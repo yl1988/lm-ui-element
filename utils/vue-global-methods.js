@@ -1,11 +1,6 @@
-import store from '../store'
-import router from '../router'
-import {getProjectInfo} from "../api/home-api";
-import {reqUserRoutes} from "../api/common";
-import {formatDate,getAndFilterMenus,isIEFun,isEdgFun} from "./global-methods";
+
+import {formatDate,isIEFun,isEdgFun} from "./global-methods";
 import {Alert} from 'element-ui'
-import {documentTitleAfterText} from "./const-datas";
-import {compressImage} from "./compress-image";
 import {MessageBox} from 'element-ui'
 
 export default {
@@ -28,51 +23,6 @@ export default {
                     }, continueTime)
                     resolve(true)
                 })
-            },
-            //获取项目信息
-            async getProjInfo(projParams={}){
-                let {callback,params,refresh}=projParams
-                let projInfo = localStorage.getItem('projInfo')
-                let projId=sessionStorage.getItem('projId')
-                // console.log(refresh)
-                if(projInfo !== 'null' && projInfo && !refresh){
-                    projInfo = JSON.parse(projInfo)
-                }else{
-                    projInfo=await getProjectInfo(projId)
-                    console.log(projInfo)
-                    if(Object.keys(projInfo).length){
-                        //确保projectInfo有项目信息值
-                        document.tilte=projInfo.name+documentTitleAfterText
-                        localStorage.setItem('projInfo',JSON.stringify(projInfo))
-                    }
-                }
-                if (!(projInfo instanceof Object) || !Object.keys(projInfo).length){
-                    console.warn('项目信息缺失，请先完善项目信息')
-                    Alert('项目信息缺失，请先完善项目信息', '提示', {
-                        confirmButtonText: '知道了',
-                    })
-                    callback && callback()
-                    return
-                }
-                store.state.projInfo=projInfo
-                return projInfo
-            },
-            //显示合同详情
-            showContractDetail(that,contract){
-                that.contract=contract
-                that.showDetail=true
-                that.showList=that.showAddEdit=false
-            },
-            //显示合同列表
-            showContractList(that){
-                that.showList=true
-                that.showDetail=that.showAddEdit=false
-            },
-            //显示添加编辑合同
-            showContractAddEdit(that,contract={}){
-                that.contract=contract
-                that.showDetail=that.showList=false
-                that.showAddEdit=true
             },
             //通过地址查询经纬度
             getLngLat(AMap, address) {
@@ -125,13 +75,6 @@ export default {
                     resolve(imgFile)
                 })
             },
-            //从本地获取用户信息
-            getUserInfoFromLocalStorage(that) {
-                let userInfo = sessionStorage.getItem("userInfo")
-                userInfo = userInfo ? JSON.parse(userInfo) : {}
-                that && (that.userInfo = userInfo)
-                return userInfo
-            },
             //日期范围开始日期 结束日期配置
             disabledDate(time,type,values){
                 let value=values ? values[type] : ''
@@ -177,24 +120,6 @@ export default {
                     })
                 })
             },
-            //根据类型值获取对应的文字，用于从复杂列表中根据类型（通常为value，id等）获取显示值
-            getListName(arr,value,config={}){
-                let {valueStr='value',nameStr='name'}=config
-                let filterData=arr.filter(item=>{
-                    let listValue= item[valueStr]
-                    if(typeof item[valueStr]==='number'){
-                        value=Number(value)
-                    }
-                    if(typeof item[valueStr]==='string'){
-                        if(typeof value==='number'){
-                            value=value.toString()
-                        }
-                    }
-                    return listValue===value
-                })[0]
-                // console.log(filterData)
-                return filterData ? filterData[nameStr] : ''
-            },
             // 控制在一个日期范围内不可见
             dateRangeDisabele(time,range=[],config={}){
                 let {startEqual,endEqual}=config
@@ -225,76 +150,6 @@ export default {
                 }
                 return false
             },
-            //平台跳转
-            async goPlatForm(canIUsePlatForm={},projInfo={},callback){
-                let {path,value}=canIUsePlatForm
-                if(!path){
-                    Alert('请先选择平台')
-                    return
-                }
-                let userRoutes=await reqUserRoutes(value)
-                // console.log(userRoutes)
-                let routeMenuObj={
-                    '1':{
-                        userRoutes:'userRoutes',
-                        menus:'menus',
-                    },
-                    '2':{
-                        userRoutes:'projUserRoutes',
-                        menus:'projMenus',
-                        id:'projId',
-                        info:'projInfo'
-                    }
-                }
-                localStorage.setItem(routeMenuObj[value].userRoutes,JSON.stringify(userRoutes))
-                let menus=[]
-                // router.app._route.name==='Login' && sessionStorage.setItem('activeForm',value)
-                let isProduction = process.env.NODE_ENV === 'production'//是否为生产环境
-                ;(router.app._route.name==='Login' || isProduction) && sessionStorage.setItem('activeForm',value)
-                //其他平台
-                menus=getAndFilterMenus([...userRoutes])
-                if(!menus.length){
-                    MessageBox.alert('当前账户在目标平台没有任何权限','提示')
-                    callback && callback()
-                    return
-                }
-                localStorage.setItem(routeMenuObj[value].menus,JSON.stringify(menus))
-                console.log(projInfo)
-                if(Object.keys(projInfo).length){
-                    sessionStorage.setItem(routeMenuObj[value].id,projInfo.id || projInfo.projId)
-                    localStorage.setItem(routeMenuObj[value].info,JSON.stringify(projInfo))
-                }
-                window.open(path,'_self')
-            },
-            /**
-             动态获取路由tab
-             **/
-           getDynamicTabRoutes(userRoutes=[],routeNames=[],that){
-                function filterRoutes() {
-                    let children=[]
-                    let routes=[...userRoutes]
-                    for(let i=0;i<routeNames.length;i++){
-                        let childrenInfo=routes.filter(item=>item.name===routeNames[i])
-                        console.log(childrenInfo)
-                        children=childrenInfo[0] ? (childrenInfo[0].children || []) : []
-                        routes=[...children]
-                    }
-                    return children
-                }
-                let children=filterRoutes()
-                children=children.sort((a,b)=>a.sort-b.sort)
-                let tabs= children.reduce((result,current)=>{
-                    let {name,label,path}=current
-                    result.push({
-                        name,label,path
-                    })
-                    return result
-                },[])
-                if(that.$route.name!==tabs[0].name){
-                    router.push(tabs[0].path)
-                }
-                return tabs
-            }
         }
     }
 }
