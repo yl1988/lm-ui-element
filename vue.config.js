@@ -17,8 +17,6 @@ module.exports = {
             template:'public/index.html',
             filename:'index.html'
         }
-
-
     },
     configureWebpack: config => {
         if (isProduction) {
@@ -46,7 +44,7 @@ module.exports = {
         config.module.rule('js')
             .include.add(resolve('packages')).end()
             .use('babel')
-            .loader('balel-loader')
+            .loader('babel-loader')
             .tap(options=>{
                 return options
             })

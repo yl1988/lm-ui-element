@@ -1,0 +1,82 @@
+/*
+scss混合
+ */
+
+//省略号
+@mixin textEllipsis ($width) {
+  max-width: $width;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/**
+图片展现
+ */
+@mixin imgObjectFit( $fit:contain){
+  width:100%;
+  height:100%;
+  object-fit: $fit;
+}
+//定位居中
+@mixin positionCenter($position:absolute,$rotate:0deg,$z-index:10){
+  position: $position;
+  left:50%;
+  top:50%;
+  -webkit-transform: translate(-50%,-50%) rotate($rotate);
+  -moz-transform: translate(-50%,-50%) rotate($rotate);
+  -ms-transform: translate(-50%,-50%) rotate($rotate);
+  -o-transform: translate(-50%,-50%) rotate($rotate);
+  transform: translate(-50%,-50%) rotate($rotate);
+  z-index: $z-index
+}
+//宽高层级变换圆角
+@mixin W_H_ZIndexTransformRadius($width:100%,$height:100%,$z-index:1,$translateX:0,$translateY:0,$rotate:0,$radius:0){
+  width:$width;
+  height:$height;
+  z-index: $z-index;
+  -webkit-transform: translate($translateX,$translateY) rotate($rotate);
+  -moz-transform: translate($translateX,$translateY) rotate($rotate);
+  -ms-transform: translate($translateX,$translateY) rotate($rotate);
+  -o-transform: translate($translateX,$translateY) rotate($rotate);
+  transform: translate($translateX,$translateY) rotate($rotate);
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+//左上定位，宽高，层级
+@mixin positionLeftTopSizeIndex($position:absolute,$left:0,$top:0,$width:100%,$height:100%,$z-index:1,$translateX:0,$translateY:0,$rotate:0,$radius:0){
+  position: $position;
+  left:$left;
+  top:$top;
+  @include W_H_ZIndexTransformRadius($width:$width,$height:$height,$z-index:$z-index,$translateX:$translateX,$translateY:$translateY,$rotate:$rotate,$radius:$radius)
+}
+//左下定位，宽高，层级
+@mixin positionLeftBottomSizeIndex($position:absolute,$left:0,$bottom:0,$width:100%,$height:100%,$z-index:1,$translateX:0,$translateY:0,$rotate:0,$radius:0){
+  position: $position;
+  left:$left;
+  bottom:$bottom;
+  @include W_H_ZIndexTransformRadius($width:$width,$height:$height,$z-index:$z-index,$translateX:$translateX,$translateY:$translateY,$rotate:$rotate,$radius:$radius)
+}
+//右上定位，宽高，层级
+@mixin positionTopRightSizeIndex($position:absolute,$right:0,$top:0,$width:100%,$height:100%,$z-index:1,$translateX:0,$translateY:0,$rotate:0,$radius:0){
+  position: $position;
+  right:$right;
+  top:$top;
+  @include W_H_ZIndexTransformRadius($width:$width,$height:$height,$z-index:$z-index,$translateX:$translateX,$translateY:$translateY,$rotate:$rotate,$radius:$radius)
+}
+//右下定位，宽高，层级
+@mixin positionRightBottomSizeIndex($position:absolute,$right:0,$bottom:0,$width:100%,$height:100%,$z-index:1,$translateX:0,$translateY:0,$rotate:0,$radius:0){
+  position: $position;
+  right:$right;
+  bottom:$bottom;
+  @include W_H_ZIndexTransformRadius($width:$width,$height:$height,$z-index:$z-index,$translateX:$translateX,$translateY:$translateY,$rotate:$rotate,$radius:$radius)
+}
+//多行省略
+@mixin textMultiLineEllipsis($clamp:2){
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $clamp;
+  -webkit-box-orient: vertical;
+}
