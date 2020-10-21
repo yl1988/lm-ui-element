@@ -69,7 +69,6 @@
 
 <script>
     import {mapState} from 'vuex'
-    import {reqRegionInfo} from "../api/common"
     import {isNumber} from "../utils/validate";
 
     export default {
