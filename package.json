@@ -1,11 +1,13 @@
 {
   "name": "lm-ui-element",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "main": "lib/frog-ui.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "build-lib": "vue-cli-service build --target lib --name frog-ui --dest lib packages/index.js  && npm run build-theme"
   },
   "dependencies": {
     "core-js": "^3.6.5",

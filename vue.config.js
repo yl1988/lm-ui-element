@@ -18,28 +18,28 @@ module.exports = {
             filename:'index.html'
         }
     },
-    configureWebpack: config => {
-        if (isProduction) {
-            // 为生产环境修改配置...
-            config.plugins.push(
-                //生产环境自动删除console
-                new TerserPlugin({
-                    terserOptions: {
-                        ecma: undefined,
-                        warnings: false,
-                        parse: {},
-                        compress: {
-                            drop_console: true,
-                            drop_debugger: false,
-                            pure_funcs: ['console.log'] // 移除console
-                        }
-                    },
-                    sourceMap: false,
-                    parallel: true,
-                })
-            )
-        }
-    },
+    // configureWebpack: config => {
+    //     if (isProduction) {
+    //         // 为生产环境修改配置...
+    //         config.plugins.push(
+    //             //生产环境自动删除console
+    //             new TerserPlugin({
+    //                 terserOptions: {
+    //                     ecma: undefined,
+    //                     warnings: false,
+    //                     parse: {},
+    //                     compress: {
+    //                         drop_console: true,
+    //                         drop_debugger: false,
+    //                         pure_funcs: ['console.log'] // 移除console
+    //                     }
+    //                 },
+    //                 sourceMap: false,
+    //                 parallel: true,
+    //             })
+    //         )
+    //     }
+    // },
     chainWebpack:config=>{
         config.module.rule('js')
             .include.add(resolve('packages')).end()
@@ -49,7 +49,7 @@ module.exports = {
                 return options
             })
     },
-    // 生产环境是否生成 sourceMap 文件
+    // // 生产环境是否生成 sourceMap 文件
     productionSourceMap: false,
     parallel: require('os').cpus().length > 1,
     pwa: {},
