@@ -1,16 +1,17 @@
 {
   "name": "lm-ui-element",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "private": false,
   "main": "lib/frog-ui.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build-lib": "vue-cli-service build --target lib --name frog-ui --dest lib packages/index.js  && npm run build-theme"
+    "build-lib": "vue-cli-service build --target lib --name frog-ui --dest lib packages/index.js"
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "element-ui": "^2.14.0",
     "terser-webpack-plugin": "^5.0.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"

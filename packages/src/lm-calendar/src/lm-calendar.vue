@@ -3,12 +3,12 @@
     <div class="calendar-topBox">
       <slot name="calendarTitle"></slot>
       <slot name="calendarTop" :currentYear="currentYear" :currentMonth="currentMonth+1" :changeMonth="changeMonth">
-        <div class="calendar-title rowBtween" :style="{height:titleHeight,background:titleBk}" :class="titleClass">
+        <div class="calendar-title rowCenter" :style="{height:titleHeight,background:titleBk}" :class="titleClass">
           <strong class="left rowStart">{{currentYear}}{{titleDateConnector || '年'}}{{currentMonth+1}}{{titleDateConnector ? '' : '月'}}</strong>
-          <span class="right">
+          <span class="right rowBtween">
                <slot name="monthRightBtn" :changeMonth="changeMonth" :currentYear="currentYear" :currentMonth="currentMonth+1">
-                  <i class="el-icon-arrow-left" @click="changeMonth(0)"></i>
-                  <i class="el-icon-arrow-right" @click="changeMonth(1)"></i>
+                 <span class="changeMonth" @click="changeMonth(0)">&lt;</span>
+                 <span class="changeMonth" @click="changeMonth(1)">&gt;</span>
                </slot>
            </span>
         </div>
@@ -22,7 +22,7 @@
       </div>
       <div class="calen-content rowCenter">
         <div class="calen-cell" :id="'calen'+index" :ref="index ? '' : 'calenCell'" :class="[calenCellClass,index<7 ? 'firstRowCellClass': '',index%7===0 ? 'firstColumCellClass' : '']"  :style="{...calenCellStyle,...cellBorderStyle(index)}" v-for="(day,index) in calendarList" :key="index" @click="choose(day,index)">
-          <slot name="day" :day="day">
+          <slot name="day" :day="day" :index="index">
             <span class="dateSpan rowCenter" :class="day.dateClass">{{day.day}}</span>
           </slot>
           <div class="rowCenter" v-show="day.hasData && day.isThis">
@@ -34,17 +34,12 @@
       </div>
     </div>
   </div>
-  <!--<div>-->
-    <!--<ul>-->
-      <!--<li>666666666666666</li>-->
-    <!--</ul>-->
-  <!--</div>-->
 </template>
 <script>
     import {isValidDate,isNumber} from "../../../utils/validate"
     import {checkStartTimeEndTimeFun,insertDataToCalendar} from './util'
     export default {
-        name: "Calendar",
+        name: "LmCalendar",
         props: {
             initDate:{
                 type:[String,Date,Number],
@@ -296,14 +291,24 @@
                     if(typeof value ==='string'){
                         value=value.replace(/-/g,'/')
                     }
-                    year=new Date(value).getFullYear()
-                    month=new Date(value).getMonth()
-                    day=new Date(value).getDate()
-                }
+                    if(value===2){
+                        //今天
+                        year=new Date().getFullYear()
+                        month=new Date().getMonth()
+                        day=new Date().getDate()
+                    }else{
+                        year=new Date(value).getFullYear()
+                        month=new Date(value).getMonth()
+                        day=new Date(value).getDate()
+                    }
 
+                }
                 await this.init(year, month,day,{isChangeMonth:true})//等待日历先创建完成
                 insertDataToCalendar(this.insertData,this.calendarList,this.dateProp)
-                this.$emit('monthChange')
+                month=month+1
+                month<10 && (month='0'+month)
+                day<10 && (day='0'+day)
+                this.$emit('monthChange',`${year}-${month}-${day}`)
             },
 
         },
@@ -329,5 +334,7 @@
     }
 </script>
 <style lang="scss" scoped>
-  @import "style";
+  @import "./style";
+  @import "../../../utils/scss/flex";
+
 </style>

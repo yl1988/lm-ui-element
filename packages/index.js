@@ -1,4 +1,4 @@
-import LmCalendar from '../components/lm-calendar'
+import LmCalendar from './src/lm-calendar/index'
 const components=[LmCalendar]
 const install=function (Vue) {
     if(install.installed){
