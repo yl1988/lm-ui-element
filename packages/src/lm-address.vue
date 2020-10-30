@@ -72,7 +72,7 @@
     import {isNumber} from "../utils/validate";
 
     export default {
-        name: 'addressFormItem',
+        name: 'LmAddress',
         props: {
             required: {
                 type: Boolean,
@@ -202,6 +202,10 @@
             },
             //获取经纬度
             async getLonLat(data) {
+                if(!AMap){
+                    console.error('获取地图实例AMap失败,请确保正确引入并初始化高德地图')
+                    return
+                }
                 let lngLatArr = await this.$globalMethods.getLngLat(AMap, data)
                 let {addressArea, isNotTwoLevels, showStreet} = this
                 this.address = {...this.address, addressArea, isNotTwoLevels, showStreet}
@@ -273,6 +277,10 @@
             getSearchAddresList(keyword) {
                 let {provinceId, cityId, districtId} = this.address
                 let city = districtId || cityId || provinceId
+                if(!AMap){
+                    console.error('获取地图实例AMap失败,请确保正确引入并初始化高德地图')
+                    return
+                }
                 return new Promise((resolve, reject) => {
                     AMap.plugin('AMap.Autocomplete', () => {
                         // 实例化Autocomplete
