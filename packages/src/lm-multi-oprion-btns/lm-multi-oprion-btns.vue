@@ -18,7 +18,6 @@
                 <el-button type="primary" @click="sureMultiOption" size="mini">{{sureText || '确定'}}</el-button>
                 <el-button @click="cancelMultiOption" size="mini">{{cancelText || '关闭'}}</el-button>
             </div>
-
         </div>
     </div>
 </template>

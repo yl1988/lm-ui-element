@@ -97,34 +97,5 @@
 </script>
 
 <style scoped lang="scss">
-  @import "../lm-ui-element-style/src/common/mix";
-  .customDialogBox{
-    @include positionLeftTopSizeIndex($position:fixed,$z-index:999);
-    .overy{
-      @include positionLeftTopSizeIndex();
-      background:rgba(0,0,0,0.5);
-    }
-    .customDialogWhiteBox{
-      @include positionCenter();
-      z-index: 10;
-      .customDialogTitleBox{
-        padding:0 0 0 20px;
-        span{
-          font-size:16px;
-        }
-        .closeBox{
-          width:40px;
-          height:40px;
-        }
-      }
-      .customDialogContentBox{
-        max-height:700px;
-        overflow: auto;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-      }
-    }
 
-  }
 </style>

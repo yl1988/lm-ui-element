@@ -1,0 +1,27 @@
+@import "./common/mix";
+
+.addressFormItemBox {
+  .addressFormItem {
+    margin-right: 10px;
+  }
+}
+
+.autoCompleteBox {
+  border-bottom: dashed 1px #eeeeee;
+  margin-bottom: 10px;
+  align-items: flex-start;
+  padding-bottom: 10px;
+
+  .name {
+    height: 16px;
+    line-height: 16px;
+    @include textEllipsis(300px);
+  }
+
+  .addr {
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    margin-top: 5px;
+  }
+}

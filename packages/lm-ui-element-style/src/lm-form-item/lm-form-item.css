@@ -1,0 +1,26 @@
+/* 去除input[type=number]浏览器默认的icon显示 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+.el-input__inner{
+    -moz-appearance:textfield; /* Firefox */
+}
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity:0;
+}
+.lm-form-item-col .el-input__prefix{
+    display:flex;
+    align-items: center;
+}
+.el-date-editor.el-input, .el-date-editor.el-input__inner{
+    width:100%;
+}
+.el-select{
+    width:100%;
+}

@@ -69,7 +69,7 @@
 
 <script>
     import {mapState} from 'vuex'
-    import {isNumber} from "../utils/validate";
+    import {isNumber} from "../../utils/validate";
 
     export default {
         name: 'LmAddress',
@@ -345,31 +345,5 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../lm-ui-element-style/src/common/mix";
 
-    .addressFormItemBox {
-        .addressFormItem {
-            margin-right: 10px;
-        }
-    }
-
-    .autoCompleteBox {
-        border-bottom: dashed 1px #eeeeee;
-        margin-bottom: 10px;
-        align-items: flex-start;
-        padding-bottom: 10px;
-
-        .name {
-            height: 16px;
-            line-height: 16px;
-            @include textEllipsis(300px);
-        }
-
-        .addr {
-            font-size: 12px;
-            height: 16px;
-            line-height: 16px;
-            margin-top: 5px;
-        }
-    }
 </style>
