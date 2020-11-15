@@ -345,7 +345,7 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../../packages/lm-ui-element-style/src/common/mix";
+    @import "../lm-ui-element-style/src/common/mix";
 
     .addressFormItemBox {
         .addressFormItem {

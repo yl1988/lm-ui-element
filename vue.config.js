@@ -48,29 +48,6 @@ module.exports = {
             .tap(options=>{
                 return options
             })
-        // rules: [
-        //     {
-        //         // 单独打包出 css
-        //         test: /\.scss$/,
-        //         use: ['file-loader?name=lm-ui-element-style/[name].css']
-        //     },
-        //     {
-        //         test: /\.scss$/,
-        //         use: [
-        //             {
-        //                 loader: "sass-loader" // 将 Sass 编译成 CSS
-        //             },
-        //         ]
-        //     },
-        //
-        // ]
-        config.module.rule('scss')
-            .include.add(resolve('packages')).end()
-            .use('file-loader?name=lm-ui-element-style/[name].css')
-            .loader('sass-loader')
-            .tap(options=>{
-                return options
-            })
     },
     // // 生产环境是否生成 sourceMap 文件
     productionSourceMap: false,

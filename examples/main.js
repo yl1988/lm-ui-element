@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import ElementUi from 'element-ui'
 import LmUI from '../packages/index'
-import 'element-ui/lib/lm-ui-element-style/index.css'
+// import '../lib/lm-ui-element-style/index.css'
 console.log(LmUI)
 Vue.use(LmUI)
 Vue.use(ElementUi)

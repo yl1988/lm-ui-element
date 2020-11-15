@@ -91,8 +91,6 @@
 </script>
 <style lang="scss" scoped type="text/scss">
     @import "../../packages/lm-ui-element-style/src/common/mix";
-    @import "../../packages/lm-ui-element-style/src/common/common";
-    @import "../../packages/lm-ui-element-style/src/common/color";
     .canlendarExample{
         .customCalendarHeadBox{
             background:#ffffff;

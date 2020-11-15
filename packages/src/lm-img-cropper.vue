@@ -197,7 +197,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../packages/lm-ui-element-style/src/common/mix";
+    @import "../lm-ui-element-style/src/common/mix";
     .cropper-component {
         width: 100%;
         position: relative;
