@@ -334,7 +334,5 @@
     }
 </script>
 <style lang="scss" scoped>
-  @import "./style";
-  @import "../../../utils/scss/flex";
 
 </style>

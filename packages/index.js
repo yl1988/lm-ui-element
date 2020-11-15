@@ -1,4 +1,5 @@
 import LmCalendar from './src/lm-calendar/index'
+import './lm-ui-element-style/src/index.scss'
 const components=[LmCalendar]
 const install=function (Vue) {
     if(install.installed){
@@ -11,5 +12,4 @@ if(typeof window!=='undefined' && window.Vue){
 }
 export default {
     install,
-    // LmCalendar
 }

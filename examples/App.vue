@@ -40,10 +40,10 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../packages/utils/scss/mix";
-    @import "../packages/utils/scss/common";
-    @import "../packages/utils/scss/color";
-    @import "../packages/utils/scss/flex";
+    @import "../packages/lm-ui-element-style/src/mix";
+    @import "../packages/lm-ui-element-style/src/common";
+    @import "../packages/lm-ui-element-style/src/color";
+    @import "../packages/lm-ui-element-style/src/flex";
     .exampleBox{
         padding:20px;
         .lm-ui-title{

@@ -310,7 +310,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import "../utils/scss/mix";
+  @import "../../packages/lm-ui-element-style/src/common/mix";
   .fileListBox{
     position: relative;
     overflow: hidden;
