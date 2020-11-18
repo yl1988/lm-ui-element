@@ -61,7 +61,7 @@
     </el-col>
 </template>
 <script>
-    import {mapState} from 'vuex'
+    // import {mapState} from 'vuex'
     import {commonProps,commonData,getSize,lmFormItemChangeFun,lmFormItemWatch} from "./util";
     export default {
         name: 'LmDateTime',
@@ -111,7 +111,7 @@
             }
         },
         computed: {
-            ...mapState(['focusHiddenData']),
+            // ...mapState(['focusHiddenData']),
         },
         created(){
             let {formType,placeholder,dateTimeType,dateTimeValueFormat,dateTimeFormat}=this

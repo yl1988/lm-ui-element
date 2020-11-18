@@ -47,7 +47,7 @@
     </el-col>
 </template>
 <script>
-    import {mapState} from 'vuex'
+    // import {mapState} from 'vuex'
     import {commonProps,commonData,getSize,lmFormItemChangeFun,lmFormItemWatch} from "./util";
     export default {
         name: 'LmSelect',
@@ -106,7 +106,7 @@
             }
         },
         computed: {
-            ...mapState(['focusHiddenData']),
+            // ...mapState(['focusHiddenData']),
             //查看状态下显示的文字
             lmTexts(){
                 let {formType,lmFormItemData,oName,oValue,lmMultiFormItemData,lmFormValue,lmFormMultiValues}=this

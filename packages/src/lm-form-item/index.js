@@ -14,7 +14,7 @@ LmCascader.install=function (Vue) {
 LmDateTime.install=function (Vue) {
     Vue.component(LmDateTime.name,LmDateTime)
 }
-export default {
+export {
     LmInput,
     LmSelect,
     LmDateTime,

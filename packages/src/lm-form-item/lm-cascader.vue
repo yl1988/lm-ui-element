@@ -21,7 +21,7 @@
     </el-col>
 </template>
 <script>
-    import {mapState} from 'vuex'
+    // import {mapState} from 'vuex'
     import {commonProps,commonData,getSize,lmFormItemChangeFun} from "./util";
     export default {
         name: 'LmCascader',
@@ -58,7 +58,7 @@
             }
         },
         computed: {
-            ...mapState(['focusHiddenData']),
+            // ...mapState(['focusHiddenData']),
             //查看状态下显示的文字
             lmTexts(){
                 let {lmFormItemData,oName,oValue,lmFormValue}=this
