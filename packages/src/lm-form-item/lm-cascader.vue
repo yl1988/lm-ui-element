@@ -49,6 +49,12 @@
                 type:Boolean,
                 default:true
             },//是否可搜索
+            pickerOptions:{
+                type:[Object,Array],
+                default:()=>{
+                    return {}
+                }
+            },//日期配置，级联配置
         },
         data() {
             return {
@@ -88,7 +94,7 @@
             }
         },
         mounted() {
-            this.getSize(this.width,this.labelWidth,this.height,this)
+            getSize(this.width,this.labelWidth,this.height,this)
             if(this.value){
                 this.lmFormValue=value
             }

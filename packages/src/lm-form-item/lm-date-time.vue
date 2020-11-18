@@ -129,7 +129,7 @@
             }
         },
         mounted() {
-            this.getSize(this.width,this.labelWidth,this.height,this)
+            getSize(this.width,this.labelWidth,this.height,this)
             if(this.value){
                 if(formType==='rangeDateTime'){
                     this.lmFormMultiValues=value

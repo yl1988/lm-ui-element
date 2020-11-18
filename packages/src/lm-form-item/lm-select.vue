@@ -99,6 +99,7 @@
                 lmFormMultiValues:[],//选择好的多选数据
                 lmFormMultiItemData:[],//选择好的多选数据
                 lmDateMultiSelectPlaceholder:'请选择',//多个下拉框选择placeholder
+                selectPlaceholder:'请选择',//下拉框选择placeholder
                 getDefaultData:false,//是否获取默认值（多选框或时间范围）
                 lmFormData:[],///数据
             }
@@ -160,7 +161,7 @@
             }
         },
         mounted() {
-            this.getSize(this.width,this.labelWidth,this.height,this)
+            getSize(this.width,this.labelWidth,this.height,this)
             if(this.value){
                 if(formType==='multiSelect'){
                     this.lmFormMultiValues=value

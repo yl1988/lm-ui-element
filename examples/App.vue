@@ -8,10 +8,19 @@
             <div class="componentItemBox columnCenter">
                 <lm-canlendar-component style="width:500px;"></lm-canlendar-component>
                 <el-button type="text">日历</el-button>
-                <lm-input></lm-input>
-                <!--<el-input></el-input>-->
             </div>
+            <el-form width="1000">
+                <el-row>
+                    <lm-input></lm-input>
+                    <lm-select></lm-select>
 
+                </el-row>
+                <el-row>
+                    <lm-date-time></lm-date-time>
+                    <lm-cascader></lm-cascader>
+                </el-row>
+
+            </el-form>
         </div>
 
 
