@@ -38,7 +38,7 @@
                           :placeholder="placeholder" :size="size"
                           :id="lmRef[0]"  @keyup.native.13="$emit('enter')"
                           :maxlength="lmInputMaxlength" :minlength="lmInputMinlength"
-                          v-focus-next-on-enter:[focusHiddenData]="lmRef[1]"
+
                           @change="v=>this.$emit('change',v)"
                           :min="min" :max="max"
                           :autosize="autosize"
@@ -67,7 +67,7 @@
     </el-col>
 </template>
 <script>
-    import {mapState} from 'vuex'
+    // import {mapState} from 'vuex'
     import {commonProps,commonData,getSize} from "./util";
     export default {
         name: 'LmInput',
@@ -125,7 +125,7 @@
             }
         },
         computed: {
-            ...mapState(['focusHiddenData']),
+            // ...mapState(['focusHiddenData']),
         },
         created(){
             let {maxlength,type,minlength}=this

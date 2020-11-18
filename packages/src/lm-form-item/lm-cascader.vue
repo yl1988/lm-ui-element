@@ -10,7 +10,6 @@
                              @change="lmFormItemChange"
                              :props="pickerOptions"
                              :filterable="filterable"
-                             v-focus-next-on-enter:[focusHiddenData]="lmRef[1]"
                              :id="lmRef[0]"
                 ></el-cascader>
             </div>

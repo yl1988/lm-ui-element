@@ -10,7 +10,6 @@
                            :placeholder="selectPlaceholder"
                            :style="{width:lmFormItemWidth}"
                            :filterable="filterable" :disabled="disabled"
-                           v-focus-next-on-enter:[focusHiddenData]="lmRef[1]"
                            :id="lmRef[0]" clearable
                 >
                     <el-option :label="o[oName] || o" :value="o[oValue] || index" v-for="(o,index) in lmFormItemData" :key="index"></el-option>
@@ -25,7 +24,6 @@
                             :placeholder="lmDateMultiSelectPlaceholder[index]"
                             :style="{width:lmFormItemWidth,margin:multiMargin}"
                             :filterable="filterable" clearable
-                            v-focus-next-on-enter:[focusHiddenData]="lmRef[1] ? lmRef[1][index] : undefined"
                             :id="lmRef[0] ? lmRef[0][index] : undefined"
                     >
                         <el-option

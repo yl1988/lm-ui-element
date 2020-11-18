@@ -12,7 +12,6 @@
                                 :style="{width:lmFormItemWidth}"
                                 @input="lmFormItemChange" :picker-options="pickerOptions"
                                 :default-value="defaultDateTimeValue"
-                                v-focus-next-on-enter:[focusHiddenData]="lmRef[1]"
                                 :id="lmRef[0]"
                                 :disabled="disabled"
                 ></el-date-picker>
