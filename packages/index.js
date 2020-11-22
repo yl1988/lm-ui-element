@@ -5,9 +5,10 @@ import {
     LmDateTime,
     LmCascader
 } from './src/lm-form-item/index'
+import LmMultiOptionBtns from './src/lm-multi-oprion-btns'
 import './lm-ui-element-style/src/index.scss'
-console.log(LmInput)
-const components=[LmCalendar,LmInput,LmSelect,LmDateTime,LmCascader]
+
+const components=[LmCalendar,LmInput,LmSelect,LmDateTime,LmCascader,LmMultiOptionBtns]
 const install=function (Vue) {
     if(install.installed){
         return

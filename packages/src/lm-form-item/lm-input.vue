@@ -6,18 +6,23 @@
                 <el-autocomplete v-if="elAuto"
                                  :value="lmFormValue"
                                  :style="{width:lmFormItemWidth,height:lmFormItemHeight}"
-                                 @input="lmInputInput" :type="type"
-                                 :placeholder="placeholder" :size="size"
-                                 :id="lmRef[0]"  @keyup.native.13="$emit('enter')"
-                                 :maxlength="lmInputMaxlength" :minlength="lmInputMinlength"
-                                 v-focus-next-on-enter:[focusHiddenData]="lmRef[1]"
+                                 @input="lmInputInput"
+                                 :type="type"
+                                 :placeholder="placeholder"
+                                 :size="size"
+                                 :id="lmRef[0]"
+                                 @keyup.native.13="$emit('enter')"
+                                 :maxlength="lmInputMaxlength"
+                                 :minlength="lmInputMinlength"
                                  @change="v=>this.$emit('change',v)"
                                  :min="min" :max="max"
-                                 :autosize="autosize" :fetch-suggestions="inputQuerySearch"
-                                 :value-key="valueKey" :placement="placement" :trigger-on-focus="triggerOnFocus"
+                                 :autosize="autosize"
+                                 :fetch-suggestions="inputQuerySearch"
+                                 :value-key="valueKey"
+                                 :placement="placement"
+                                 :trigger-on-focus="triggerOnFocus"
                                  :disabled="disabled"
                                  :show-word-limit="lmShowWordLimit"
-
                 >
                     <template slot="append">
                         <slot name="append">
@@ -38,7 +43,6 @@
                           :placeholder="placeholder" :size="size"
                           :id="lmRef[0]"  @keyup.native.13="$emit('enter')"
                           :maxlength="lmInputMaxlength" :minlength="lmInputMinlength"
-
                           @change="v=>this.$emit('change',v)"
                           :min="min" :max="max"
                           :autosize="autosize"
@@ -113,7 +117,6 @@
                 type:Array,
                 default:()=>[]
             },///输入框建议数据
-
         },
         data() {
             return {
@@ -135,6 +138,7 @@
             // console.log(this.lmShowWordLimit)
             type==='tel' && (this.lmInputMaxlength=11)
             type==='idcard' && (this.lmInputMaxlength=18)
+            type==='number' && (this.lmInputMaxlength=maxlength || 15)
 
         },
         mounted() {
@@ -142,12 +146,11 @@
             if(this.value){
                 this.lmFormValue=value
             }
-
         },
         methods: {
             // 输入框，改变
             lmInputInput(v){
-                let {type,min,max,int,toFixed,maxlength}=this
+                let {type,min,max,int,toFixed,lmInputMaxlength}=this
                 if(type==='tel'){
                     //电话
                     this.$emit('input',v.replace(/\D/g,''))
@@ -163,8 +166,8 @@
                     }
                     toFixed && (v=Number(v).toFixed(toFixed))
                     int && (v=parseInt(v))
-                    if(typeof maxlength==='number'){
-                        v=v.toString().slice(0,maxlength)
+                    if(typeof lmInputMaxlength==='number'){
+                        v=v.toString().slice(0,lmInputMaxlength)
                     }
                     this.$emit('input',Number(v))
                 }else if(type==='idcard'){

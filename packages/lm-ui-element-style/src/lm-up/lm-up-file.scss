@@ -1,0 +1,76 @@
+@import "../common/mix";
+.upfile-with-progress{
+  .fileList{
+    flex-wrap:wrap;
+    .fileListBox{
+      margin:0 20px 10px 0;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      p{
+        cursor:pointer;
+      }
+      .fileItemBox{
+        overflow:hidden;
+        position: relative;
+        .fileImgBox{
+          position: relative;
+          width:100%;
+          overflow:hidden;
+          .fileImg{
+            width:100%;
+            z-index:1;
+          }
+          .imgPreviewBox{
+            @include positionCenter();
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.5);
+            display:none;
+            .imgPreview{
+              font-size:40px;
+              color:#ffffff;
+              cursor:pointer;
+            }
+          }
+          .fileImgInnerBox{
+            &:hover .imgPreviewBox{
+              display:flex;
+            }
+          }
+          .el-icon-loading{
+            position: absolute;
+            z-index:100;
+          }
+          .deleteBk{
+            @include positionTopRightSizeIndex($width:30px,$height:30px,$radius:50%,$z-index:99);
+            background:rgba(255,255,255,0.9);
+          }
+
+        }
+        .circleProgressBk{
+          @include positionCenter();
+          z-index:10;
+        }
+      }
+    }
+  }
+  .el-dialog{
+    @include positionCenter();
+    margin-top:0 !important;
+    min-width:50%;
+  }
+}
+.upfile-with-progress .el-progress-circle{
+  background:rgba(0,0,0,0.5);
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.upfile-with-progress .el-progress__text{
+  /*color:#ffffff;*/
+  font-size:12px;
+}
+.upfile-with-progress .el-form-item__content{
+  line-height:normal;
+}

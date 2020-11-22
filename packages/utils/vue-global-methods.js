@@ -6,24 +6,6 @@ import {MessageBox} from 'element-ui'
 export default {
     install(Vue) {
         Vue.prototype.$globalMethods = {
-            // 防止连点continueTime为多少秒以内不可以使用
-            preventContinuePoint(that, continueTime = 2000) {
-                return new Promise((resolve, reject) => {
-                    let date = new Date()
-                    let time = date.getTime()
-                    let {lastTime} = that
-                    if (lastTime && ((time - lastTime) < continueTime)) {
-                        return
-                    }
-                    lastTime = time
-                    that.lastTime = lastTime
-                    let timeOut = setTimeout(() => {
-                        clearTimeout(timeOut)
-                        that.lastTime = 0
-                    }, continueTime)
-                    resolve(true)
-                })
-            },
             //通过地址查询经纬度
             getLngLat(AMap, address) {
                 if (!address) return

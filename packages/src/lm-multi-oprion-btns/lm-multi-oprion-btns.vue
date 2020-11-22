@@ -10,10 +10,7 @@
                     @click="getMultiOption(index)"
                     :size="size"
             >{{btn.text}}</el-button>
-            <div class="rowStart" style="margin-left:20px;" v-if="showIsOpenReport">
-                <span class="font14">是否开启上报：</span>
-                <el-switch v-model="canIReport" active-color="#13ce66" inactive-color="#ff4949" :active-value="1" :inactive-value="0" @change="switchChange" />
-            </div>
+            <slot name="appendContent"></slot>
             <div class="rowStart sureCancelBtn">
                 <el-button type="primary" @click="sureMultiOption" size="mini">{{sureText || '确定'}}</el-button>
                 <el-button @click="cancelMultiOption" size="mini">{{cancelText || '关闭'}}</el-button>
@@ -106,11 +103,6 @@
                 this.activeOption=index
                 this.$emit('getMultiOptionIndex',index)
             },
-            //是否允许上报
-            switchChange(value){
-                // console.log(value)
-                this.getCanIReport=true
-            }
         },
         watch:{
             activeIndex:function (v) {

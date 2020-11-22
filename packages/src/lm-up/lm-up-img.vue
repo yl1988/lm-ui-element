@@ -9,7 +9,7 @@
               <div class="fileOutBox rowCenter" v-for="(file,index) in fileList" :key="index">
                 <div class="fileListBox rowCenter" :style="{width:fileImgWidth,height:fileImgHeight}">
                   <slot name="fileView" :index="index" :file="file">
-                    <img class="fileImg" :src="file.blob || file.fileId">
+                    <img class="fileImg" :src="file.blob || (fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId)">
                     <div class="circleProgressBk rowCenter" v-if="file.loading">
                       <el-progress :width="progressWidth" type="circle" :percentage="file.percentage" :status="file.percentage===100 ? 'success' : undefined"/>
                     </div>                  
@@ -22,8 +22,8 @@
                 </slot>
               </div>
               <el-upload class="avatar-uploader" v-if="typeof limit==='undefined' || (typeof limit==='number' && (fileList.length<limit))"
-                         :action="upLoadFileUrl"
-                         :multiple="multiple"
+                         :action="action"
+                         :multiple="limit!==1 || multiple"
                          :before-upload="beforeUploadWithProgress"
                          :on-success="fileSuccessWithProgress"
                          accept="image/*"
@@ -51,7 +51,7 @@
               <div class="" v-if="fileList.length">
                 <div class="fileListBox rowCenter" v-for="(file,index) in fileList" :key="index" :style="{width:fileImgWidth,height:fileImgHeight}">
                   <slot name="fileView" :index="index" :file="file">
-                    <el-image class="fileImg" :src="file.blob || file.fileId" fit="contain"/>
+                    <el-image class="fileImg" :src="file.blob || (fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId)" fit="contain"/>
                   </slot>
                 </div>
               </div>
@@ -75,7 +75,7 @@
           <div class="" v-if="fileList.length">
             <div class="fileListBox rowCenter" v-for="(file,index) in fileList" :key="index" :style="{width:fileImgWidth,height:fileImgHeight}">
               <slot name="fileView" :index="index" :file="file">
-                <img class="fileImg" :src="file.blob || file.fileId">
+                <img class="fileImg" :src="file.blob || (fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId)">
               </slot>
             </div>
           </div>
@@ -87,11 +87,11 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-    import {upLoadFileUrl,fileBaseUrl} from "../utils/const-datas"
-    import {isNumber} from "../utils/validate"
+    import {isNumber} from "../../utils/validate"
+    import LmImgCropper from '../lm-img-cropper'
+
     export default {
-        name: 'UpImgWithProgress',
+        name: 'LmUpImg',
         props:{
             label:{
                 type:String,
@@ -150,11 +150,17 @@
                 default:false
             },//是否多张
             limit:Number,//图片限制张数
+            action:{
+                type:String,
+                default:''
+            },//上传地址
+            fileBaseUrl:String,//文件域名
+        },
+        components:{
+            LmImgCropper
         },
         data() {
             return {
-                upLoadFileUrl,
-                projInfo:{},//项目信息
                 strokeWidth:20,//进度条宽度
                 fileImgWidth:'120px',//图片宽度
                 fileImgHeight:'90px',//图片高度
@@ -166,9 +172,6 @@
                 cropperImgType:'',//裁剪文件后缀
                 file:null,//文件
             }
-        },
-        computed: {
-            ...mapState(['isIE'])
         },
         created(){
             let {imgWidth,imgHeight}=this
@@ -184,9 +187,6 @@
             if(this.progressWidth<126){
                 this.strokeWidth=10
             }
-        },
-        mounted() {
-            // console.log(this.fileList)
         },
         methods: {
             //超出文件限制
@@ -212,9 +212,6 @@
                     compressFiile=await this.$globalMethods.compressImageFun({file})
                 }
                 return compressFiile
-                // if(!isIE){
-                //     return compressFiile
-                // }
             },
             //文件上传进度带进度条
             fileProgress(event,file){
@@ -260,125 +257,17 @@
                 this.fileList.splice(index,1)
                 this.$emit('delFile')
             },
-            //图片预览
-            imgPreview(url){
-                this.previewImgSrc=url
-                this.showPreviewDialog=true
-            },
             //文件预览
             filePreview(file){
-                let url=file.fileId
-                if(/.pdf/.test(url)){
-                    let {href}=this.$router.resolve({
-                        name: "FileOverView",
-                        query:{
-                            url
-                        }
-                    })
-                    window.open(href,'_blank')
-                    return
-                }
-                this.imgPreview(url)
-
-            },
-            //图片旋转
-            imgRotateFun(type){
-                //type 0左旋 1右旋
-                console.log(this.$refs.previewImg)
-                type ? this.imgRotate+=90 : this.imgRotate-=90
-            },
-            //图片放大缩小
-            imZoom(type){
-                if(type){
-                    this.previewImgWidth+=10
-                    ;(this.previewImgWidth>100) && (this.previewImgWidth=100)
-                }else{
-                    this.previewImgWidth-=10
-                    ;(this.previewImgWidth<10) && (this.previewImgWidth=10)
-                }
+                this.previewImgSrc=fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId
+                this.showPreviewDialog=true
             },
             //关闭图片预览弹窗
             cancel(){
                 this.showPreviewDialog=false
-                this.previewImgWidth=100
-                this.imgRotate=0
                 this.previewImgSrc=''
             },
         },
 
     }
 </script>
-
-<style scoped lang="scss">
-  @import "../lm-ui-element-style/src/common/mix";
-  .fileListBox{
-    position: relative;
-    overflow: hidden;
-
-    .fileImg{
-      width:100%;
-      z-index:1;
-    }
-    .circleProgressBk{
-      @include positionCenter();
-      z-index:10;
-      width:100%;
-      height:100%;
-    }
-  }
-  .fileOutBox{
-    position: relative;
-    margin-right:20px;
-    margin-bottom:20px;
-    .delImgBox{
-      @include positionTopRightSizeIndex($top:-9px,$right:-9px,$width:18px,$height:18px,$z-index:99,$rotate:45deg,$radius:50%);
-      background:#ED5A47;
-      color:#ffffff;
-      cursor:pointer;
-    }
-  }
-
-  .camera-box{
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    border: 1px dashed #d9d9d9;
-    .el-icon-camera{
-      font-size:28px;
-    }
-  }
-  .fileMethodBox{
-    height:100%;
-  }
-  .upImgListBox{
-    flex-wrap:wrap;
-    flex:1;
-  }
-</style>
-<style>
-  .upImgBox .avatar-uploader .el-upload {
-    border: 1px solid #d9d9d9;
-    border-radius: 2px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    background:rgba(250,250,250,1);
-  }
-  .upImgBox .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .upImgBox .avatar-uploader-icon {
-    font-size: 40px;
-    color: #8c939d;
-    text-align: center;
-  }
-  .upImgBox .el-progress-circle{
-    background:rgba(0,0,0,0.5);
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-  }
-  .upImgBox .el-progress__text{
-    color:#ffffff;
-  }
-</style>
