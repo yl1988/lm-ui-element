@@ -19,18 +19,6 @@ export function formatDateTime(date, connector = '/') {
     }
     return `${date.getFullYear()}${connector}${(date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)}${connector}${date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()} ${date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()}:${date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes()}:${date.getSeconds() < 10 ? ("0" + date.getSeconds()) : date.getSeconds()}`;
 }
-//字符串日期格式切换
-export function switchDateTimeFormat(date,dateTime) {
-  let formatFun = dateTime ? formatDateTime : formatDate
-  if (typeof date === 'string'){
-    date = date.replace(/-/g,'/')
-    date = formatFun(new Date(date),'-')
-  } else {
-    date = formatFun(date,'-')
-  }
-  // console.log(date)
-  return date
-}
 /**
 *带对象的数组去重
  */
@@ -49,14 +37,7 @@ export const noRepeatArrHasObject=(arr=[],onlyId='id')=>{
     }
     return resultArr
 }
-/**
- * 生成随机len位数字
- */
-export const randomLenNum = (len, date) => {
-    let random = Math.ceil(Math.random() * 100000000000000).toString().substr(0, len || 4)
-    if (date) random = random + Date.now()
-    return random
-}
+
 /**
  * 是否ie
  */

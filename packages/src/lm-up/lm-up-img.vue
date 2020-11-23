@@ -88,7 +88,7 @@
 
 <script>
     import {isNumber} from "../../utils/validate"
-    import LmImgCropper from '../lm-img-cropper'
+    import LmImgCropper from '../lm-img-cropper/lm-img-cropper'
 
     export default {
         name: 'LmUpImg',

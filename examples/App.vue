@@ -13,13 +13,11 @@
                 <el-row>
                     <lm-input></lm-input>
                     <lm-select></lm-select>
-
                 </el-row>
                 <el-row>
                     <lm-date-time></lm-date-time>
                     <lm-cascader></lm-cascader>
                 </el-row>
-
             </el-form>
         </div>
 

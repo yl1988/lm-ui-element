@@ -1,7 +1,5 @@
 
 import {formatDate,isIEFun,isEdgFun} from "./global-methods";
-import {Alert} from 'element-ui'
-import {MessageBox} from 'element-ui'
 
 export default {
     install(Vue) {

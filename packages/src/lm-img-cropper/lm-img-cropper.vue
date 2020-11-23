@@ -1,85 +1,85 @@
 <!--图片裁剪-->
 <template>
-    <CustomDialog width="850" title="图片裁剪" ref="customDialog">
-        <template #content>
-            <div class="cropper-component">
-                <div class="rowCenter" v-if="headImg && file && file.size/1000>200">
+    <CustomDialog :width="width" :title="title" ref="customDialog">
+        <div class="cropper-component">
+            <slot name="sizeWarning">
+                <div class="rowCenter" v-if="fileSize && maxSize && fileSize>maxSize">
                     <strong class="red">*提示：</strong>
                     <span class="gray666">头像要求小于</span>
                     <strong class="red" style="margin:0 5px;"> 200 </strong>
                     <span class="gray666"> kb，当前图片为 </span>
-                    <strong class="red" style="margin:0 5px;"> {{file.size/1000}} </strong>
+                    <strong class="red" style="margin:0 5px;"> {{fileSize}} </strong>
                     <span class="gray666">kb，请裁剪后再上传</span>
                 </div>
-                <div class="info-item rowBtween">
-                    <div class="columnStart">
-                        <div class="btn-box">
-                            <el-button size="mini" class="operation-btn" icon="el-icon-plus" value="+"  @click="changeScale(1)"/>
-                            <el-button size="mini" class="operation-btn" icon="el-icon-minus" @click="changeScale(-1)"></el-button>
-                            <el-button size="mini" class="operation-btn" icon="el-icon-refresh-left"  @click="rotate(0)"></el-button>
-                            <el-button size="mini" class="operation-btn" icon="el-icon-refresh-right" @click="rotate(1)"></el-button>
-                        </div>
-                        <div class="operation-box">
-                            <div class="cropper" :style="{width:autoCropWidth+60+'px',height:priveImgHeight+60+'px'}">
-                                <vueCropper
-                                        ref="cropper"
-                                        :img="imgSrc"
-                                        :outputSize="outputSize"
-                                        :outputType="outputType"
-                                        :info="info"
-                                        :full="full"
-                                        :canMove="canMove"
-                                        :canMoveBox="canMoveBox"
-                                        :original="original"
-                                        :autoCrop="autoCrop"
-                                        :autoCropWidth="priveImgWidth"
-                                        :autoCropHeight="priveImgHeight"
-                                        :fixedBox="fixedBox"
-                                        @realTime="realTime"
-                                        @imgLoad="imgLoad"
-                                ></vueCropper>
-                                <div class="rowCenter loadingBox" v-if="showLoading">
-                                    <i class="el-icon-loading font40 gray666"></i>
-                                </div>
-                            </div>
-                        </div>
+            </slot>
+            <div class="info-item rowBtween">
+                <div class="columnStart">
+                    <div class="btn-box">
+                        <el-button size="mini" class="operation-btn" icon="el-icon-plus" value="+"  @click="changeScale(1)"/>
+                        <el-button size="mini" class="operation-btn" icon="el-icon-minus" @click="changeScale(-1)"></el-button>
+                        <el-button size="mini" class="operation-btn" icon="el-icon-refresh-left"  @click="rotate(0)"></el-button>
+                        <el-button size="mini" class="operation-btn" icon="el-icon-refresh-right" @click="rotate(1)"></el-button>
                     </div>
-                    <div class="preview-box columnStart">
-                        <div class="font16" style="margin-bottom:20px;">预览</div>
-                        <div :style="{width:autoCropWidth+'px',height:priveImgHeight+'px'}" class="preview">
-                            <img :src="previews.url" :style="previews.img">
+                    <div class="operation-box">
+                        <div class="cropper" :style="{width:autoCropWidth+60+'px',height:priveImgHeight+60+'px'}">
+                            <vueCropper
+                                    ref="cropper"
+                                    :img="imgSrc"
+                                    :outputSize="outputSize"
+                                    :outputType="outputType"
+                                    :info="info"
+                                    :full="full"
+                                    :canMove="canMove"
+                                    :canMoveBox="canMoveBox"
+                                    :original="original"
+                                    :autoCrop="autoCrop"
+                                    :autoCropWidth="priveImgWidth"
+                                    :autoCropHeight="priveImgHeight"
+                                    :fixedBox="fixedBox"
+                                    @realTime="realTime"
+                                    @imgLoad="imgLoad"
+                            ></vueCropper>
                             <div class="rowCenter loadingBox" v-if="showLoading">
                                 <i class="el-icon-loading font40 gray666"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="preview-box columnStart">
-                        <div class="font16" style="margin-bottom:20px;">示例</div>
-                        <div :style="{width:autoCropWidth+'px',height:priveImgHeight+'px'}" class="preview">
-                            <img src="../assets/images/exampleHeadImg.png" :style="{width:autoCropWidth+'px',height:priveImgHeight+'px'}">
+                </div>
+                <div class="preview-box columnStart">
+                    <div class="font16" style="margin-bottom:20px;">{{previewText}}</div>
+                    <div :style="{width:autoCropWidth+'px',height:priveImgHeight+'px'}" class="preview">
+                        <img :src="previews.url" :style="previews.img">
+                        <div class="rowCenter loadingBox" v-if="showLoading">
+                            <i class="el-icon-loading font40 gray666"></i>
                         </div>
                     </div>
                 </div>
+                <div class="preview-box columnStart">
+                    <div class="font16" style="margin-bottom:20px;">{{exampleText}}</div>
+                    <div :style="{width:autoCropWidth+'px',height:priveImgHeight+'px'}" class="preview">
+                        <img :src="exampleImg" :style="{width:autoCropWidth+'px',height:priveImgHeight+'px'}">
+                    </div>
+                </div>
             </div>
-           
-        </template>
+        </div>
         <template #footer>
-            <div class="rowCenter">
-                <div ref="complete" style="margin-right:20px;">
-                    <el-button type="primary" style="width:90px;height:40px;">裁剪完成</el-button>
+            <slot name="footer">
+                <div class="rowCenter">
+                    <div ref="complete" style="margin-right:20px;">
+                        <el-button type="primary" style="width:90px;height:40px;">{{completeBtnText}}</el-button>
+                    </div>
+                    <div ref="cancel" >
+                        <el-button style="width:90px;height:40px;">{{cancelBtnText}}</el-button>
+                    </div>
                 </div>
-                <!--v-if="!(headImg && file && file.size/1000>200)"-->
-                <div ref="cancel" >
-                    <el-button style="width:90px;height:40px;">不裁剪</el-button>
-                </div>
-            </div>
+            </slot>
         </template>
     </CustomDialog>
 </template>
 
 <script>
     export default {
-        name: 'cropper',
+        name: 'LmImgCropper',
         props:{
             imgSrc:[String,Blob],// 裁剪图片的地址
             info: {
@@ -118,7 +118,39 @@
             },//裁剪框宽度
             fixedBox: Boolean, // 截图框固定大小
             headImg:Boolean,//是否是头像
-            file:File
+            fileSize:Number,//文件尺寸
+            exampleImg:{
+                type:String,
+                default:require('./exampleImg.svg')
+            },//示例图片路径
+            maxSize:{
+                type:[Number,String],
+                default:200
+            },//允许的最大尺寸
+            title:{
+                type:String,
+                default:'图片裁剪'
+            },//标题
+            width:{
+                type:[Number,String],
+                default:850
+            },//宽度
+            previewText:{
+                type:String,
+                default:'预览'
+            },//预览文字
+            exampleText:{
+                type:String,
+                default:'示例'
+            },//是例文字
+            completeBtnText:{
+                type:String,
+                default:'裁剪完成'
+            },//裁剪完成按钮
+            cancelBtnText:{
+                type:String,
+                default:'不裁剪'
+            },//裁剪完成按钮
         },
         data() {
             return {
@@ -195,54 +227,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-    @import "../lm-ui-element-style/src/common/mix";
-    .cropper-component {
-        width: 100%;
-        position: relative;
-        padding:0 20px;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        .btn-box {
-            margin: 20px 0;
-            .operation-btn {
-                width: 30px;
-                height: 30px;
-                text-align: center;
-                background-color: #fff;
-                cursor: pointer;
-                display: inline-block;
-                font-size: 16px;
-                color: #666;
-                padding: 0;
-                margin: 0 10px;
-            }
-        }
-        .info-item {
-            .operation-box {
-                display: inline-block;
-                .cropper {
-                    position: relative;
-                }
-            }
-            .preview-box {
-                .preview {
-                    width: 150px;
-                    height: 150px;
-                    border: 1px solid #ccc;
-                    background-color: #ffffff;
-                    margin: 5px;
-                    overflow: hidden;
-                    position: relative;
-                }
-            }
-        }
-    }
-    .loadingBox{
-        @include positionCenter();
-        z-index: 999;
-    }
-
-</style>

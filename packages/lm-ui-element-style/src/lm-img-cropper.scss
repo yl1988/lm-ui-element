@@ -1,0 +1,47 @@
+@import "./common/mix";
+.cropper-component {
+  width: 100%;
+  position: relative;
+  padding:0 20px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  .btn-box {
+    margin: 20px 0;
+    .operation-btn {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      background-color: #fff;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 16px;
+      color: #666;
+      padding: 0;
+      margin: 0 10px;
+    }
+  }
+  .info-item {
+    .operation-box {
+      display: inline-block;
+      .cropper {
+        position: relative;
+      }
+    }
+    .preview-box {
+      .preview {
+        width: 150px;
+        height: 150px;
+        border: 1px solid #ccc;
+        background-color: #ffffff;
+        margin: 5px;
+        overflow: hidden;
+        position: relative;
+      }
+    }
+  }
+}
+.loadingBox{
+  @include positionCenter();
+  z-index: 999;
+}
