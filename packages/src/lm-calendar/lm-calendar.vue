@@ -2,11 +2,11 @@
   <div class="custom-calendar" :style="{width:calendarWidth,height:calendarHeight}" :class="calendarClass">
     <div class="calendar-topBox">
       <slot name="calendarTitle"></slot>
-      <slot name="calendarTop" :currentYear="currentYear" :currentMonth="currentMonth+1" :changeMonth="changeMonth">
+      <slot name="calendarHead" :currentYear="currentYear" :currentMonth="currentMonth+1" :changeMonth="changeMonth">
         <div class="calendar-title rowCenter" :style="{height:titleHeight,background:titleBk}" :class="titleClass">
           <strong class="left rowStart">{{currentYear}}{{titleDateConnector || '年'}}{{currentMonth+1}}{{titleDateConnector ? '' : '月'}}</strong>
           <span class="right rowBtween">
-               <slot name="monthRightBtn" :changeMonth="changeMonth" :currentYear="currentYear" :currentMonth="currentMonth+1">
+               <slot name="changeMonthBtn" :changeMonth="changeMonth" :currentYear="currentYear" :currentMonth="currentMonth+1">
                  <span class="changeMonth" @click="changeMonth(0)">&lt;</span>
                  <span class="changeMonth" @click="changeMonth(1)">&gt;</span>
                </slot>

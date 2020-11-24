@@ -10,7 +10,7 @@
                     </div>
                 </div>
             </template>
-            <template #calendarTop="{currentYear,currentMonth,changeMonth}">
+            <template #calendarHead="{currentYear,currentMonth,changeMonth}">
                 <div class="canlendar-top-box">
                     <div class="canlendar-top-inner-box rowCenter">
                         <div class="rowCenter year-back-box">
