@@ -87,7 +87,7 @@
             appendText:String,//尾部文字
             appendIcon:String,//尾部图标
             placeholder:{
-                type:[String,Array],
+                type:String,
                 default:'请输入'
             },//placeholder
             prefixIcon:String,//输入框前置图标
@@ -95,8 +95,7 @@
             minlength:[Number,String],//最小长度
             min:Number,//最小值
             max:Number,//最大值
-            int:Boolean,//是否是整数
-            toFixed:Number,//保留的小数
+            toFixed:[Number,String],//保留的小数
             autosize:{
                 type:[Boolean,Object],
                 default:()=>{
@@ -150,7 +149,8 @@
         methods: {
             // 输入框，改变
             lmInputInput(v){
-                let {type,min,max,int,toFixed,lmInputMaxlength}=this
+                let {type,min,max,toFixed,lmInputMaxlength}=this
+                toFixed=Number(toFixed)
                 if(type==='tel'){
                     //电话
                     this.$emit('input',v.replace(/\D/g,''))
@@ -165,7 +165,7 @@
                         v=v.toString().replace(/\.\./g,'.')
                     }
                     toFixed && (v=Number(v).toFixed(toFixed))
-                    int && (v=parseInt(v))
+                    toFixed===0 && (v=parseInt(v))
                     if(typeof lmInputMaxlength==='number'){
                         v=v.toString().slice(0,lmInputMaxlength)
                     }

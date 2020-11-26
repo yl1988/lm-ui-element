@@ -1,18 +1,15 @@
-<!--表单项：输入框，选择框，单选按钮,时间选择-->
+<!--表单项：级联选择-->
 <template>
     <el-col :span="span" class="lm-form-item-col" ref="lmCol">
         <el-form-item :label="label" :prop="prop" :label-width="lmFormLabelWidth" ref="formItemRef" :required="required" :style="{'margin-bottom':marginBottom || (isEdit ? '22px' : '0')}">
-            <div class="editInputBox" v-if="isEdit" style="text-align:left;">
-                <!--级联选择器-->
-                <el-cascader :value="lmFormValue"
-                             :options="lmFormItemData"
-                             :style="{width:lmFormItemWidth}"
-                             @change="lmFormItemChange"
-                             :props="pickerOptions"
-                             :filterable="filterable"
-                             :id="lmRef[0]"
-                ></el-cascader>
-            </div>
+            <el-cascader :value="lmFormValue" v-if="isEdit"
+                         :options="lmFormItemData"
+                         :style="{width:lmFormItemWidth}"
+                         @change="lmFormItemChange"
+                         :props="pickerOptions"
+                         :filterable="filterable"
+                         :id="lmRef[0]"
+            ></el-cascader>
             <div class="lmTexts" v-else>
                 <span class="textSpan" :style="{margin:multiMargin,...spanStyle}"  v-for="(value,index) in lmTexts" :key="index">{{value}}</span>
             </div>
@@ -27,22 +24,22 @@
         props:{
             ...commonProps,
             value:{
-                type:[String,Number,Object,Array,Date]
+                type:Array
             },//值
             placeholder:{
-                type:[String,Array],
+                type:String,
                 default:'请选择'
             },//placeholder
             lmFormItemData:{
                 type:Array,
-                default:()=>['否','是']
+                default:()=>[]
             },//数据
             oName:{
-                type:[String,Array],
+                type:String,
                 default:'name'
             },//选项文字
             oValue:{
-                type:[String,Array],
+                type:String,
                 default:'value'
             },//选项值
             filterable:{
@@ -58,7 +55,7 @@
         },
         data() {
             return {
-                lmFormValue:null,//值
+                lmFormValue:[],//值
                 ...commonData,
             }
         },
@@ -67,9 +64,6 @@
             //查看状态下显示的文字
             lmTexts(){
                 let {lmFormItemData,oName,oValue,lmFormValue}=this
-                if(!lmFormValue && (lmFormValue!==0)){
-                    return []
-                }
                 let texts=[]
                 let cascaderText=''
                 if(!(lmFormValue instanceof Array )|| !lmFormValue.length){
@@ -95,7 +89,7 @@
         },
         mounted() {
             getSize(this.width,this.labelWidth,this.height,this)
-            if(this.value){
+            if(this.value instanceof Array){
                 this.lmFormValue=value
             }
         },
@@ -107,11 +101,15 @@
         },
         watch:{
             value:function (v) {
-                this.lmFormValue=v
+                if(v instanceof Array){
+                    this.lmFormValue=v
+                }
             },
         },
     }
 </script>
 <style>
-    @import "../../lm-ui-element-style/src/lm-form-item/lm-form-item.css";
+    .lm-form-item-col .el-cascader{
+        width:100%;
+    }
 </style>

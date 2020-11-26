@@ -1,4 +1,4 @@
-<!--表单项：输入框，选择框，单选按钮,时间选择-->
+<!--表单项：时间选择-->
 <template>
     <el-col :span="span" class="lm-form-item-col" ref="lmCol">
         <el-form-item :label="label" :prop="prop" :label-width="lmFormLabelWidth" ref="formItemRef" :required="required" :style="{'margin-bottom':marginBottom || (isEdit ? '22px' : '0')}">
@@ -71,7 +71,7 @@
                 default:'dateTime'
             },//表单类型
             value:{
-                type:[String,Number,Object,Array,Date]
+                type:[String,Number,Array,Date]
             },//值
             dateTimeType:{
                 type:String,
@@ -102,9 +102,6 @@
                 startDatePlaceholder:'',//起始日期日期placeholder
                 endDatePlaceholder:'',//结束日期日期placeholder
                 lmDateTimePlaceholder:'请选择',//时间范围placeholder
-                lmDateMultiSelectPlaceholder:'请选择',//多个下拉框选择placeholder
-                selectPlaceholder:'请选择',//下拉框placeholder
-                getDefaultData:false,//是否获取默认值（多选框或时间范围）
                 lmDateTimeFormat:'yyyy-MM-dd',//时间显示格式
                 lmDateTimeValueFormat:'yyyy-MM-dd',//时间值格式
             }
@@ -159,5 +156,8 @@
     }
 </script>
 <style>
-    @import "../../lm-ui-element-style/src/lm-form-item/lm-form-item.css";
+    .lm-form-item-col .el-date-editor .el-input, .lm-form-item-col .el-date-editor .el-input__inner{
+        width:100%;
+    }
+
 </style>

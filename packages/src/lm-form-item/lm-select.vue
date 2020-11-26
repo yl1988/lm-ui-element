@@ -56,7 +56,7 @@
                 default:'select'
             },//表单类型
             value:{
-                type:[String,Number,Object,Array,Date]
+                type:[String,Number,Array]
             },//值
             placeholder:{
                 type:[String,Array],
@@ -212,5 +212,7 @@
     }
 </script>
 <style>
-    @import "../../lm-ui-element-style/src/lm-form-item/lm-form-item.css";
+    .lm-form-item-col .el-select{
+        width:100%;
+    }
 </style>

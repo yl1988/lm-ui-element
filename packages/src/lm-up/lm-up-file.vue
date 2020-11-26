@@ -75,7 +75,7 @@
                       <i class="el-icon-loading yellow" style="margin-left:10px;" v-if="file.loading"></i>
                     </div>
                     <div class="rowEnd">
-                      <i class="el-icon-view blue" style="font-size:18px;margin-right:10px;" @click="filePreview(file)" v-if="file.fileType && overViewAccept.indexOf(file.fileType)>-1"></i>
+                      <i class="el-icon-view blue" style="font-size:18px;margin-right:10px;" @click="filePreview(file)" v-if="showView && file.fileType && overViewAccept.indexOf(file.fileType)>-1"></i>
                       <i class="el-icon-delete" style="color:red" @click="removeDescFile(index,file)" v-if="!showEdit"></i>
                     </div>
                   </div>
@@ -109,33 +109,15 @@
             },//文件数据
             fileAccept:{
                 type:String,
-                default:`.jpg,.jpeg,.png`
+                default:`.jpg,.jpeg,.png,.pdf,.webp'`
             },//文件类型
             showEdit:Boolean,//显示编辑状态
             showUpBtn:{
                 type:Boolean,
                 default:true
             },//是否显示上传按钮
-            drag:{
-                type:Boolean,
-                default:false
-            },//是否可以拖拽上传
-            imgWidth:{
-                type:[String,Number],
-                default:'600px'
-            },//图片宽度
-            imgHeight:{
-                type:[String,Number],
-                default:'360px'
-            },//图片高度
-            limit:{
-                type:Number,
-                default:undefined
-            },//图片限制张数
-            imgBorder:{
-                type:String,
-                default:'dashed 1px #eeeeee'
-            },//图片边框
+            drag:Boolean,//是否可以拖拽上传
+            limit:Number,//文件限制数量
             otherData:{
                 type:Object,
                 default:()=>{
@@ -148,7 +130,10 @@
                 type:String,
                 default:'点击拍照'
             },//相机按钮文字
-            hiddenCamera:Boolean,//是否隐藏拍照
+            hiddenCamera:{
+                type:Boolean,
+                default:true
+            },//是否隐藏拍照
             toastColumn:Boolean,//提示文字是否竖排
             checkText:{
                 type:String,
@@ -165,6 +150,7 @@
                 default:''
             },//上传地址
             fileBaseUrl:String,//文件域名
+            showView:Boolean,//是否显示预览图标
         },
         data() {
             return {
@@ -175,8 +161,6 @@
                 fileViewForm:{},//预览文件表单
                 overViewAccept:['.png','.jpg','.jpeg','.webp','.pdf','.docx'],//可预览的文件类型
             }
-        },
-        computed: {
         },
         methods: {
             //文件获取
