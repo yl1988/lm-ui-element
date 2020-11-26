@@ -1,8 +1,7 @@
 <!--选择地址，搭配高德地图使用-->
 <template>
     <el-row>
-        <el-form-item :label="title" label-position="top" class="addressFormItemBox" :required="required"
-                      :prop="addressProp" :style="{'margin-bottom':edit ? '22px' : '0'}">
+        <el-form-item :label="title" label-position="top" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':edit ? '22px' : '0'}">
             <div v-if="edit" class="rowStart">
                 <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince"
                            placeholder="请选择" :id="lmRef[0]" :filterable="filterable">
@@ -68,8 +67,11 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    // import {mapState} from 'vuex'
     import {isNumber} from "../../utils/validate";
+    import provinceList from './province.json'
+    import citys from './city.json'
+    import districts from './district.json'
 
     export default {
         name: 'LmAddress',
@@ -96,10 +98,7 @@
                 type: Boolean,
                 default: true
             },//是否可编辑
-            size: {
-                type: String,
-                default: 'mini'
-            },//尺寸
+            size: String,//尺寸
             inputWidth: {
                 type: [Number, String],
                 default: 'auto'
@@ -131,6 +130,7 @@
             return {
                 address: {},//地址
                 isNotTwoLevels: false,//是否直辖市
+                provinceList:Object.freeze(provinceList),
                 cityList: Object.freeze([]),//市
                 districtList: Object.freeze([]),//县
                 fullAddress: '',//地址全部信息
@@ -144,7 +144,7 @@
         },
 
         computed: {
-            ...mapState(['provinceList', 'focusHiddenData']),
+            // ...mapState(['provinceList', 'focusHiddenData']),
         },
         async mounted() {
             let {inputWidth} = this
