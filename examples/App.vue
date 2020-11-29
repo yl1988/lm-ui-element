@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import {formatDate} from "../packages/uitls/lm-methods";
+    import {formatDate} from "../packages/utils/lm-methods";
     import LmCanlendarComponent from './components/lm-canlendar-component'
     export default {
         components: {

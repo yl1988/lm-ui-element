@@ -1,6 +1,6 @@
 {
   "name": "lm-ui-element",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "main": "lib/frog-ui.umd.min.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "lint": "vue-cli-service lint",
     "build:theme": "gulp build --gulpfile packages/lm-ui-element-style/gulpfile.js && cp-cli packages/lm-ui-element-style/lib lib/lm-ui-element-style",
     "build:utils": "cp-cli packages/utils lib/utils",
-    "build:lib": "vue-cli-service build --target lib --name frog-ui --dest lib packages/index.js && npm run build:theme && npm run build:utils"
+    "build:lib": "vue-cli-service build --target lib --name frog-ui --dest lib packages/index.js && npm run build:theme && npm run build:utils",
+    "publish": "npm publish --registry https://registry.npmjs.org"
   },
   "dependencies": {
     "ant-design-vue": "^1.7.1",

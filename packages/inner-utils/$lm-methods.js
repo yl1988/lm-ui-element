@@ -1,7 +1,7 @@
 /**
  * 挂在原型链上的方法
  */
-import {formatDate,isIEFun,isEdgFun} from "../uitls/lm-methods";
+import {formatDate,isIEFun,isEdgFun} from "../utils/lm-methods";
 
 export default {
     install(Vue) {

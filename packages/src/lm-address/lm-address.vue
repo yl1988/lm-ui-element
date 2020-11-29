@@ -61,7 +61,7 @@
 
 <script>
     // import {mapState} from 'vuex'
-    import {isNumber} from "../../uitls/lm-validate";
+    import {isNumber} from "../../utils/lm-validate";
     import provinceList from './province.json'
     import citys from './city.json'
     import districts from './district.json'

@@ -87,7 +87,7 @@
 </template>
 
 <script>
-    import {isNumber} from "../../uitls/lm-validate"
+    import {isNumber} from "../../utils/lm-validate"
     import LmImgCropper from '../lm-img-cropper/lm-img-cropper'
 
     export default {
