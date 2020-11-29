@@ -1,4 +1,4 @@
-import {isNumber} from "../../utils/validate"
+import {isNumber} from "../../uitls/lm-validate"
 /**
  * 公用的参数对象
  */

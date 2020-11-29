@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-    import {isValidDate,isNumber} from "../../utils/validate"
+    import {isValidDate,isNumber} from "../../uitls/lm-validate"
     import {checkStartTimeEndTimeFun,insertDataToCalendar} from './util'
     export default {
         name: "LmCalendar",

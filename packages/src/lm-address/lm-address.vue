@@ -3,40 +3,36 @@
     <el-row>
         <el-form-item :label="title" label-position="top" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':edit ? '22px' : '0'}">
             <div v-if="edit" class="rowStart">
-                <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince"
-                           placeholder="请选择" :id="lmRef[0]" :filterable="filterable">
+                <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable">
                     <el-option
                             v-for="item in provinceList"
-                            :key="item.areaid"
+                            :key="item.id"
                             :label="item.name"
-                            :value="item.areaid">
+                            :value="item.id">
                     </el-option>
                 </el-select>
-                <el-select class="addressFormItem" :size="size" :value="address.cityId" @change="changeCity"
-                           placeholder="请选择" :filterable="filterable">
+                <el-select class="addressFormItem" :size="size" :value="address.cityId" @change="changeCity" placeholder="请选择" :filterable="filterable">
                     <el-option
                             v-for="item in cityList"
-                            :key="item.areaid"
+                            :key="item.id"
                             :label="item.name"
-                            :value="item.areaid">
+                            :value="item.id">
                     </el-option>
                 </el-select>
-                <el-select class="addressFormItem" v-if="isNotTwoLevels" :size="size" :value="address.districtId"
-                           @change="changeDistrict" placeholder="请选择" :filterable="filterable">
+                <el-select class="addressFormItem" v-if="isNotTwoLevels" :size="size" :value="address.districtId" @change="changeDistrict" placeholder="请选择" :filterable="filterable">
                     <el-option
                             v-for="item in districtList"
-                            :key="item.areaid"
+                            :key="item.id"
                             :label="item.name"
-                            :value="item.areaid">
+                            :value="item.id">
                     </el-option>
                 </el-select>
                 <div v-if="showStreet">
                     <el-autocomplete
                             class="addressFormInput"
                             v-if="elAuto" :style="{width:streetInputWidth}" :size="size" placeholder="请输入"
-                            :value="address.street" :maxlength="100"
+                            :value="address.street" :maxlength="maxlength"
                             @blur="streetBlur" @input="streetInput"
-                            v-focus-next-on-enter:[focusHiddenData]="lmRef[1]"
                             @select="inputAutoSelect" :fetch-suggestions="inputQuerySearch"
                             :value-key="valueKey" :placement="placement" :trigger-on-focus="triggerOnFocus"
                     >
@@ -54,21 +50,18 @@
                             :size="size" placeholder="请输入"
                             :value="address.street"
                             @blur="streetBlur" @input="streetInput"
-                            v-focus-next-on-enter:[focusHiddenData]="lmRef[1]"
-                            :maxlength="100"
+                            :maxlength="maxlength"
                     ></el-input>
                 </div>
-
             </div>
             <span v-else>{{fullAddress}}</span>
         </el-form-item>
     </el-row>
-
 </template>
 
 <script>
     // import {mapState} from 'vuex'
-    import {isNumber} from "../../utils/validate";
+    import {isNumber} from "../../uitls/lm-validate";
     import provinceList from './province.json'
     import citys from './city.json'
     import districts from './district.json'
@@ -106,7 +99,7 @@
             addressProp: {
                 type: String,
                 default: 'address'
-            },
+            },//用于校验的prop字段
             lmRef: {
                 type: Array,
                 default: () => []
@@ -125,12 +118,13 @@
             },//输入建议对象中用于显示的键名
             placement: String,//菜单弹出位置
             triggerOnFocus: Boolean,//是否在输入框 focus 时显示建议列表
+            maxlength:[String,Number],//地址输入框的最大长度
         },
         data() {
             return {
                 address: {},//地址
                 isNotTwoLevels: false,//是否直辖市
-                provinceList:Object.freeze(provinceList),
+                provinceList:Object.freeze(provinceList),//省数据
                 cityList: Object.freeze([]),//市
                 districtList: Object.freeze([]),//县
                 fullAddress: '',//地址全部信息
@@ -154,13 +148,6 @@
             this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
         },
         methods: {
-            // // 获取省市区信息 code 父级code 000000 省份  type类型 （province省份 city城市 district区域县  ）
-            async getRegionInfo(code, type = 0) {
-                let result = await reqRegionInfo(code)
-                this[['provinceList', 'cityList', 'districtList'][type]] = result
-                ;(type === 2) && (this.isNotTwoLevels = !!result.length)
-                this.inputQueryData = []
-            },
             // // 点击切换省份
             changeProvince(val) {
                 this.$set(this.address, 'provinceId', val)
@@ -168,63 +155,53 @@
                 this.$set(this.address, 'districtId', '')
                 this.$set(this.address, 'street', '')
                 this.districtList = []
-                this.cityList = []
-                this.getRegionInfo(val, 1)
-                let thisProvince = this.provinceList.filter((item, index) => item.areaid === val)
+                this.inputQueryData = []
+                this.cityList = citys[val]
+                let thisProvince = this.provinceList.filter((item, index) => item.id === val)
                 this.addressArea[1] = this.addressArea[2] = ''
                 this.addressArea[0] = thisProvince[0].name
                 this.address.addressArea = this.addressArea
                 this.$emit('input', this.address)
+                this.$emit('addressChange',this.address)
             },
             // // 点击切换城市
             changeCity(val) {
-                this.districtList = []
-                this.getRegionInfo(val, 2)
+                this.districtList = districts[val]
                 this.$set(this.address, 'cityId', val)
                 this.$set(this.address, 'districtId', '')
-                let thisCity = this.cityList.filter(item => item.areaid === val)
+                this.inputQueryData = []
+                let thisCity = this.cityList.filter(item => item.id === val)
                 this.addressArea[2] = ''
                 this.addressArea[1] = thisCity[0].name
                 this.address.addressArea = this.addressArea
                 this.$emit('input', this.address)
+                this.$emit('addressChange',this.address)
             },
             // 点击切换区县
             async changeDistrict(val) {
                 let {districtList} = this
                 this.$set(this.address, 'districtId', val)
+                this.inputQueryData = []
                 this.hasLngLag = false
-                let thisdistrictList = districtList.filter(item => item.areaid === val)
+                let thisdistrictList = districtList.filter(item => item.id === val)
                 this.addressArea[2] = thisdistrictList[0].name
-                !this.hasLngLag && this.addressArea[3] && this.getLonLat(this.addressArea.join(''))
+                !this.hasLngLag && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
                 this.address.addressArea = this.addressArea
                 this.address.showStreet = this.showStreet
                 this.$emit('input', this.address)
-            },
-            //获取经纬度
-            async getLonLat(data) {
-                if(!AMap){
-                    console.error('获取地图实例AMap失败,请确保正确引入并初始化高德地图')
-                    return
-                }
-                let lngLatArr = await this.$globalMethods.getLngLat(AMap, data)
-                let {addressArea, isNotTwoLevels, showStreet} = this
-                this.address = {...this.address, addressArea, isNotTwoLevels, showStreet}
-                this.$emit('getLngLatInfo', {
-                    longitude: lngLatArr[0].lng,
-                    latitude: lngLatArr[0].lat,
-                })
-                this.$emit('input', this.address)
+                this.$emit('addressChange',this.address)
             },
             //详细地址改变
             streetBlur(e) {
                 this.addressArea[3] = e.target.value
                 this.hasLngLag = false
                 if (this.isNotTwoLevels) {
-                    !this.hasLngLag && this.addressArea[2] && this.addressArea[3] && this.getLonLat(this.addressArea.join(''))
+                    !this.hasLngLag && this.addressArea[2] && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
                 } else {
-                    !this.hasLngLag && this.addressArea[1] && this.addressArea[3] && this.getLonLat(this.addressArea.join(''))
+                    !this.hasLngLag && this.addressArea[1] && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
                     this.address.districtId = this.address.cityId
                 }
+                console.log(this.addressArea)
                 this.address.addressArea = this.addressArea
                 let {isNotTwoLevels, showStreet} = this
                 this.address = {...this.address, addressArea: this.addressArea, isNotTwoLevels, showStreet}
@@ -234,6 +211,7 @@
             async streetInput(value) {
                 this.$set(this.address, 'street', value)
                 this.$emit('input', this.address)
+                this.$emit('addressChange',this.address)
                 if (value) {
                     let addressInfos = await this.getSearchAddresList(value)
                     this.inputQueryData = addressInfos instanceof Array ? addressInfos.reduce((result, current) => {
@@ -248,15 +226,16 @@
                         })
                         return result
                     }, []) : []
-
                 }
             },
             //输入框搜索点击完成
             inputAutoSelect(item) {
+                console.log(item)
+                this.addressArea[3] = item.name
                 this.hasLngLag = true
                 this.$emit('getLngLatInfo', {
-                    longitude: item.lng,
-                    latitude: item.lat,
+                    lng: item.lng,
+                    lat: item.lat,
                 })
             },
             //输入框返回建议数据
@@ -305,12 +284,12 @@
             async handleGetCityAndDistrict(provinceId, cityId, districtId, street) {
                 if (provinceId && cityId) {
                     this.getDefault = true
-                    this.cityList = await reqRegionInfo(provinceId)
-                    this.districtList = await reqRegionInfo(cityId)
+                    this.cityList = citys[provinceId]
+                    this.districtList = districts[cityId]
                     this.isNotTwoLevels = !!this.districtList.length
-                    let province = provinceId ? this.provinceList.filter(item => item.areaid === provinceId)[0].name : ''
-                    let city = cityId ? this.cityList.filter(item => item.areaid === cityId)[0].name : ''
-                    let district = cityId === districtId ? '' : (districtId ? this.districtList.filter(item => item.areaid === districtId)[0].name : '')
+                    let province = provinceId ? this.provinceList.filter(item => item.id === provinceId)[0].name : ''
+                    let city = cityId ? this.cityList.filter(item => item.id === cityId)[0].name : ''
+                    let district = cityId === districtId ? '' : (districtId ? this.districtList.filter(item => item.id === districtId)[0].name : '')
                     this.fullAddress = `${province} ${city} ${district} ${street}`
                     this.addressArea = [province, city]
                     if (district) {
@@ -320,6 +299,34 @@
                         this.addressArea[2] = street
                     }
                 }
+            },
+            //通过地址查询经纬度
+            getLngLatFun(address) {
+                if (!address) return
+                if(!AMap){
+                    console.error('获取地图实例AMap失败,请确保正确引入并初始化高德地图')
+                    return
+                }
+                return new Promise((resolve, reject) => {
+                    AMap.plugin('AMap.Geocoder', () => {
+                        let geocoder = new AMap.Geocoder({})
+                        geocoder.getLocation(address, (status, result) => {
+                            // console.log(result)
+                            let {geocodes = []} = result
+                            // console.log(geocodes)
+                            if(!(geocodes instanceof Array) || !geocodes.length){
+                                resolve({})
+                            }
+                            let {lng, lat} = geocodes[0].location
+                            this.$emit('getLngLatInfo', {lng, lat})
+                            resolve({lng, lat})
+                        })
+                    })
+                })
+            },
+            //设置所有地址
+            setFullAddress(fullAddress){
+                this.fullAddress =fullAddress
             }
         },
         watch: {
@@ -336,14 +343,9 @@
                     let {cityId, provinceId, districtId, street} = value
                     //有数据时只允许更新一次
                     if (this.getDefault) return
-
                     this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
                 }
             },
         },
     }
 </script>
-
-<style scoped lang="scss">
-
-</style>

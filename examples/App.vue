@@ -18,7 +18,9 @@
                     <lm-date-time></lm-date-time>
                     <lm-cascader></lm-cascader>
                 </el-row>
+                <lm-address v-model="address" :required="false"></lm-address>
             </el-form>
+            <div>{{address}}</div>
         </div>
 
 
@@ -26,7 +28,7 @@
 </template>
 
 <script>
-    import {formatDate} from "../packages/utils/global-methods";
+    import {formatDate} from "../packages/uitls/lm-methods";
     import LmCanlendarComponent from './components/lm-canlendar-component'
     export default {
         components: {
@@ -34,6 +36,7 @@
         },
         data() {
             return {
+                address:'',//地址
             }
         },
         computed: {

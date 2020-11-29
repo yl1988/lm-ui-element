@@ -8,7 +8,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "build:theme": "gulp build --gulpfile packages/lm-ui-element-style/gulpfile.js && cp-cli packages/lm-ui-element-style/lib lib/lm-ui-element-style",
-    "build-lib": "vue-cli-service build --target lib --name frog-ui --dest lib packages/index.js && npm run build:theme"
+    "build:utils": "cp-cli packages/utils lib/utils",
+    "build:lib": "vue-cli-service build --target lib --name frog-ui --dest lib packages/index.js && npm run build:theme && npm run build:utils"
   },
   "dependencies": {
     "ant-design-vue": "^1.7.1",
