@@ -46,11 +46,12 @@
 </template>
 <script>
     // import {mapState} from 'vuex'
-    import {commonProps,commonData,getSize,lmFormItemChangeFun,lmFormItemWatch} from "./util";
+    import {lmFormItemChangeFun,lmFormItemWatch} from "./util";
+    import mixin from './mixin'
     export default {
         name: 'LmSelect',
+        mixins:[mixin],
         props:{
-            ...commonProps,
             formType:{
                 type:String,
                 default:'select'
@@ -95,7 +96,6 @@
         data() {
             return {
                 lmFormValue:null,//值
-                ...commonData,
                 lmFormMultiValues:[],//选择好的多选数据
                 lmFormMultiItemData:[],//选择好的多选数据
                 lmDateMultiSelectPlaceholder:'请选择',//多个下拉框选择placeholder
@@ -161,7 +161,6 @@
             }
         },
         mounted() {
-            getSize(this.width,this.labelWidth,this.height,this)
             if(this.value){
                 if(formType==='multiSelect'){
                     this.lmFormMultiValues=value

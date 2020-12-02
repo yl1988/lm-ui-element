@@ -72,11 +72,12 @@
 </template>
 <script>
     // import {mapState} from 'vuex'
-    import {commonProps,commonData,getSize} from "./util";
+    import {getSize} from "./util";
+    import mixin from './mixin'
     export default {
         name: 'LmInput',
+        mixins:[mixin],
         props:{
-            ...commonProps,
             value:{
                 type:[String,Number]
             },//值
@@ -119,7 +120,6 @@
         },
         data() {
             return {
-                ...commonData,
                 lmFormValue:null,//值
                 lmInputMaxlength:undefined,//输入框最大长度
                 lmInputMinlength:undefined,//输入框最小长度
@@ -141,7 +141,6 @@
 
         },
         mounted() {
-            getSize(this.width,this.labelWidth,this.height,this)
             if(this.value){
                 this.lmFormValue=value
             }

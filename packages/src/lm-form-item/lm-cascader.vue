@@ -18,11 +18,12 @@
 </template>
 <script>
     // import {mapState} from 'vuex'
-    import {commonProps,commonData,getSize,lmFormItemChangeFun} from "./util";
+    import {lmFormItemChangeFun} from "./util";
+    import mixin from './mixin'
     export default {
         name: 'LmCascader',
+        mixins:[mixin],
         props:{
-            ...commonProps,
             value:{
                 type:Array
             },//值
@@ -56,7 +57,6 @@
         data() {
             return {
                 lmFormValue:[],//值
-                ...commonData,
             }
         },
         computed: {
@@ -88,7 +88,6 @@
             }
         },
         mounted() {
-            getSize(this.width,this.labelWidth,this.height,this)
             if(this.value instanceof Array){
                 this.lmFormValue=value
             }

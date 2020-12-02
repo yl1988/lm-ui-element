@@ -95,3 +95,93 @@ export const compressImageFun=({file, width, height, quality = 0.8, maxWidth = 1
         })
     })
 }
+// 将base64转换为blob
+export function convertBase64UrlToBlob(urlData) {
+    let arr = urlData.split(',')
+    let mime = arr[0].match(/:(.*?);/)[1]
+    let bstr = atob(arr[1])
+    let n = bstr.length
+    let u8arr = new Uint8Array(n)
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+    }
+    return new Blob([u8arr], { type: mime })
+}
+
+export function dataURLtoFile(dataurl, filename = 'file') {
+    let arr = dataurl.split(',')
+    let mime = arr[0].match(/:(.*?);/)[1]
+    let suffix = mime.split('/')[1]
+    let bstr = atob(arr[1])
+    let n = bstr.length
+    let u8arr = new Uint8Array(n)
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+    }
+    return new File([u8arr], `${filename}.${suffix}`, {
+        type: mime
+    })
+}
+
+// 压缩图片
+export function compressImage(path, config) {
+    console.log(config)
+    if((typeof path !=='string' || !(path instanceof Blob)) && path instanceof File){
+        path=URL.createObjectURL(path)
+    }
+    return new Promise((resolve, reject) => {
+        // 生成canvas
+        let canvas = document.createElement('canvas')
+        let ctx = canvas.getContext('2d')
+        let img = new Image()
+        img.crossOrigin = 'Anonymous'
+        img.onload = function() {
+            let w = this.width
+            let h = this.height
+            let scale = w / h
+            w = config.width || config.height * scale || w
+            h = config.height || config.width / scale || h
+            // 最大宽高如有限制时的处理
+            w = config.maxWidth && w > config.maxWidth ? config.maxWidth : w
+            h = config.maxHeight && h > config.maxHeight ? config.maxHeight : h
+            w = Math.min(w, h * scale) || w
+            h = Math.min(h, w / scale) || h
+
+            let quality = 0.7 // 默认图片质量为0.7
+            // 创建属性节点
+            let anw = document.createAttribute('width')
+            anw.nodeValue = w
+            let anh = document.createAttribute('height')
+            anh.nodeValue = h
+            canvas.setAttributeNode(anw)
+            canvas.setAttributeNode(anh)
+            // 将canvas的透明背景设置成白色
+            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+            for(let i = 0; i < imageData.data.length; i += 4) {
+                // 当该像素是透明的,则设置成白色
+                if(imageData.data[i + 3] === 0) {
+                    imageData.data[i] = 255
+                    imageData.data[i + 1] = 255
+                    imageData.data[i + 2] = 255
+                    imageData.data[i + 3] = 255
+                }
+            }
+            ctx.putImageData(imageData, 0, 0)
+            ctx.drawImage(this, 0, 0, w, h)
+            if (config.quality && config.quality <= 1 && config.quality > 0) {
+                quality = config.quality
+            }
+            config.imgType==='image/jpg' && (config.imgType='image/jpeg')
+            let base64 = canvas.toDataURL(config.imgType, quality)
+            // 在指定图片格式为 image/jpeg 或 image/webp的情况下，可以从 0 到 1 的区间内选择图片的质量。如果超出取值范围，将会使用默认值 0.92。其他参数会被忽略。
+            // console.log(base64.length)
+            let blob = convertBase64UrlToBlob(base64)
+            let file = dataURLtoFile(base64)
+            // 回调函数返回base64的值，也可根据自己的需求返回blob的值
+            // console.log(file)
+            resolve({blob,base64,file})
+            canvas = null
+        }
+        img.src = path
+    })
+}
