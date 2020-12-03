@@ -72,7 +72,6 @@
 </template>
 <script>
     // import {mapState} from 'vuex'
-    import {getSize} from "./util";
     import mixin from './mixin'
     export default {
         name: 'LmInput',

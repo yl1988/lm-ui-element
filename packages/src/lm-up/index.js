@@ -6,7 +6,7 @@ LmUpFile.install=function (Vue) {
 LmUpImg.install=function (Vue) {
     Vue.component(LmUpImg.name,LmUpImg)
 }
-export default {
+export {
     LmUpFile,
     LmUpImg
 }

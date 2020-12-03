@@ -44,7 +44,7 @@ export default {
         }
     },
     mounted() {
-        getSize()
+        this.getSize()
     },
     methods:{
         /**

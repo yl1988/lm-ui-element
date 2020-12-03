@@ -205,7 +205,7 @@
         },
         watch:{
             value:function (v) {
-                lmFormItemWatch(v,'multiSelect',thid)
+                lmFormItemWatch(v,'multiSelect',this)
             },
         },
     }

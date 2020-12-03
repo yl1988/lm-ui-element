@@ -48,9 +48,7 @@
         data() {
             return {
                 activeOption:null,//选中的操作
-                canIReport:1,//是否开启上报
                 showMulti:false,//是否显示批量操作
-                getCanIReport:false,//操作是否允许上报
             }
         },
         computed: {},
@@ -70,12 +68,8 @@
             },
             //确定批量操作
             sureMultiOption(){
-                console.log(this.getCanIReport)
-                let {activeOption,getCanIReport}=this
-                console.log(activeOption,getCanIReport)
-                if(getCanIReport || activeOption===null){
-                    this.$emit('getCanIReport',this.canIReport)
-                    this.getCanIReport=false
+                let {activeOption}=this
+                if(activeOption===null){
                     return
                 }
                 if(!this.selectData.length){

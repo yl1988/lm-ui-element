@@ -138,7 +138,8 @@
         methods: {
             //选择框，单选框，时间，级联选择等改变
             lmFormItemChange(value){
-                lmFormItemChangeFun(value,this)
+                this.$emit('input',value)
+                this.$emit('change',{value})
             },
             //时间范围改变
             rangeTimeFormItemChange(value,type){

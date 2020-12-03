@@ -72,6 +72,7 @@ export const compressImageFun=({file, width, height, quality = 0.8, maxWidth = 1
         height && (compressConfig.height = height)
         // console.log(compressConfig)
         let imgFile = file
+        // ie和edg不支持new File
         if(!isEdgFun() && !isIEFun()){
             if (file.size > compressSize) {
                 //大于200kb，开启图片压缩

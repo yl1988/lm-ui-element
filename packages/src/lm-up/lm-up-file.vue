@@ -139,6 +139,7 @@
             }
         },
         methods: {
+            //文件预览
             filePreview(file){
                 let {fileBaseUrl}=this
                 let {fileId,fileType}=file
