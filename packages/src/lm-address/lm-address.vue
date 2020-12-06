@@ -60,7 +60,6 @@
 </template>
 
 <script>
-    // import {mapState} from 'vuex'
     import {isNumber} from "../../utils/lm-validate";
     import provinceList from './province.json'
     import citys from './city.json'
@@ -94,7 +93,7 @@
             size: String,//尺寸
             inputWidth: {
                 type: [Number, String],
-                default: 'auto'
+                default: '100%'
             },
             addressProp: {
                 type: String,
@@ -136,10 +135,6 @@
                 hasLngLag: false,//是否有经纬度
             }
         },
-
-        computed: {
-            // ...mapState(['provinceList', 'focusHiddenData']),
-        },
         async mounted() {
             let {inputWidth} = this
             this.streetInputWidth = (typeof inputWidth === 'number' || isNumber(inputWidth)) ? (inputWidth + 'px') : inputWidth
@@ -167,6 +162,7 @@
             // // 点击切换城市
             changeCity(val) {
                 this.districtList = districts[val]
+                this.isNotTwoLevels=!!this.districtList.length
                 this.$set(this.address, 'cityId', val)
                 this.$set(this.address, 'districtId', '')
                 this.inputQueryData = []
@@ -257,7 +253,7 @@
                 let {provinceId, cityId, districtId} = this.address
                 let city = districtId || cityId || provinceId
                 if(!AMap){
-                    console.error('获取地图实例AMap失败,请确保正确引入并初始化高德地图')
+                    console.error('获取高德地图实例AMap失败,请确保正确引入并初始化高德地图')
                     return
                 }
                 return new Promise((resolve, reject) => {
@@ -304,7 +300,7 @@
             getLngLatFun(address) {
                 if (!address) return
                 if(!AMap){
-                    console.error('获取地图实例AMap失败,请确保正确引入并初始化高德地图')
+                    console.error('获取高德地图实例AMap失败,请确保正确引入并初始化高德地图')
                     return
                 }
                 return new Promise((resolve, reject) => {

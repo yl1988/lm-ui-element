@@ -1,27 +1,27 @@
 <!--上传图片，并显示进度条-->
 <template>
   <div class="upImgBox">
-    <el-form-item :label="label" label-position="top" :required="required">
-      <div style="display:flex;" v-if="showEdit">
+    <el-form-item :label="label || (isEdit ? '上传图片：' : '图片：')" label-position="top" :required="required">
+      <div style="display:flex;">
         <div style="margin-right:20px;flex:1;">
           <div v-if="hiddenCamera || getFileMethod" class="rowStart" style="flex:1;">
             <div class="rowStart upImgListBox">
               <div class="fileOutBox rowCenter" v-for="(file,index) in fileList" :key="index">
                 <div class="fileListBox rowCenter" :style="{width:fileImgWidth,height:fileImgHeight}">
                   <slot name="fileView" :index="index" :file="file">
-                    <img class="fileImg" :src="file.blob || (fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId)">
+                    <img class="fileImg" :src="file.blob || file.fileId">
                     <div class="circleProgressBk rowCenter" v-if="file.loading">
                       <el-progress :width="progressWidth" type="circle" :percentage="file.percentage" :status="file.percentage===100 ? 'success' : undefined"/>
                     </div>                  
                   </slot>
                 </div>
-                <slot name="delIcon">
+                <slot name="delIcon" v-if="isEdit">
                       <span class="delImgBox rowCenter" @click="removeDescFile(index,file)">
                     <i class="el-icon-plus delIcon"></i>
                   </span>
                 </slot>
               </div>
-              <el-upload class="avatar-uploader" v-if="typeof limit==='undefined' || (typeof limit==='number' && (fileList.length<limit))"
+              <el-upload class="avatar-uploader" v-if="isEdit && (typeof limit==='undefined' || (typeof limit==='number' && (fileList.length<limit)))"
                          :action="action"
                          :multiple="limit!==1 || multiple"
                          :before-upload="beforeUploadWithProgress"
@@ -51,7 +51,7 @@
               <div class="" v-if="fileList.length">
                 <div class="fileListBox rowCenter" v-for="(file,index) in fileList" :key="index" :style="{width:fileImgWidth,height:fileImgHeight}">
                   <slot name="fileView" :index="index" :file="file">
-                    <el-image class="fileImg" :src="file.blob || (fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId)" fit="contain"/>
+                    <img class="fileImg" :src="file.blob || (fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId)" @click="filePreview"/>
                   </slot>
                 </div>
               </div>
@@ -70,19 +70,9 @@
           </el-radio-group>
         </slot>
       </div>
-      <div v-else>
-        <slot name="chooseFileBtn">
-          <div class="" v-if="fileList.length">
-            <div class="fileListBox rowCenter" v-for="(file,index) in fileList" :key="index" :style="{width:fileImgWidth,height:fileImgHeight}">
-              <slot name="fileView" :index="index" :file="file">
-                <img class="fileImg" :src="file.blob || (fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId)">
-              </slot>
-            </div>
-          </div>
-        </slot>
-      </div>
     </el-form-item>
     <lm-img-cropper v-if="!hiddenCropper || headImg" ref="imgCropper" v-show="showCropper" :img-src="cropperImg" @closeDialog="closeCropperDialog" :output-type="cropperImgType" :head-img="headImg" :file="file"/>
+    <preview-img-dialog v-if="showPreviewDialog" :preview-img-src="previewImgSrc" @closeDialog="cancel"/>
   </div>
 </template>
 
@@ -95,10 +85,7 @@
         name: 'LmUpImg',
         mixins:[mixin],
         props:{
-            label:{
-                type:String,
-                default:'上传图片'
-            },//标题
+            label:String,//标题
             type:{
                 type:Number,
                 default:2,
@@ -142,7 +129,8 @@
                 cropperImg:'',//裁剪图片路径
                 cropperFile:null,//裁剪的文件
                 cropperImgType:'',//裁剪文件后缀
-                file:null,//文件
+                file:null,//头像上传时用于裁剪的文件数据
+                progressWidth:126,//进度条宽度
 
             }
         },
@@ -161,12 +149,13 @@
                 this.strokeWidth=10
             }
         },
-        methods: {
-            //文件预览
+        methods:{
+            // 文件预览
             filePreview(file){
-                this.previewImgSrc=fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId
-                this.showPreviewDialog=true
+                let {fileId}=file
+                typeof this.customPreviewImgMethod==='function' ? this.customPreviewImgMethod(fileId) : this.imgPreview(fileId)
+                this.$emit('filePreview',file)
             },
-        },
+        }
     }
 </script>

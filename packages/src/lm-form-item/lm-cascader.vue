@@ -10,14 +10,16 @@
                          :filterable="filterable"
                          :id="lmRef[0]"
             ></el-cascader>
-            <div class="lmTexts" v-else>
-                <span class="textSpan" :style="{margin:multiMargin,...spanStyle}"  v-for="(value,index) in lmTexts" :key="index">{{value}}</span>
+            <div class="lmTexts rowStart" v-else>
+                <span class="textSpan" :style="{margin:multiMargin,...spanStyle}" v-if="text">{{text}}</span>
+                <div v-if="lmTexts.length">
+                    <span class="textSpan" :style="{margin:multiMargin,...spanStyle}"  v-for="(value,index) in lmTexts" :key="index">{{value}}</span>
+                </div>
             </div>
         </el-form-item>
     </el-col>
 </template>
 <script>
-    // import {mapState} from 'vuex'
     import {lmFormItemChangeFun} from "./util";
     import mixin from './mixin'
     export default {
@@ -35,61 +37,30 @@
                 type:Array,
                 default:()=>[]
             },//数据
-            oName:{
-                type:String,
-                default:'name'
-            },//选项文字
-            oValue:{
-                type:String,
-                default:'value'
-            },//选项值
             filterable:{
                 type:Boolean,
                 default:true
             },//是否可搜索
             pickerOptions:{
-                type:[Object,Array],
+                type:Object,
                 default:()=>{
-                    return {}
+                    return {
+                        label:'name'
+                    }
                 }
             },//日期配置，级联配置
         },
         data() {
             return {
                 lmFormValue:[],//值
-            }
-        },
-        computed: {
-            // ...mapState(['focusHiddenData']),
-            //查看状态下显示的文字
-            lmTexts(){
-                let {lmFormItemData,oName,oValue,lmFormValue}=this
-                let texts=[]
-                let cascaderText=''
-                if(!(lmFormValue instanceof Array )|| !lmFormValue.length){
-                    return []
-                }
-                if(lmFormItemData instanceof Array){
-                    let parentIndex=lmFormItemData.findIndex(item=>item[oValue]===lmFormValue[0])
-                    cascaderText=lmFormItemData[parentIndex] ? lmFormItemData[parentIndex][oName] : ''
-                    let childIndex=lmFormItemData[parentIndex] ? lmFormItemData[parentIndex].children.findIndex(item=>item[oValue]===lmFormValue[1]) : undefined
-                    if(lmFormItemData[parentIndex]){
-                        if(lmFormItemData[parentIndex].children[childIndex]){
-                            cascaderText+='/'+lmFormItemData[parentIndex].children[childIndex][oName]
-                        }else{
-                            cascaderText+=''
-                        }
-                    }else{
-                        cascaderText+=''
-                    }
-                    texts.push(cascaderText)
-                }
-                return texts
+                text:'',//显示的文字值
+                lmTexts:[],////显示的文字值数组
             }
         },
         mounted() {
             if(this.value instanceof Array){
-                this.lmFormValue=value
+                this.lmFormValue=this.value
+                this.optionText(this.value)
             }
         },
         methods: {
@@ -97,11 +68,30 @@
             lmFormItemChange(value){
                 lmFormItemChangeFun(value,this)
             },
+            // 操作文字数据
+            optionText(valueList){
+                if(!(valueList instanceof Array) || !valueList.length){
+                    this.lmTexts=[]
+                    this.text=''
+                    return
+                }
+                let {label='name',value='value'}=this.pickerOptions
+                for(let i=0;i<valueList.length;i++){
+                    if(value[i][value]===valueList[i]){
+                        this.lmTexts.push(valueList[label])
+                        if(value[i].children instanceof Array && value[i].children.length){
+                            this.optionText(value[i].children)
+                        }
+                        break
+                    }
+                }
+            }
         },
         watch:{
             value:function (v) {
                 if(v instanceof Array){
                     this.lmFormValue=v
+                    this.optionText(v)
                 }
             },
         },

@@ -10,8 +10,9 @@
     z-index: 10;
     .customDialogTitleBox{
       padding:0 0 0 20px;
-      span{
-        font-size:16px;
+      position: relative;
+      .titleBk{
+        @include positionLeftTopSizeIndex($z-index:-1,$radius:0 !important);
       }
       .closeBox{
         width:40px;
@@ -24,6 +25,7 @@
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
+      position: relative;
     }
   }
 

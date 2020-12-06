@@ -6,7 +6,10 @@ export default {
             type:Array,
             default:()=>[]
         },//文件数据
-        showEdit:Boolean,//显示编辑状态
+        isEdit:{
+            type:Boolean,
+            default:true
+        },//显示编辑状态
         drag:Boolean,//是否可以拖拽上传
         limit:Number,//文件限制数量
         otherData:{
@@ -25,12 +28,13 @@ export default {
             default:''
         },//上传地址
         fileBaseUrl:String,//文件域名
-        showView:Boolean,//是否显示预览图标
+        customPreviewImgMethod:Function,//自定义图片预览方法
     },
     data() {
         return {
-            progressWidth:126,//进度条宽度
+
             getFileMethod:0,//获取文件类型
+            showPreviewDialog:false,//是否显示大图
         }
     },
     methods: {
@@ -45,25 +49,26 @@ export default {
         },
         //文件上传进度带进度条
         async beforeUploadWithProgress(file){
+            // console.log(file)
             this.fileList.unshift({
-                fileId:file.name,
+                fileId:'javascript:;',
                 fileName:file.name,
-                fullFileUrl:'javascript:;',
                 uid:file.uid,
                 percentage:0,
                 loading:true,
                 blob:URL.createObjectURL(file)
             })
             this.$emit('beforeUpload')
-            let compressFiile=file
+            let compressFile=file
             if(/image/.test(file.type)){
                 //图片，压缩
-                compressFiile=await compressImageFun({file})
+                compressFile=await compressImageFun({file})
             }
-            return compressFiile
+            return compressFile
         },
         //文件上传进度带进度条
         fileProgress(event,file){
+            console.log(file)
             let {loaded,total}=event
             let {fileList}=this
             let fileIndex=fileList.findIndex(item=>item.uid===file.uid)
@@ -82,10 +87,10 @@ export default {
             }
             let {fileList}=this
             let fileIndex=fileList.findIndex(item=>item.uid===file.uid)
+            let fileId=(/^http/.test(data.url) || /^\/\//.test(data.url)) ? data.url : `${this.fileBaseUrl}${data.url}`
             let fileObj={
                 ... fileList[fileIndex],
-                fullFileUrl:`${fileBaseUrl}${data.url}`,
-                fileId:data.url,
+                fileId,
                 fileName:data.fileName,
                 loading:false,
                 percentage:100,
@@ -120,8 +125,8 @@ export default {
         onCameraSuccess(fileInfo){
             console.log(fileInfo)
             let {fileId,fileName,name}=fileInfo
+            fileId=(/^http/.test(data.url) || /^\/\//.test(data.url)) ? data.url : `${this.fileBaseUrl}${data.url}`
             this.fileList.unshift({
-                fullFileUrl:`${fileBaseUrl}${fileId}`,
                 fileId,
                 loading:false,
                 percentage:100,

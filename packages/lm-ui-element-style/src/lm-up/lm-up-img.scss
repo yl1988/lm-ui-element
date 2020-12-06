@@ -5,6 +5,7 @@
   .fileImg{
     width:100%;
     z-index:1;
+    @include imgObjectFit(cover);
   }
   .circleProgressBk{
     @include positionCenter();

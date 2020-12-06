@@ -1,8 +1,8 @@
 <!--上传文件，并显示进度条-->
 <template>
   <div class="upfile-with-progress">
-    <el-form-item :label="label" label-position="top" :required="!!required">
-      <div class="rowStart" v-if="showUpBtn" style="min-height:40px;">
+    <el-form-item :label="label || (isEdit ? '上传文件：' : '文件：')" label-position="top" :required="required">
+      <div class="rowStart" style="min-height:40px;">
         <div>
           <div v-if="hiddenCamera || getFileMethod">
             <el-upload class="avatar-uploader" :action="action"
@@ -18,6 +18,7 @@
                        :data="otherData"
                        :auto-upload="true"
                        :on-change="fileChange"
+                       v-if="isEdit && (typeof limit==='undefined' || (typeof limit==='number' && (fileList.length<limit)))"
             >
               <div >
                 <slot name="chooseFileBtn">
@@ -47,7 +48,7 @@
             </div>
           </slot>
         </div>
-        <slot name="fileMethod" v-if="!hiddenCamera && !showEdit">
+        <slot name="fileMethod" v-if="!hiddenCamera && !isEdit">
           <el-radio-group  v-model="getFileMethod" style="margin-left:20px;" @change="fileMethodChange">
             <div class="fileMethodBox">
               <el-radio :label="1">上传 <el-icon class="el-icon-upload2"/></el-radio>
@@ -57,37 +58,34 @@
         </slot>
       </div>
       <span class="red" v-if="toastColumn">{{toastText}}</span>
-    </el-form-item>
-    <div class="fileList" :style="{...fileListStyle}">
-      <div class="fileListBox" v-for="(file,index) in fileList" :key="index">
-        <slot name="fileView" :index="index" :file="file">
-          <div class="rowStart" style="width:100%;">
-            <el-form ref="fileViewForm" :model="fileViewForm" style="width:100%;">
+      <div class="fileList" :style="{...fileListStyle}">
+        <div class="fileListBox" v-for="(file,index) in fileList" :key="index">
+          <slot name="fileView" :index="index" :file="file">
+            <el-form ref="fileForm" :model="fileForm" style="width:100%;">
               <div class="rowStart">
-                <slot name="filePrev" :fileViewForm="fileViewForm" :file="file"></slot>
+                <slot name="filePrev" :fileForm="fileForm" :file="file"></slot>
                 <div style="flex:1;">
-                  <div class="rowBtween">
+                  <div class="rowBtween" style="padding-right:20px;">
                     <div class="rowStart">
-                      <a class="file blue" :href="fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId" :download="file.name || file.fileName">
-                        {{file.name || file.fileName}}
-                        <i class="el-icon-document blue" style="margin-left:5px;" v-if="showEdit"></i>
+                      <a class="file blue" :href="file.fileId" :download="file.name || file.fileName">
+                        <el-button type="text"> {{file.name || file.fileName}}</el-button>
                       </a>
                       <i class="el-icon-loading yellow" style="margin-left:10px;" v-if="file.loading"></i>
                     </div>
                     <div class="rowEnd">
-                      <i class="el-icon-view blue" style="font-size:18px;margin-right:10px;" @click="filePreview(file)" v-if="showView && file.fileType && overViewAccept.indexOf(file.fileType)>-1"></i>
-                      <i class="el-icon-delete" style="color:red" @click="removeDescFile(index,file)" v-if="!showEdit"></i>
+                      <i class="el-icon-view blue" style="font-size:18px;margin-right:10px;" @click="filePreview(file)" v-if="file.fileType && overViewAccept.indexOf(file.fileType)>-1"></i>
+                      <i class="el-icon-delete" style="color:red" @click="removeDescFile(index,file)" v-if="isEdit"></i>
                     </div>
                   </div>
                   <el-progress :percentage="file.percentage" :status="file.percentage===100 ? 'success' : undefined" v-if="file.blob"/>
                 </div>
               </div>
             </el-form>
-          </div>
-        </slot>
+          </slot>
+        </div>
       </div>
-    </div>
-    <preview-img-dialog v-if="showPreviewDialog" :preview-img-src="previewImgSrc" @closeDialog="cancel"/>
+    </el-form-item>
+    <preview-img-dialog v-if="showPreviewDialog" :preview-img-src="imgSrc" @closeDialog="cancel"/>
   </div>
 </template>
 
@@ -97,10 +95,7 @@
         name: 'LmUpFile',
         mixins: [mixin],
         props:{
-            label:{
-                type:String,
-                default:'上传文件：'
-            },//标题
+            label:String,//标题
             btnText:{
                 type:String,
                 default:'选择文件'
@@ -109,20 +104,12 @@
                 type:String,
                 default:`.jpg,.jpeg,.png,.pdf,.webp'`
             },//文件类型
-            showUpBtn:{
-                type:Boolean,
-                default:true
-            },//是否显示上传按钮
             toastText:String,//提示文字
             cameraText:{
                 type:String,
                 default:'点击拍照'
             },//相机按钮文字
             toastColumn:Boolean,//提示文字是否竖排
-            checkText:{
-                type:String,
-                default:'附件'
-            },
             fileListStyle:{
                 type:Object,
                 default:()=>{
@@ -132,16 +119,13 @@
         },
         data() {
             return {
-                previewImgSrc:'',//预览图片地址
-                showPreviewDialog:false,//是否显示大图
-                fileViewForm:{},//预览文件表单
+                fileForm:{},//预览文件表单
                 overViewAccept:['.png','.jpg','.jpeg','.webp','.pdf','.docx'],//可预览的文件类型
             }
         },
         methods: {
             //文件预览
             filePreview(file){
-                let {fileBaseUrl}=this
                 let {fileId,fileType}=file
                 if(fileType){
                     if(!/\./.test(fileType)){
@@ -151,8 +135,7 @@
                     fileType='.'+url.split('.')[1]
                 }
                 if(['.jpg','.png','.jpeg','.webp'].indexOf(fileType)>-1){
-                    let url=fileBaseUrl ? fileBaseUrl+fileId : fileId
-                    this.imgPreview(url)
+                    typeof this.customPreviewImgMethod==='function' ? this.customPreviewImgMethod(fileId) : this.imgPreview(fileId)
                     return
                 }
                 this.$emit('filePreview',file)

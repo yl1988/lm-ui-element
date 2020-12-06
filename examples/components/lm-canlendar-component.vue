@@ -124,6 +124,7 @@
                         border: 1px solid #CCCCCC;
                         border-radius: 2px;
                         cursor:pointer;
+                        display:flex;
                     }
                 }
                 .back-today{

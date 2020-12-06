@@ -1,22 +1,23 @@
 <!--自定义弹窗-->
 <template>
   <div class="customDialogBox">
-    <div class="overy" @click="closeDialog" ref="overy"></div>
+    <div class="overy" @click="overyClick" ref="overy"></div>
     <div class="customDialogWhiteBox" :style="{width:width+'px',background,'padding-bottom':bottomPadding+'px'}">
-      <div class="customDialogTitleBox rowBtween" :style="{background:titleBk}">
-        <span :style="{color:titleTextColor}">{{title}}</span>
+      <div class="customDialogTitleBox rowBtween">
+        <el-button type="primary" :style="{background:titleBk}" class="titleBk"></el-button>
+        <span class="title font16" :style="{color:titleTextColor}">{{title}}</span>
         <div class="rowCenter closeBox"  @click="closeDialog" ref="closeIcon">
           <i class="el-icon-close" :style="{color:titleTextColor}"></i>
         </div>
       </div>
-      <div class="customDialogContentBox" ref="customDialogContentBox" :style="{'margin-bottom':contentMarginBottom+'px',padding:contentPadding}">
+      <div class="customDialogContentBox" ref="customDialogContentBox" :style="{'margin-bottom':contentMarginBottom+'px',padding:contentPadding,...contentBoxStyle}">
         <slot></slot>
       </div>
       <div class="confirmCancelFotterBox" v-if="showFooter">
         <slot name="footer">
           <div class="rowCenter">
             <el-button @click="$emit('cancel')" :style="{width:btnWidth,height:btnHeight}">{{backText || '返回'}}</el-button>
-            <el-button type="primary" @click="$emit('sure')" :style="{width:btnWidth,height:btnHeight}">{{saveText || '保存'}}</el-button>
+            <el-button type="primary" @click="$emit('sure')" :style="{width:btnWidth,height:btnHeight}" :icon="showLoading ? 'el-icon-loading' : ''">{{saveText || '保存'}}</el-button>
           </div>
         </slot>
       </div>
@@ -26,7 +27,7 @@
 
 <script>
     export default {
-        name: 'CustomDialog',
+        name: 'LmDialog',
         props:{
             title:{
                 type:String,
@@ -44,10 +45,7 @@
                 type:[String,Number],
                 default:40
             },//标题高度
-            titleBk:{
-                type:String,
-                default:'#545EBC'
-            },//标题背景
+            titleBk:String,//标题背景
             titleTextColor:{
                 type:String,
                 default:'#ffffff'
@@ -78,24 +76,27 @@
                 type:String,
                 default:'40px'
             },//按钮高度
-        },
-        data() {
-            return {}
-        },
-        computed: {},
-        mounted() {
-            // console.log(this.width)
+            showLoading:{
+                type:Boolean,
+                default:true
+            },//是否显示保存按钮的加载
+            contentBoxStyle:{
+                type:Object,
+                default:()=>{
+                    return {}
+                }
+            },//内容框样式
         },
         methods: {
             //关闭弹窗
             closeDialog(){
                 this.$emit('closeDialog')
+            },
+            // 遮罩点击
+            overyClick(){
+
             }
         },
 
     }
 </script>
-
-<style scoped lang="scss">
-
-</style>

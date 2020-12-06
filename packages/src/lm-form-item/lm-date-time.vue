@@ -156,7 +156,7 @@
     }
 </script>
 <style>
-    .lm-form-item-col .el-date-editor .el-input, .lm-form-item-col .el-date-editor .el-input__inner{
+    .lm-form-item-col .el-date-editor.el-input{
         width:100%;
     }
 

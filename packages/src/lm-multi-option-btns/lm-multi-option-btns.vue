@@ -3,6 +3,7 @@
     <div class="multi-option-btns-box rowStart">
         <el-button type="primary" @click="showMultiOption" size="mini">{{optionTitle}}</el-button>
         <div v-if="showMulti" class="rowStart"  style="margin-left:20px;">
+            <slot name="prevContent"></slot>
             <el-button
                     v-for="(btn,index) in options"
                     :key="index"
@@ -12,7 +13,6 @@
             >{{btn.text}}</el-button>
             <slot name="appendContent"></slot>
             <div class="rowStart sureCancelBtn">
-                <el-button type="primary" @click="sureMultiOption" size="mini">{{sureText || '确定'}}</el-button>
                 <el-button @click="cancelMultiOption" size="mini">{{cancelText || '关闭'}}</el-button>
             </div>
         </div>
