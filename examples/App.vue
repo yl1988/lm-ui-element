@@ -28,8 +28,12 @@
                 </div>
             </div>
         </div>
-
-
+        <div>
+            <el-button type="primary" @click="showDialog=true">{{ dialogText || '打开弹窗' }}</el-button>
+        </div>
+        <lm-dialog v-if="showDialog" @cancel="showDialog=false" @closeDialog="closeDialog" @sure="sure">
+            <span>弹窗内容</span>
+        </lm-dialog>
     </div>
 </template>
 
@@ -82,7 +86,9 @@
                             }
                         ]
                     }
-                ]
+                ],
+                showDialog:false,//是否显示弹窗
+                dialogText:'',//弹窗文字
             }
         },
         computed: {
@@ -91,7 +97,21 @@
 
         },
         methods: {
-            save(){}
+            save(){},
+            sure(){
+                this.dialogText='点击确定'
+                this.showDialog=false
+                setTimeout(()=>{
+                    this.dialogText='打开弹窗'
+                },2000)
+            },
+            closeDialog(){
+                this.dialogText='点击取消或关闭'
+                this.showDialog=false
+                setTimeout(()=>{
+                    this.dialogText='打开弹窗'
+                },2000)
+            }
 
         },
 

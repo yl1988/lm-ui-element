@@ -76,10 +76,7 @@
                 type:String,
                 default:'40px'
             },//按钮高度
-            showLoading:{
-                type:Boolean,
-                default:true
-            },//是否显示保存按钮的加载
+            showLoading:Boolean,//是否显示保存按钮的加载
             contentBoxStyle:{
                 type:Object,
                 default:()=>{
