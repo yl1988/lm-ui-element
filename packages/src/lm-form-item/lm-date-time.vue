@@ -61,7 +61,7 @@
 </template>
 <script>
     // import {mapState} from 'vuex'
-    import {lmFormItemChangeFun,lmFormItemWatch} from "./util";
+    import {lmFormItemWatch} from "./util";
     import mixin from './mixin'
     export default {
         name: 'LmDateTime',

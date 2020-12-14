@@ -78,7 +78,6 @@
 
 <script>
     import {isNumber} from "../../utils/lm-validate"
-    import LmImgCropper from '../lm-img-cropper/lm-img-cropper'
     import mixin from './mixin'
 
     export default {
@@ -116,9 +115,6 @@
                 default:false
             },//是否多张
 
-        },
-        components:{
-            LmImgCropper
         },
         data() {
             return {

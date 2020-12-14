@@ -12,11 +12,12 @@ import {
     LmUpImg
 } from './src/lm-up/index'
 import LmDialog from './src/lm-dialog/lm-dialog'
+import LmImgCropper from './src/lm-img-cropper/lm-img-cropper'
 
 
 import './lm-ui-element-style/src/index.scss'
 
-const components=[LmCalendar,LmInput,LmSelect,LmDateTime,LmCascader,LmMultiOptionBtns,LmAddress,LmUpFile,LmUpImg,LmDialog]
+const components=[LmCalendar,LmInput,LmSelect,LmDateTime,LmCascader,LmMultiOptionBtns,LmAddress,LmUpFile,LmUpImg,LmDialog,LmImgCropper]
 console.log(components)
 const install=function (Vue) {
     if(install.installed){
