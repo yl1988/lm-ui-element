@@ -1,4 +1,4 @@
-@import "./common/mix";
+@import "utils/mix";
 .customDialogBox{
   @include positionLeftTopSizeIndex($position:fixed,$z-index:999);
   .overy{

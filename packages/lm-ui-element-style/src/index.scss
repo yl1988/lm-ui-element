@@ -1,10 +1,10 @@
 @import "./common/common";
 @import "./common/flex";
+@import "common/cover-element-ui.css";
 @import "./lm-calendar";
-@import "lm-up/lm-up-file";
-@import "lm-up/lm-up-img";
+@import "lm-up-file";
+@import "lm-up-img";
 @import "./lm-address";
-@import "./lm-form-item/lm-form-item.scss";
-@import "./lm-form-item/lm-form-item.css";
+@import "lm-form-item";
 @import "./lm-img-cropper";
-@import "./custom-dialog";
+@import "lm-dialog";

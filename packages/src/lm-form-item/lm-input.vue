@@ -201,5 +201,5 @@
     }
 </script>
 <style>
-    @import "../../lm-ui-element-style/src/lm-form-item/lm-form-item.css";
+    @import "../../lm-ui-element-style/src/common/cover-element-ui.css";
 </style>
