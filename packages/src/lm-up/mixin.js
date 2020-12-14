@@ -118,7 +118,7 @@ export default {
         //图片预览
         imgPreview(url){
             console.log(url)
-            this.previewImgSrc=url
+            this.imgSrc=url
             this.showPreviewDialog=true
         },
         //拍照成功
@@ -139,7 +139,7 @@ export default {
         //关闭图片预览弹窗
         cancel(){
             this.showPreviewDialog=false
-            this.previewImgSrc=''
+            this.imgSrc=''
         },
         //文件方式改变
         fileMethodChange(v){

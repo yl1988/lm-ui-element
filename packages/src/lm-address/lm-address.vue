@@ -1,7 +1,7 @@
 <!--选择地址，搭配高德地图使用-->
 <template>
     <el-row>
-        <el-form-item :label="title" label-position="top" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':edit ? '22px' : '0'}">
+        <el-form-item :label="label" label-position="top" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':edit ? '22px' : '0'}">
             <div v-if="edit" class="rowStart">
                 <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable">
                     <el-option
@@ -72,9 +72,9 @@
                 type: Boolean,
                 default: true
             },//是否必须
-            title: {
+            label: {
                 type: String,
-                default: '选择地址'
+                default: '选择地址：'
             },//标题
             showStreet: {
                 type: Boolean,

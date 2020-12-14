@@ -1,12 +1,12 @@
 <!--自定义弹窗-->
 <template>
   <div class="customDialogBox">
-    <div class="overy" @click="overyClick" ref="overy"></div>
+    <div class="overy" @click="close" ref="overy"></div>
     <div class="customDialogWhiteBox" :style="{width:width+'px',background,'padding-bottom':bottomPadding+'px'}">
       <div class="customDialogTitleBox rowBtween">
         <el-button type="primary" :style="{background:titleBk}" class="titleBk"></el-button>
         <span class="title font16" :style="{color:titleTextColor}">{{title}}</span>
-        <div class="rowCenter closeBox"  @click="closeDialog" ref="closeIcon">
+        <div class="rowCenter closeBox"  @click="close" ref="closeIcon">
           <i class="el-icon-close" :style="{color:titleTextColor}"></i>
         </div>
       </div>
@@ -76,10 +76,7 @@
                 type:String,
                 default:'40px'
             },//按钮高度
-            showLoading:{
-                type:Boolean,
-                default:true
-            },//是否显示保存按钮的加载
+            showLoading:Boolean,//是否显示保存按钮的加载
             contentBoxStyle:{
                 type:Object,
                 default:()=>{
@@ -89,13 +86,9 @@
         },
         methods: {
             //关闭弹窗
-            closeDialog(){
-                this.$emit('closeDialog')
+            close(){
+                this.$emit('close')
             },
-            // 遮罩点击
-            overyClick(){
-
-            }
         },
 
     }

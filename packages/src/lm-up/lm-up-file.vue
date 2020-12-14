@@ -132,7 +132,7 @@
                         fileType=`.${fileType}`
                     }
                 }else{
-                    fileType='.'+url.split('.')[1]
+                    fileType='.'+fileId.split('.')[1]
                 }
                 if(['.jpg','.png','.jpeg','.webp'].indexOf(fileType)>-1){
                     typeof this.customPreviewImgMethod==='function' ? this.customPreviewImgMethod(fileId) : this.imgPreview(fileId)
