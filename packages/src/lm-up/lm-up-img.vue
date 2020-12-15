@@ -71,13 +71,14 @@
         </slot>
       </div>
     </el-form-item>
-    <lm-img-cropper v-if="!hiddenCropper || headImg" ref="imgCropper" v-show="showCropper" :img-src="cropperImg" @closeDialog="closeCropperDialog" :output-type="cropperImgType" :head-img="headImg" :file="file"/>
+    <lm-img-cropper ref="imgCropper" v-show="showCropper" :img-src="cropperImg" @closeDialog="closeCropperDialog" :output-type="cropperImgType" :file="file"/>
     <preview-img-dialog v-if="showPreviewDialog" :preview-img-src="previewImgSrc" @closeDialog="cancel"/>
   </div>
 </template>
 
 <script>
     import {isNumber} from "../../utils/lm-validate"
+
     import mixin from './mixin'
 
     export default {
@@ -109,7 +110,6 @@
                 type:Boolean,
                 default:true
             },//不裁剪图片
-            headImg:Boolean,//是否是头像
             multiple:{
                 type:Boolean,
                 default:false
@@ -151,6 +151,13 @@
                 let {fileId}=file
                 typeof this.customPreviewImgMethod==='function' ? this.customPreviewImgMethod(fileId) : this.imgPreview(fileId)
                 this.$emit('filePreview',file)
+            },
+            //关闭图像裁剪弹窗
+            closeCropperDialog(){
+                this.showCropper=false
+                this.cropperImg=''
+                this.cropperFile=null
+                this.file=null
             },
         }
     }

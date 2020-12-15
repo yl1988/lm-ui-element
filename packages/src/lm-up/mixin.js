@@ -1,4 +1,4 @@
-import {compressImageFun} from "../../utils/lm-methods";
+import {compressImageFun,isIEFun,isEdgFun} from "../../utils/lm-methods";
 
 export default {
     props:{
@@ -62,6 +62,25 @@ export default {
             let compressFile=file
             if(/image/.test(file.type)){
                 //图片，压缩
+                if(!this.hiddenCropper && typeof this.hiddenCropper==='boolean'){
+                    //启用裁剪
+                    this.showCropper=true
+                    this.cropperImg=blob
+                    this.cropperImgType=file.type
+                    cropperFile=await this.$refs.imgCropper.openDialog()
+                    console.log(cropperFile)
+                    if(cropperFile){
+                        this.fileList.splice(0,1,{
+                            fileId:file.name,
+                            fileName:file.name,
+                            uid:file.uid,
+                            percentage:0,
+                            loading:true,
+                            blob:URL.createObjectURL(cropperFile)
+                        })
+                    }
+                    this.closeCropperDialog()
+                }
                 compressFile=await compressImageFun({file})
             }
             return compressFile

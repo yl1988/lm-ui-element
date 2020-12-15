@@ -118,7 +118,6 @@ export default {
             default:260
         },//裁剪框宽度
         fixedBox: Boolean, // 截图框固定大小
-        headImg:Boolean,//是否是头像
         fileSize:Number,//文件尺寸
         exampleImg:{
             type:String,
@@ -224,7 +223,6 @@ export default {
                 })
             })
         },
-
         imgLoad(){
             console.log('imgLoad')
             this.showLoading=false
