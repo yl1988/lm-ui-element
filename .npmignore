@@ -1,5 +1,4 @@
 examples/
-packages/
 public/
 dist/
 vue.config.js

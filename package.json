@@ -1,6 +1,6 @@
 {
   "name": "lm-ui-element",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "private": false,
   "main": "lib/frog-ui.umd.min.js",
   "scripts": {
@@ -15,8 +15,6 @@
   "author": "杨涟",
   "dependencies": {
     "core-js": "^3.8.1",
-    "element-ui": "^2.14.1",
-    "terser-webpack-plugin": "^5.0.0",
     "vue": "^2.6.11",
     "vue-cropper": "^0.5.5",
     "vue-router": "^3.2.0"
