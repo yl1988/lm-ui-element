@@ -1,6 +1,6 @@
 {
   "name": "lm-ui-element-style",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "lm-ui-element-style",
   "main": "lib/index.css",
   "style": "lib/index.css",
@@ -11,7 +11,7 @@
   "scripts": {
     "build": "gulp build"
   },
-  "author": "",
+  "author": "杨涟",
   "license": "MIT",
   "devDependencies": {
     "gulp": "^4.0.0",

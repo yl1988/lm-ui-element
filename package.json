@@ -1,6 +1,6 @@
 {
   "name": "lm-ui-element",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "private": false,
   "main": "lib/frog-ui.umd.min.js",
   "scripts": {
@@ -12,6 +12,7 @@
     "build:lib": "vue-cli-service build --target lib --name frog-ui --dest lib packages/index.js && npm run build:style && npm run build:utils",
     "publish": "npm publish --registry https://registry.npmjs.org"
   },
+  "author": "杨涟",
   "dependencies": {
     "core-js": "^3.8.1",
     "element-ui": "^2.14.1",
