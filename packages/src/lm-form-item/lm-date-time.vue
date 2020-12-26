@@ -113,24 +113,24 @@
             let {formType,placeholder,dateTimeType,dateTimeValueFormat,dateTimeFormat}=this
             if(formType==='dateTime'){
                 placeholder !=='请选择' && (this.lmDateTimePlaceholder=placeholder)
-                if(dateTimeType==='datetime'){
-                    this.lmDateTimeFormat=dateTimeFormat || 'yyyy-MM-dd HH:mm:ss'
-                    this.lmDateTimeValueFormat=dateTimeValueFormat ||  'yyyy-MM-dd HH:mm:ss'
-                }else{
-                    this.lmDateTimeFormat=dateTimeFormat || 'yyyy-MM-dd'
-                    this.lmDateTimeValueFormat=dateTimeValueFormat|| 'yyyy-MM-dd'
-                }
             }
             if(formType==='rangeDateTime'){
                 placeholder instanceof Array ? (this.lmDateTimePlaceholder=placeholder) : (this.lmDateTimePlaceholder=['请选择','请选择'])
             }
+            if(dateTimeType==='datetime'){
+                this.lmDateTimeFormat=dateTimeFormat || 'yyyy-MM-dd HH:mm:ss'
+                this.lmDateTimeValueFormat=dateTimeValueFormat ||  'yyyy-MM-dd HH:mm:ss'
+            }else{
+                this.lmDateTimeFormat=dateTimeFormat || 'yyyy-MM-dd'
+                this.lmDateTimeValueFormat=dateTimeValueFormat|| 'yyyy-MM-dd'
+            }
         },
         mounted() {
             if(this.value){
-                if(formType==='rangeDateTime'){
-                    this.lmFormMultiValues=value
+                if(this.formType==='rangeDateTime'){
+                    this.lmFormMultiValues=this.value
                 }else{
-                    this.lmFormValue=value
+                    this.lmFormValue=this.value
                 }
             }
 

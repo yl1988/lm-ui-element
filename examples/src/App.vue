@@ -16,7 +16,7 @@
                         <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
                     </el-row>
                     <el-row>
-                        <lm-date-time label="入学日期：" v-model="form.date"/>
+                        <lm-date-time label="入学日期：" v-model="form.date" form-type="rangeDateTime" date-time-type="datetime"/>
                         <lm-cascader label="证书：" :options="cascaders"/>
                     </el-row>
                     <lm-address label="住址：" v-model="form.address" :required="false"/>
