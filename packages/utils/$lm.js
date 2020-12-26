@@ -6,17 +6,8 @@ import {formatDate} from "./lm-methods";
 export default {
     install(Vue) {
         Vue.prototype.$lm = {
-            //日期范围开始日期 结束日期配置
-            disabledDate(time,type,values){
-                let value=values ? values[type] : ''
-                let date = new Date(formatDate(value)).getTime()
-                let timeDate=new Date(formatDate(time)).getTime()
-                if (date) {
-                    return type ? (timeDate > date) : (timeDate < date)
-                }
-            },
             // 控制在一个日期范围内不可见
-            dateRangeDisabele(time,range=[],config={}){
+            dateRangeDisabled(time,range=[],config={}){
                 let {startEqual,endEqual}=config
                 /**
                  *startEqual //开始时间是否可以相等
