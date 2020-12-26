@@ -1058,7 +1058,7 @@ validateAbcAnd_|验证字母和下划线正则 | (rule, value, callback,config) 
 
 函数名	| 说明 |	 参数说明	
 :---|:---:|:---
-dateRangeDisabele|日期范围内不可见设置 | 接收三个参数，(time, range, config) ，time是时间组件返回的时间 Date；range是时间范围值，由开始时间和结束时间组成的一个数组 Array，第一个值是开始时间 String/Date/Number，第二个值是结束时间 String/Date/Number；config 配置信息,包含startEqual 开始日期是否可以相等 Boolean,endEqual 结束日期是否可以相等 Boolean
+dateRangeDisabled|日期范围内不可见设置 | 接收三个参数，(time, range, config) ，time是时间组件返回的时间 Date；range是时间范围值，由开始时间和结束时间组成的一个数组 Array，第一个值是开始时间 String/Date/Number，第二个值是结束时间 String/Date/Number；config 配置信息,包含startEqual 开始日期是否可以相等 Boolean,endEqual 结束日期是否可以相等 Boolean
 
 使用示例：
 首先在main.js中添加如下代码
@@ -1075,10 +1075,10 @@ Vue.use($lm)
                           date-time-type="datetime"
                           :picker-options="[
                             {
-                                disabledDate:(time)=>$lm.dateRangeDisabele(time,[0,form.date ? form.date[1] : new Date()],{endEqual:true})
+                                disabledDate:(time)=>$lm.dateRangeDisabled(time,[0,form.date ? form.date[1] : new Date()],{endEqual:true})
                                 },
                                 {
-                                    disabledDate:time=> $lm.dateRangeDisabele(time,[form.date ? form.date[0] : 0,new Date()],{endEqual:true,startEqual:true})
+                                    disabledDate:time=> $lm.dateRangeDisabled(time,[form.date ? form.date[0] : 0,new Date()],{endEqual:true,startEqual:true})
                                 }
                                 ]"
             />
