@@ -13,11 +13,11 @@
                 <el-form width="1000" ref="form" :model="form" label-width="100px">
                     <el-row>
                         <lm-input label="姓名：" v-model="form.name"></lm-input>
-                        <lm-select label="学历：" v-model="form.stuty" :lm-form-item-data="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
+                        <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
                     </el-row>
                     <el-row>
                         <lm-date-time label="入学日期：" v-model="form.date"/>
-                        <lm-cascader label="证书：" :lm-form-item-data="cascaders"/>
+                        <lm-cascader label="证书：" :options="cascaders"/>
                     </el-row>
                     <lm-address label="住址：" v-model="form.address" :required="false"/>
                     <lm-up-img :limit="6"/>

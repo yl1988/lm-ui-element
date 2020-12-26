@@ -408,7 +408,7 @@ oValue|选项值|String / Array|--|value
 filterable|是否可搜索|Boolean|--|true
 changeFun|下拉框改变的函数|Function / Array|--|--
 multiMargin|多个下拉框的边距|String|--|0 10px 0 0
-lmMultiFormItemData|多个下拉框的数据|Array|--|--
+multiList|多个下拉框的数据|Array|--|--
 
 ##### <strong style="font-size:14px;color:#333333">Events</strong>
 事件名	| 说明 |	 回调参数
@@ -457,11 +457,11 @@ pickerOptions|级联配置（配置内容同element-ui el-cascader配置 props�
           <lm-input label="手机号：" v-model="form.phoneNum" prop="phoneNum" type="tel" :lm-ref="['phoneNum','orgId']" v-if="!isCert"/>
         </el-row>
         <el-row >
-          <lm-select form-type="select" label="公司：" v-model="form.orgId" :lm-form-item-data="addPersonCompanys" prop="orgId"  :lm-ref="['orgId','idcard']" @change="companyChange" :disabled="!!personDetailInfo.position"/>
+          <lm-select form-type="select" label="公司：" v-model="form.orgId" :list="addPersonCompanys" prop="orgId"  :lm-ref="['orgId','idcard']" @change="companyChange" :disabled="!!personDetailInfo.position"/>
             <lm-input label="身份证号：" v-model="form.idcard" prop="idcard" :lm-ref="['idcard','sex']" type="idcard"/>
         </el-row>
         <el-row>        
-          <lm-select form-type="radio" label="性别：" v-model="form.sex" :lm-form-item-data="['女','男']" prop="sex"/>
+          <lm-select form-type="radio" label="性别：" v-model="form.sex" :list="['女','男']" prop="sex"/>
             <lm-date-time             
                             label="出生日期："
                             prop="birthday"
