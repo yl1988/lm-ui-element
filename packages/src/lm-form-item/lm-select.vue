@@ -162,10 +162,10 @@
         },
         mounted() {
             if(this.value){
-                if(formType==='multiSelect'){
-                    this.lmFormMultiValues=value
+                if(this.formType==='multiSelect'){
+                    this.lmFormMultiValues=this.value
                 }else{
-                    this.lmFormValue=value
+                    this.lmFormValue=this.value
                 }
             }
 
