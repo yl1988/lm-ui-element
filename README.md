@@ -1053,3 +1053,46 @@ validateCertificateNo|企业资质编号校验 | (rule, value, callback,config) 
 validateLngLat|经纬度校验 | (rule, value, callback,isLgnOrLat) ,isLgnOrLat用于区分 是经度还是纬度 String，可选值有lng 经度,lat 纬度
 validateAbcAnd_|验证字母和下划线正则 | (rule, value, callback,config) ,其中config为配置对象，可选参数为：msg 错误信息 String，默认值是"请输入字母和下划线组成的字符串" ； required 是否必须 Boolean ,默认值true
 
+## 挂在在vue原型链上的方法 $lm
+有些函数需要挂载到原型链上，主要方便在dom中使用,当然在生命周期和方法中也可以使用。这部分方法统一挂在到$lm下
+
+函数名	| 说明 |	 参数说明	
+:---|:---:|:---
+dateRangeDisabele|日期范围内不可见设置 | 接收三个参数，(time, range, config) ，time是时间组件返回的时间 Date；range是时间范围值，由开始时间和结束时间组成的一个数组 Array，第一个值是开始时间 String/Date/Number，第二个值是结束时间 String/Date/Number；config 配置信息,包含startEqual 开始日期是否可以相等 Boolean,endEqual 结束日期是否可以相等 Boolean
+
+使用示例：
+首先在main.js中添加如下代码
+````javascript
+import $lm from 'lm-ui-element/lib/utils/$lm'
+Vue.use($lm)
+````
+使用
+````html
+<template>
+<el-form width="1000" ref="form" :model="form" label-width="100px">
+          <el-row>
+            <lm-date-time label="日期范围：" v-model="form.date"   form-type="rangeDateTime" width="46%"
+                          date-time-type="datetime"
+                          :picker-options="[
+                            {
+                                disabledDate:(time)=>$lm.dateRangeDisabele(time,[0,form.date ? form.date[1] : new Date()],{endEqual:true})
+                                },
+                                {
+                                    disabledDate:time=> $lm.dateRangeDisabele(time,[form.date ? form.date[0] : 0,new Date()],{endEqual:true,startEqual:true})
+                                }
+                                ]"
+            />
+          </el-row>
+        </el-form>
+</template>
+<script>
+export default {
+    data(){
+       return{
+           form:{},//表单
+       }
+     }
+}
+</script>
+
+````

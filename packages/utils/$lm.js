@@ -5,7 +5,7 @@ import {formatDate} from "./lm-methods";
 
 export default {
     install(Vue) {
-        Vue.prototype.$lmMethods = {
+        Vue.prototype.$lm = {
             //日期范围开始日期 结束日期配置
             disabledDate(time,type,values){
                 let value=values ? values[type] : ''
