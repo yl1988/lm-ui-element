@@ -400,7 +400,7 @@ enter|回车事件|--
 :---|:---:|:---|:---:|:---
 value|值|String / Number /Array|--|--
 formType|表单类型|String| radio / multiSelect|select
-lmFormItemData|尾部图标|Array| --|['否','是']
+list|尾部图标|Array| --|['否','是']
 placeholder|placeholder|String / Array|--|请选择
 selectClass|select类名|String|--|--
 oName|选项文字|String / Array|--|name
@@ -442,7 +442,7 @@ change|事件日期改变|(date:String/Number/Date/Array)
 :---|:---:|:---|:---:|:---
 value|值|String / Number |--|--
 placeholder|placeholder|请选择
-lmFormItemData|数据|Array|--|--
+options|数据|Array|--|--
 oName|选项文字|String|--|name
 oValue|选项值|String|--|value
 filterable|是否可搜索|Boolean|--|true

@@ -3,7 +3,7 @@
     <el-col :span="span" class="lm-form-item-col" ref="lmCol">
         <el-form-item :label="label" :prop="prop" :label-width="lmFormLabelWidth" ref="formItemRef" :required="required" :style="{'margin-bottom':marginBottom || (isEdit ? '22px' : '0')}">
             <el-cascader :value="lmFormValue" v-if="isEdit"
-                         :options="lmFormItemData"
+                         :options="options"
                          :style="{width:lmFormItemWidth}"
                          @change="lmFormItemChange"
                          :props="pickerOptions"
@@ -33,7 +33,7 @@
                 type:String,
                 default:'请选择'
             },//placeholder
-            lmFormItemData:{
+            options:{
                 type:Array,
                 default:()=>[]
             },//数据

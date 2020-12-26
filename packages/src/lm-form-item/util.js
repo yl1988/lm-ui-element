@@ -4,13 +4,13 @@
 选择框，单选框，时间，级联选择等改变
  */
 export function lmFormItemChangeFun(value,that){
-    let valueIndex=(that.lmFormItemData[0] instanceof Object) ? that.lmFormItemData.findIndex(item=>item[that.oValue]===value) : value
+    let valueIndex=(that.list[0] instanceof Object) ? that.list.findIndex(item=>item[that.oValue]===value) : value
     // console.log(valueIndex)
-    let itemData=that.lmFormItemData[valueIndex]
+    let itemData=that.list[valueIndex]
     that.$emit('input',value)
     console.log(value,itemData)
     // console.log(this.oValue)
-    // console.log(this.lmFormItemData)
+    // console.log(this.list)
     that.$emit('change',{value,itemData})
 }
 /*

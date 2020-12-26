@@ -12,12 +12,12 @@
                            :filterable="filterable" :disabled="disabled"
                            :id="lmRef[0]" clearable
                 >
-                    <el-option :label="o[oName] || o" :value="o[oValue] || index" v-for="(o,index) in lmFormItemData" :key="index"></el-option>
+                    <el-option :label="o[oName] || o" :value="o[oValue] || index" v-for="(o,index) in list" :key="index"></el-option>
                 </el-select>
                 <!--多个下拉框-->
                 <div v-if="formType==='multiSelect'" class="rowStart">
                     <el-select
-                            v-for="(lmItem,index) in lmMultiFormItemData" :key="index"
+                            v-for="(lmItem,index) in multiList" :key="index"
                             :value="lmFormMultiValues[index]"
                             @input="v=>lmFormMultiItemChange(v,index)"
                             :size="size"
@@ -35,7 +35,7 @@
                 </div>
                 <!--单选按钮-->
                 <el-radio-group v-if="formType==='radio'"  :value="lmFormValue" @input="lmFormItemChange" :size="size" :style="{width:lmFormItemWidth}" >
-                    <el-radio style="margin-right:20px;color:#888888;" :label="o[oValue] || index" v-for="(o,index) in lmFormItemData" :key="index">{{o[oName] || o}}</el-radio>
+                    <el-radio style="margin-right:20px;color:#888888;" :label="o[oValue] || index" v-for="(o,index) in list" :key="index">{{o[oName] || o}}</el-radio>
                 </el-radio-group>
             </div>
             <div class="lmTexts" v-else>
@@ -63,7 +63,7 @@
                 type:[String,Array],
                 default:'请选择'
             },//placeholder
-            lmFormItemData:{
+            list:{
                 type:Array,
                 default:()=>['否','是']
             },//数据
@@ -88,7 +88,7 @@
                 type:String,
                 default:'0 10px 0 0'
             },
-            lmMultiFormItemData:{
+            multiList:{
                 type:Array,
                 default:()=>[]
             },//多选数据
@@ -108,7 +108,7 @@
             // ...mapState(['focusHiddenData']),
             //查看状态下显示的文字
             lmTexts(){
-                let {formType,lmFormItemData,oName,oValue,lmMultiFormItemData,lmFormValue,lmFormMultiValues}=this
+                let {formType,list,oName,oValue,multiList,lmFormValue,lmFormMultiValues}=this
                 if(formType==='multiSelect'){
                     if(!lmFormMultiValues.length){
                         return []
@@ -119,8 +119,8 @@
                     }
                 }
                 let texts=[]
-                let lmData=[...lmFormItemData]
-                let forData=formType==='multiSelect' ? [...lmMultiFormItemData]: [lmData]
+                let lmData=[...list]
+                let forData=formType==='multiSelect' ? [...multiList]: [lmData]
                 let forValue=formType==='multiSelect' ? [...lmFormMultiValues] : [lmFormValue]
                 for(let i=0;i<forData.length;i++){
                     if(forData[i][0] instanceof Object){
@@ -154,7 +154,7 @@
                     this.lmDateMultiSelectPlaceholder=placeholder
                 }else{
                     this.lmDateMultiSelectPlaceholder=[]
-                    for(let i=0;i<this.lmMultiFormItemData.length;i++){
+                    for(let i=0;i<this.multiList.length;i++){
                         this.lmDateMultiSelectPlaceholder.push('请选择')
                     }
                 }
@@ -180,22 +180,22 @@
                 console.log(value,selectIndex)
                 this.lmFormMultiValues.splice(selectIndex)
                 this.lmFormMultiValues.push(value)
-                for(let i=0;i<this.lmMultiFormItemData.length;i++){
+                for(let i=0;i<this.multiList.length;i++){
                     if(i>selectIndex){
-                        this.lmMultiFormItemData.splice(i,1,[])
+                        this.multiList.splice(i,1,[])
                     }
                 }
                 if(this.changeFun instanceof Array){
                     (this.changeFun[selectIndex] instanceof Function) && this.changeFun[selectIndex](value)
                 }else{
                     // this.changeFun(value)
-                    selectIndex<this.lmMultiFormItemData.length-1 && this.changeFun(value)
+                    selectIndex<this.multiList.length-1 && this.changeFun(value)
                 }
 
                 let {oValue}=this
                 let valueStr=typeof oValue==='string' ? oValue : oValue[selectIndex]
-                let valueIndex=(this.lmMultiFormItemData[selectIndex][0] instanceof Object) ? this.lmMultiFormItemData[selectIndex].findIndex(item=>item[valueStr]===value) : value
-                let itemData=this.lmMultiFormItemData[selectIndex][valueIndex]
+                let valueIndex=(this.multiList[selectIndex][0] instanceof Object) ? this.multiList[selectIndex].findIndex(item=>item[valueStr]===value) : value
+                let itemData=this.multiList[selectIndex][valueIndex]
                 // console.log(value,itemData)
                 this.lmFormMultiItemData.splice(selectIndex)
                 this.lmFormMultiItemData.push(itemData)
