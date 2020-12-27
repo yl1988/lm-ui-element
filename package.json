@@ -1,6 +1,6 @@
 {
   "name": "lm-ui-element",
-  "version": "0.3.2",
+  "version": "0.3.6",
   "private": false,
   "main": "lib/frog-ui.umd.min.js",
   "scripts": {
