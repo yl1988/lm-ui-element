@@ -1,6 +1,9 @@
 import {compressImageFun,isIEFun,isEdgFun} from "../../utils/lm-methods";
-
+import PreviewImgDialog from './preview-img-dialog'
 export default {
+    components:{
+        PreviewImgDialog
+    },
     props:{
         fileList:{
             type:Array,

@@ -78,12 +78,15 @@
 
 <script>
     import {isNumber} from "../../utils/lm-validate"
-
     import mixin from './mixin'
+    import LmImgCropper from '../lm-img-cropper'
 
     export default {
         name: 'LmUpImg',
         mixins:[mixin],
+        components:{
+            LmImgCropper
+        },
         props:{
             label:String,//标题
             type:{

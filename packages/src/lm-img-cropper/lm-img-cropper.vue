@@ -79,8 +79,12 @@
 
 <script>
 import { VueCropper }  from 'vue-cropper'
+import LmDialog from '../lm-dialog'
 export default {
     name: 'LmImgCropper',
+    components:{
+        LmDialog
+    },
     props:{
         imgSrc:[String,Blob],// 裁剪图片的地址
         info: {
