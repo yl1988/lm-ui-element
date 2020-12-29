@@ -197,7 +197,7 @@
                     !this.hasLngLag && this.addressArea[1] && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
                     this.address.districtId = this.address.cityId
                 }
-                console.log(this.addressArea)
+                //console.log(this.addressArea)
                 this.address.addressArea = this.addressArea
                 let {isNotTwoLevels, showStreet} = this
                 this.address = {...this.address, addressArea: this.addressArea, isNotTwoLevels, showStreet}
@@ -226,7 +226,7 @@
             },
             //输入框搜索点击完成
             inputAutoSelect(item) {
-                console.log(item)
+                //console.log(item)
                 this.addressArea[3] = item.name
                 this.hasLngLag = true
                 this.$emit('getLngLatInfo', {
@@ -307,9 +307,9 @@
                     AMap.plugin('AMap.Geocoder', () => {
                         let geocoder = new AMap.Geocoder({})
                         geocoder.getLocation(address, (status, result) => {
-                            // console.log(result)
+                            // //console.log(result)
                             let {geocodes = []} = result
-                            // console.log(geocodes)
+                            // //console.log(geocodes)
                             if(!(geocodes instanceof Array) || !geocodes.length){
                                 resolve({})
                             }

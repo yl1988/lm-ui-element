@@ -28,11 +28,11 @@ export const validIDCard = (rule, value, callback,config={}) => {
     callback(new Error("请输入正确的18位身份证号码"))
   } else {
       let birthday=value.slice(6,14)
-      // console.log(birthday)
+      // //console.log(birthday)
       let year=birthday.slice(0,4)
       let month=birthday.slice(4,6)
       let day=birthday.slice(6)
-      // console.log(year,month,day)
+      // //console.log(year,month,day)
       let birthdayDate=`${year}/${month}/${day}`
       let now=Date.now()
       let birthdayDateTime=new Date(birthdayDate).getTime()
@@ -62,9 +62,9 @@ export const towPassIsAlike = (rule, value, callback,pass,confirmPass) => {
   if (value === '') {
     callback(new Error('请再次输入密码'))
   } else if (confirmPass ? (confirmPass!==pass) : (value !== pass)) {
-      console.log(value)
-      console.log(pass)
-      console.log(confirmPass)
+      //console.log(value)
+      //console.log(pass)
+      //console.log(confirmPass)
     callback(new Error('两次输入密码不一致!'))
   } else {
     callback()
@@ -73,7 +73,7 @@ export const towPassIsAlike = (rule, value, callback,pass,confirmPass) => {
 //检查地址是否完善——地址封装组件
 export const validAddressInfo=(rule, value, callback,config={})=>{
     let {msg='请完善地址信息',isReset}=config
-    // console.log(value)
+    // //console.log(value)
     //isReset 是否为重置表单
     if(isReset){
       return
@@ -83,14 +83,14 @@ export const validAddressInfo=(rule, value, callback,config={})=>{
         return
     }
     let {districtId,showStreet,street}=value
-    // console.log(districtId,showStreet,street)
+    // //console.log(districtId,showStreet,street)
     if(showStreet){
         if(!street){
             callback(new Error(msg))
             return
         }
     }
-    // console.log(districtId)
+    // //console.log(districtId)
     if(!districtId){
         callback(new Error(msg))
         return
@@ -138,7 +138,7 @@ export const validRangeDateTime=(rule, value, callback,msg='请完善信息',sto
 
 //中文校验
 export const validateChinese=(rule, value, callback,config={})=>{
-    // console.log(value)
+    // //console.log(value)
     let {msgs=['请输入'],min,max,required=true}=config
     if(!(msgs instanceof Array)){
         msgs=['请输入']
@@ -201,7 +201,7 @@ export const validateCertificateNo=(rule, value, callback,config={})=>{
     if(!required && !value){
         callback()
     }
-    // console.log(value)
+    // //console.log(value)
     if(!value){
         callback(new Error(msg))
         return
@@ -218,7 +218,7 @@ export const validateLngLat=(rule, value, callback,isLgnOrLat)=>{
     let latMsg="请输入纬度,范围:-90.00~90.00(最⼤保留8位⼩数)"
     let longReg = /^(\-|\+)?(((\d|[1-9]\d|1[0-7]\d|0{1,3})\.\d{0,6})|(\d|[1-9]\d|1[0-7]\d|0{1,3})|180\.0{0,6}|180)$/
     let latReg =  /^(\-|\+)?([0-8]?\d{1}\.\d{0,6}|90\.0{0,6}|[0-8]?\d{1}|90)$/
-    // console.log(value)
+    // //console.log(value)
     if(!value){
         callback(new Error(msg))
         return
@@ -246,7 +246,7 @@ export const validateAbcAnd_=(rule, value, callback,config={})=>{
     if(!required && !value){
         callback()
     }
-    // console.log(value)
+    // //console.log(value)
     if(!value){
         callback(new Error(msg))
         return

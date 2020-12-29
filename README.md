@@ -210,7 +210,7 @@ monthChange|月份改变|(date:String)
         methods: {
             //月份改变
             getMonthChange({changeMonth,currentYear,currentMonth,type}){
-                console.log(currentYear,currentMonth)
+                //console.log(currentYear,currentMonth)
                 let currentMonthArr=[currentMonth-1,currentMonth+1]
                 this.$sunRainMethods.getMonthChange(changeMonth,type,{currentYear,currentMonth:currentMonthArr[type],that:this})
             },
@@ -507,11 +507,11 @@ export default {
                 //保存信息
                 async savePersonInfo(){
                     await  this.$refs.form.validate()
-                    console.log(this.form)
+                    //console.log(this.form)
                 },
                 //分包单位改变
                 companyChange({value}){
-                   console.log(value)
+                   //console.log(value)
                 },               
             },
     
@@ -666,7 +666,7 @@ export default {
                   method:'POST'
               })
               this.isEdit=false
-              console.log(code+msg)
+              //console.log(code+msg)
               if(code===1){
                   //成功
                   this.$refs.address.setFullAddress(form.addressArea.join(' '))

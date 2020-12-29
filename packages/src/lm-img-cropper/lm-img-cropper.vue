@@ -79,7 +79,7 @@
 
 <script>
 import { VueCropper }  from 'vue-cropper'
-import LmDialog from '../lm-dialog'
+import LmDialog from '../lm-dialog/lm-dialog'
 export default {
     name: 'LmImgCropper',
     components:{
@@ -168,7 +168,7 @@ export default {
         }
     },
     created(){
-        console.log(this.imgSrc)
+        //console.log(this.imgSrc)
         this.priveImgHeight=this.autoCropWidth*374/264
         this.priveImgWidth=this.autoCropWidth
     },
@@ -185,17 +185,17 @@ export default {
         },
         // 实时预览函数
         realTime(data) {
-            // console.log('realTime')
-            // console.log(data)
+            // //console.log('realTime')
+            // //console.log(data)
             this.previews = data
         },
         //绑定监听函数
         openDialog(){
             this.showLoading=true
-            // console.log(this.$refs.customDialog)
+            // //console.log(this.$refs.customDialog)
             let {overy,closeIcon}=this.$refs.customDialog.$refs
-            // console.log(overy)
-            // console.log(closeIcon)
+            // //console.log(overy)
+            // //console.log(closeIcon)
             return new Promise((resolve,reject)=>{
                 this.$refs.complete.addEventListener('click',async ()=>{
                     let file=await this.getCropBlob()
@@ -228,7 +228,7 @@ export default {
             })
         },
         imgLoad(){
-            console.log('imgLoad')
+            //console.log('imgLoad')
             this.showLoading=false
         },
     }

@@ -26,7 +26,7 @@ export function formatDateTime(date, connector = '/') {
 *带对象的数组去重
  */
 export const noRepeatArrHasObject=(arr=[],onlyId='id')=>{
-    if(!arr instanceof Array){
+    if(!(arr instanceof Array)){
         console.error('数据类型错误，请确保第一个参数是数组')
         return
     }
@@ -59,8 +59,8 @@ export const isEdgFun=()=>{
     return userAgent.indexOf("Edge") > -1
 }
 //判断文件类型与压缩图片
-export const compressImageFun=({file, width, height, quality = 0.8, maxWidth = 1920, maxHeight = 1080,compressSize=200000,maxSize=9000000}) =>{
-    return new Promise(async (resolve, reject) => {
+export const compressImageFun=async ({file, width, height, quality = 0.8, maxWidth = 1920, maxHeight = 1080,compressSize=200000,maxSize=9000000}) =>{
+
         //判断类型
         let compressConfig = {
             maxWidth, // 限制最大宽度
@@ -70,25 +70,28 @@ export const compressImageFun=({file, width, height, quality = 0.8, maxWidth = 1
             imgType:file.type,//文件后缀格式
         }
         height && (compressConfig.height = height)
-        // console.log(compressConfig)
+        // //console.log(compressConfig)
         let imgFile = file
         // ie和edg不支持new File
         if(!isEdgFun() && !isIEFun()){
             if (file.size > compressSize) {
                 //大于200kb，开启图片压缩
                 let result = await compressImage(file, compressConfig)
-                // console.log(blob)
+                // //console.log(blob)
                 // 判断压缩后图片尺寸是否符合要求，不符合的过滤掉
                 imgFile = result.file
                 if (imgFile.size > maxSize) {
-                    resolve({
-                        code:2,
-                        msg:`压缩后的图片大于${maxSize}`,
-                        data:imgFile
+                    return new Promise(resolve => {
+                        resolve({
+                            code: 2,
+                            msg: `压缩后的图片大于${maxSize}`,
+                            data: imgFile
+                        })
                     })
                 }
             }
         }
+    return new Promise(resolve => {
         resolve({
             code:1,
             msg:'success',
@@ -126,11 +129,11 @@ export function dataURLtoFile(dataurl, filename = 'file') {
 
 // 压缩图片
 export function compressImage(path, config) {
-    console.log(config)
+    //console.log(config)
     if((typeof path !=='string' || !(path instanceof Blob)) && path instanceof File){
         path=URL.createObjectURL(path)
     }
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         // 生成canvas
         let canvas = document.createElement('canvas')
         let ctx = canvas.getContext('2d')
@@ -175,11 +178,11 @@ export function compressImage(path, config) {
             config.imgType==='image/jpg' && (config.imgType='image/jpeg')
             let base64 = canvas.toDataURL(config.imgType, quality)
             // 在指定图片格式为 image/jpeg 或 image/webp的情况下，可以从 0 到 1 的区间内选择图片的质量。如果超出取值范围，将会使用默认值 0.92。其他参数会被忽略。
-            // console.log(base64.length)
+            // //console.log(base64.length)
             let blob = convertBase64UrlToBlob(base64)
             let file = dataURLtoFile(base64)
             // 回调函数返回base64的值，也可根据自己的需求返回blob的值
-            // console.log(file)
+            // //console.log(file)
             resolve({blob,base64,file})
             canvas = null
         }

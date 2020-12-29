@@ -133,7 +133,7 @@
             maxlength && (this.lmInputMaxlength=Math.abs(parseInt(maxlength)))
             minlength && (this.lmInputMinlength=Math.abs(parseInt(minlength)))
             this.lmShowWordLimit=!!minlength || !!maxlength
-            // console.log(this.lmShowWordLimit)
+            // //console.log(this.lmShowWordLimit)
             type==='tel' && (this.lmInputMaxlength=11)
             type==='idcard' && (this.lmInputMaxlength=18)
             type==='number' && (this.lmInputMaxlength=maxlength || 15)

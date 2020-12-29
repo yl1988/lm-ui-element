@@ -97,13 +97,13 @@ export function insertDataToCalendar(value,calendarList,dateProp){
     let filterCalendarList=canlendarValue.filter(item=>item.calendarAddYear===calendarList[i].year)//先筛选出当前年的
     filterCalendarList=filterCalendarList.filter(item=>item.calendarAddMonth===calendarList[i].month)//再筛选出当前月的
     filterCalendarList=filterCalendarList.filter(item=>item.calendarAddDate===calendarList[i].day)//最后筛选出当前天的
-    // console.log(filterCalendarList)
+    // //console.log(filterCalendarList)
     if(!filterCalendarList.length){
       // 没有值，跳过
       continue
     }
     // 将传过来的数据插入原日历数据
-    //   console.log(calendarList)
+    //   //console.log(calendarList)
     calendarList.splice(i,1,{...calendarList[i],...filterCalendarList[0],hasData:true})
   }
 }

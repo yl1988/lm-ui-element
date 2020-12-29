@@ -80,7 +80,7 @@
         methods: {
             //月份改变
             getMonthChange({changeMonth,currentYear,currentMonth,type}){
-                console.log(currentYear,currentMonth)
+                //console.log(currentYear,currentMonth)
                 let currentMonthArr=[currentMonth-1,currentMonth+1]
                 this.$sunRainMethods.getMonthChange(changeMonth,type,{currentYear,currentMonth:currentMonthArr[type],that:this})
             },

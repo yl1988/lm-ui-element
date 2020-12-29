@@ -79,7 +79,7 @@
 <script>
     import {isNumber} from "../../utils/lm-validate"
     import mixin from './mixin'
-    import LmImgCropper from '../lm-img-cropper'
+    import LmImgCropper from '../lm-img-cropper/lm-img-cropper'
 
     export default {
         name: 'LmUpImg',

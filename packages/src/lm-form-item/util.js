@@ -5,12 +5,12 @@
  */
 export function lmFormItemChangeFun(value,that){
     let valueIndex=(that.list[0] instanceof Object) ? that.list.findIndex(item=>item[that.oValue]===value) : value
-    // console.log(valueIndex)
+    // //console.log(valueIndex)
     let itemData=that.list[valueIndex]
     that.$emit('input',value)
-    console.log(value,itemData)
-    // console.log(this.oValue)
-    // console.log(this.list)
+    //console.log(value,itemData)
+    // //console.log(this.oValue)
+    // //console.log(this.list)
     that.$emit('change',{value,itemData})
 }
 /*
@@ -22,7 +22,7 @@ export function lmFormItemWatch(v,formType,that) {
             if(that.getDefaultData){
                 return
             }
-            // console.log(v)
+            // //console.log(v)
             that.lmFormMultiValues=v
             that.getDefaultData=true
             // this.getLmTexts(v)
@@ -31,7 +31,7 @@ export function lmFormItemWatch(v,formType,that) {
             that.getDefaultData=false
         }
     }else{
-        // console.log(v)
+        // //console.log(v)
         that.lmFormValue=v
         // this.getLmTexts(v)
     }

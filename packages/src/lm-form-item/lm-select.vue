@@ -177,7 +177,7 @@
             },
             //多个选择框改变
             async lmFormMultiItemChange(value,selectIndex){
-                console.log(value,selectIndex)
+                //console.log(value,selectIndex)
                 this.lmFormMultiValues.splice(selectIndex)
                 this.lmFormMultiValues.push(value)
                 for(let i=0;i<this.multiList.length;i++){
@@ -196,7 +196,7 @@
                 let valueStr=typeof oValue==='string' ? oValue : oValue[selectIndex]
                 let valueIndex=(this.multiList[selectIndex][0] instanceof Object) ? this.multiList[selectIndex].findIndex(item=>item[valueStr]===value) : value
                 let itemData=this.multiList[selectIndex][valueIndex]
-                // console.log(value,itemData)
+                // //console.log(value,itemData)
                 this.lmFormMultiItemData.splice(selectIndex)
                 this.lmFormMultiItemData.push(itemData)
                 this.$emit('input',this.lmFormMultiValues)

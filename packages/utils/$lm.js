@@ -21,7 +21,7 @@ export default {
                     return false
                 }
                 if(endEqual && (date===endDate)){
-                    // console.log('endequal')
+                    // //console.log('endequal')
                     return false
                 }
                 if(startDate && endDate){
@@ -31,7 +31,7 @@ export default {
                     return date<startDate
                 }
                 if(endDate){
-                    // console.log(date>=endDate)
+                    // //console.log(date>=endDate)
                     return date>=endDate
                 }
                 return false

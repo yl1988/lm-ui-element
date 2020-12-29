@@ -21,7 +21,7 @@ import $lm from './utils/$lm'
 import './lm-ui-element-style/src/index.scss'
 
 const components=[LmCalendar,LmInput,LmSelect,LmDateTime,LmCascader,LmMultiOptionBtns,LmAddress,LmUpFile,LmUpImg,LmDialog,LmImgCropper]
-console.log(components)
+//console.log(components)
 const install=function (Vue) {
     if(install.installed){
         return

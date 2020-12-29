@@ -15,7 +15,7 @@
     </lm-dialog>
 </template>
 <script>
-    import LmDialog from '../lm-dialog'
+    import LmDialog from '../lm-dialog/lm-dialog'
     export default {
         name: 'PreviewImgDialog',
         components:{
@@ -34,7 +34,7 @@
             //图片旋转
             imgRotateFun(type){
                 //type 0左旋 1右旋
-                console.log(this.$refs.previewImg)
+                //console.log(this.$refs.previewImg)
                 type ? this.imgRotate+=90 : this.imgRotate-=90
             },
             //图片放大缩小
