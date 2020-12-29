@@ -171,7 +171,7 @@ monthChange|月份改变|(date:String)
 
 </template>
 <script>
-    import {formatDate} from "lm-ui-element/utils/global-methods";
+    import {formatDate} from "lm-ui-element/lib/utils/global-methods";
 
     export default {
         name: "LmCanlendarComponent",
@@ -481,7 +481,7 @@ pickerOptions|级联配置（配置内容同element-ui el-cascader配置 props�
       </el-form>
 </template>
 <script>
-import {validPhone,validIDCard} from 'lm-ui-element/utils/lm-validate-methods'
+import {validPhone,validIDCard} from 'lm-ui-element/lib/utils/lm-validate-methods'
 export default {
    
     data(){
@@ -543,7 +543,7 @@ VueAMap.initAMapApiLoader({
 })
 ````
 严格来说地址组件也属于表单组件,**lm-address**组件必须包含在**element-ui**的**el-form**组件内部，**lm-address**默认占一行的位置，所以通常情况下，你不需要在**lm-address**外面套上**el-row**，也没有**span**属性
-需要做表单校验的，可以从'lm-ui-element/utils/lm-validate-methods'引入validAddressInfo进行校验，校验rule规则同**element-ui**的表单校验。或者自定义校验方法。
+需要做表单校验的，可以从'lm-ui-element/lib/utils/lm-validate-methods'引入validAddressInfo进行校验，校验rule规则同**element-ui**的表单校验。或者自定义校验方法。
 
 **lm-address**支持表单状态（可编辑修改）和查看状态，不可见状态的切换，只需根据条件设置**is-edit**属性和**disabled**属性即可。
 
@@ -560,7 +560,7 @@ VueAMap.initAMapApiLoader({
     </el-form>
 </template>
 <script>
-import {validAddressInfo} from 'lm-ui-element/utils/lm-validate-methods'
+import {validAddressInfo} from 'lm-ui-element/lib/utils/lm-validate-methods'
 export default {
     data(){
         return {
@@ -628,7 +628,7 @@ setFullAddress|设置地址全名（用于查看状态下）|(address:String)
    
 </template>
 <script>
-import {validAddressInfo} from 'lm-ui-element/utils/lm-validate-methods'
+import {validAddressInfo} from 'lm-ui-element/lib/utils/lm-validate-methods'
 import axios from 'axios'
 export default {
     data(){
@@ -994,7 +994,7 @@ close|关闭弹窗|--
 提供部分公共函数
 引用示例：
 ````javascript
-import {formatDate} from "lm-ui-element/utils/global-methods";
+import {formatDate} from "lm-ui-element/lib/utils/global-methods";
 ````
 
 函数名	| 说明 |	 参数说明	| 返回值
@@ -1013,7 +1013,7 @@ toThousands|金额格式（分隔）|接收两个参数，第一个参数是数�
 提供验证函数
 引用示例：
 ````javascript
-import {isvalidPhone} from "lm-ui-element/utils/lm-validate";
+import {isvalidPhone} from "lm-ui-element/lib/utils/lm-validate";
 ````
 
 函数名	| 说明 |	 参数说明	| 返回值
@@ -1029,7 +1029,7 @@ isNumber|判断是否为数字，整数或者小数 | (val:any) | true或false
 封装elememt-ui的自定义表单验证方法,rule, value, callback是element-ui自定义验证回调参数
 引用用法示例：
 ````javascript
-import {validPhone} from "lm-ui-element/utils/lm-validate-methods";
+import {validPhone} from "lm-ui-element/lib/utils/lm-validate-methods";
 data(){
     return {
         rules:{
