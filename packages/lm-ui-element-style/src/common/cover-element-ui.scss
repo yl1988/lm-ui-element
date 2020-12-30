@@ -18,4 +18,15 @@ input::-webkit-inner-spin-button {
     display:flex;
     align-items: center;
 }
-
+.lmElSelectBox .el-select{
+    width:100%;
+}
+.lmElSelectBox .el-date-editor.el-input__inner{
+    width:100%;
+}
+.lmElSelectBox .el-date-editor.el-input{
+    width:100%;
+}
+.el-form-item .el-form-item__content .el-cascader{
+  width:100%;
+}

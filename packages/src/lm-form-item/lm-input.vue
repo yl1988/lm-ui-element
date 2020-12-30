@@ -141,13 +141,13 @@
         },
         mounted() {
             if(this.value){
-                this.lmFormValue=value
+                this.lmFormValue=this.value
             }
         },
         methods: {
             // 输入框，改变
             lmInputInput(v){
-                let {type,min,max,toFixed,lmInputMaxlength}=this
+                let {type,min,toFixed,lmInputMaxlength}=this
                 toFixed=Number(toFixed)
                 if(type==='tel'){
                     //电话
@@ -200,6 +200,3 @@
         },
     }
 </script>
-<style>
-    @import "../../lm-ui-element-style/src/common/cover-element-ui.css";
-</style>

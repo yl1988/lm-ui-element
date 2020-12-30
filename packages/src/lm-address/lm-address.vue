@@ -1,9 +1,9 @@
 <!--选择地址，搭配高德地图使用-->
 <template>
     <el-row>
-        <el-form-item :label="label" label-position="top" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':edit ? '22px' : '0'}">
+        <el-form-item :label="label" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':edit ? '22px' : '0'}">
             <div v-if="edit" class="rowStart">
-                <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable">
+                <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable" :style="{width:lmSelectWidth}">
                     <el-option
                             v-for="item in provinceList"
                             :key="item.id"
@@ -11,7 +11,7 @@
                             :value="item.id">
                     </el-option>
                 </el-select>
-                <el-select class="addressFormItem" :size="size" :value="address.cityId" @change="changeCity" placeholder="请选择" :filterable="filterable">
+                <el-select class="addressFormItem" :size="size" :value="address.cityId" @change="changeCity" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}">
                     <el-option
                             v-for="item in cityList"
                             :key="item.id"
@@ -19,7 +19,7 @@
                             :value="item.id">
                     </el-option>
                 </el-select>
-                <el-select class="addressFormItem" v-if="isNotTwoLevels" :size="size" :value="address.districtId" @change="changeDistrict" placeholder="请选择" :filterable="filterable">
+                <el-select class="addressFormItem" v-if="isNotTwoLevels" :size="size" :value="address.districtId" @change="changeDistrict" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}">
                     <el-option
                             v-for="item in districtList"
                             :key="item.id"
@@ -27,7 +27,7 @@
                             :value="item.id">
                     </el-option>
                 </el-select>
-                <div v-if="showStreet">
+                <div v-if="showStreet" style="flex:1;">
                     <el-autocomplete
                             class="addressFormInput"
                             v-if="elAuto" :style="{width:streetInputWidth}" :size="size" placeholder="请输入"
@@ -118,6 +118,7 @@
             placement: String,//菜单弹出位置
             triggerOnFocus: Boolean,//是否在输入框 focus 时显示建议列表
             maxlength:[String,Number],//地址输入框的最大长度
+            selectWidth:[Number,String],//下拉框宽度
         },
         data() {
             return {
@@ -133,11 +134,13 @@
                 isFilter: false,//是否是筛选
                 inputQueryData: Object.freeze([]),///输入框建议数据
                 hasLngLag: false,//是否有经纬度
+                lmSelectWidth:'150px',//下拉框宽度
             }
         },
         async mounted() {
-            let {inputWidth} = this
+            let {inputWidth,selectWidth,lmSelectWidth} = this
             this.streetInputWidth = (typeof inputWidth === 'number' || isNumber(inputWidth)) ? (inputWidth + 'px') : inputWidth
+            this.lmSelectWidth = (typeof selectWidth === 'number' || isNumber(selectWidth)) ? (selectWidth + 'px') : lmSelectWidth
             this.address = this.defaultAddress
             let {cityId, provinceId, districtId, street} = this.defaultAddress
             this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
@@ -152,7 +155,7 @@
                 this.districtList = []
                 this.inputQueryData = []
                 this.cityList = citys[val]
-                let thisProvince = this.provinceList.filter((item, index) => item.id === val)
+                let thisProvince = this.provinceList.filter((item) => item.id === val)
                 this.addressArea[1] = this.addressArea[2] = ''
                 this.addressArea[0] = thisProvince[0].name
                 this.address.addressArea = this.addressArea
@@ -252,18 +255,18 @@
             getSearchAddresList(keyword) {
                 let {provinceId, cityId, districtId} = this.address
                 let city = districtId || cityId || provinceId
-                if(!AMap){
-                    console.error('获取高德地图实例AMap失败,请确保正确引入并初始化高德地图')
+                if(!window.AMap){
+                    console.error('获取高德地图实例window.AMap失败,请确保正确引入并初始化高德地图')
                     return
                 }
-                return new Promise((resolve, reject) => {
-                    AMap.plugin('AMap.Autocomplete', () => {
+                return new Promise((resolve) => {
+                    window.AMap.plugin('window.AMap.Autocomplete', () => {
                         // 实例化Autocomplete
                         let autoOptions = {
                             //city 限定城市，默认全国
                             city
                         }
-                        let autoComplete = new AMap.Autocomplete(autoOptions);
+                        let autoComplete = new window.AMap.Autocomplete(autoOptions);
                         autoComplete.search(keyword, (status, result) => {
                             // 搜索成功时，result即是对应的匹配数据
                             if (status === 'complete' && result.info === 'OK') {
@@ -299,13 +302,13 @@
             //通过地址查询经纬度
             getLngLatFun(address) {
                 if (!address) return
-                if(!AMap){
-                    console.error('获取高德地图实例AMap失败,请确保正确引入并初始化高德地图')
+                if(!window.AMap){
+                    console.error('获取高德地图实例window.AMap失败,请确保正确引入并初始化高德地图')
                     return
                 }
-                return new Promise((resolve, reject) => {
-                    AMap.plugin('AMap.Geocoder', () => {
-                        let geocoder = new AMap.Geocoder({})
+                return new Promise((resolve) => {
+                    window.AMap.plugin('window.AMap.Geocoder', () => {
+                        let geocoder = new window.AMap.Geocoder({})
                         geocoder.getLocation(address, (status, result) => {
                             // //console.log(result)
                             let {geocodes = []} = result

@@ -97,8 +97,3 @@
         },
     }
 </script>
-<style>
-    .lm-form-item-col .el-cascader{
-        width:100%;
-    }
-</style>

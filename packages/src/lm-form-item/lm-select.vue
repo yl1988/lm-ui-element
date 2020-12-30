@@ -2,7 +2,7 @@
 <template>
     <el-col :span="span" class="lm-form-item-col" ref="lmCol">
         <el-form-item :label="label" :prop="prop" :label-width="lmFormLabelWidth" ref="formItemRef" :required="required" :style="{'margin-bottom':marginBottom || (isEdit ? '22px' : '0')}">
-            <div v-if="isEdit" style="text-align:left;">
+            <div v-if="isEdit" class="lmElSelectBox" style="text-align:left;">
                 <!--下拉框-->
                 <el-select v-if="formType==='select'" :value="lmFormValue"
                            @input="lmFormItemChange"
@@ -210,8 +210,4 @@
         },
     }
 </script>
-<style>
-    .lm-form-item-col .el-select{
-        width:100%;
-    }
-</style>
+
