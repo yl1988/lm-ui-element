@@ -78,8 +78,10 @@
 </template>
 
 <script>
-import { VueCropper }  from 'vue-cropper'
+import Vue from 'vue'
 import LmDialog from '../lm-dialog/lm-dialog'
+import VueCropper  from 'vue-cropper'
+Vue.use(VueCropper)
 export default {
     name: 'LmImgCropper',
     components:{
@@ -155,9 +157,6 @@ export default {
             type:String,
             default:'不裁剪'
         },//裁剪完成按钮
-    },
-    comments:{
-        VueCropper
     },
     data() {
         return {
