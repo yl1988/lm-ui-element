@@ -260,13 +260,13 @@
                     return
                 }
                 return new Promise((resolve) => {
-                    window.AMap.plugin('window.AMap.Autocomplete', () => {
+                    window.AMap.plugin('AMap.Autocomplete', () => {
                         // 实例化Autocomplete
                         let autoOptions = {
                             //city 限定城市，默认全国
                             city
                         }
-                        let autoComplete = new window.AMap.Autocomplete(autoOptions);
+                        let autoComplete = new AMap.Autocomplete(autoOptions);
                         autoComplete.search(keyword, (status, result) => {
                             // 搜索成功时，result即是对应的匹配数据
                             if (status === 'complete' && result.info === 'OK') {
@@ -307,8 +307,8 @@
                     return
                 }
                 return new Promise((resolve) => {
-                    window.AMap.plugin('window.AMap.Geocoder', () => {
-                        let geocoder = new window.AMap.Geocoder({})
+                    window.AMap.plugin('AMap.Geocoder', () => {
+                        let geocoder = new AMap.Geocoder({})
                         geocoder.getLocation(address, (status, result) => {
                             // //console.log(result)
                             let {geocodes = []} = result
