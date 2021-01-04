@@ -1,6 +1,6 @@
 {
   "name": "lm-ui-element",
-  "version": "0.4.3",
+  "version": "0.4.5",
   "private": false,
   "main": "lib/frog-ui.umd.min.js",
   "scripts": {
@@ -14,8 +14,8 @@
   },
   "author": "杨涟",
   "dependencies": {
-    "core-js": "^3.8.1"
-
+    "core-js": "^3.8.1",
+    "vue-cropper": "^0.5.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -30,7 +30,7 @@
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11",
     "vue": "^2.6.12",
-    "vue-cli": "^2.9.6",
-    "vue-cropper": "^0.5.6"
-  }
+    "vue-cli": "^2.9.6"
+  },
+  "bundledDependencies": ["vue-cropper"]
 }

@@ -2,7 +2,7 @@
 <template>
     <el-col :span="span" class="lm-form-item-col" ref="lmCol">
         <el-form-item :label="label" :prop="prop" :label-width="lmFormLabelWidth" ref="formItemRef" :required="required" :style="{'margin-bottom':marginBottom || (isEdit ? '22px' : '0')}">
-            <div v-if="isEdit" style="text-align:left;">
+            <div v-if="isEdit" class="lmElSelectBox" style="text-align:left;">
                 <!--日期选择-->
                 <el-date-picker v-if="formType==='dateTime'" :type="dateTimeType"
                                 :value="lmFormValue" :size="size"
@@ -155,9 +155,4 @@
         },
     }
 </script>
-<style>
-    .lm-form-item-col .el-date-editor.el-input{
-        width:100%;
-    }
 
-</style>
