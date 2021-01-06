@@ -19,6 +19,8 @@
                        :auto-upload="true"
                        :on-change="fileChange"
                        v-if="isEdit && (typeof limit==='undefined' || (typeof limit==='number' && (fileList.length<limit)))"
+                       v-bind="$attrs"
+                       v-on="$listeners"
             >
               <div >
                 <slot name="chooseFileBtn">
@@ -49,7 +51,7 @@
           </slot>
         </div>
         <slot name="fileMethod" v-if="!hiddenCamera && !isEdit">
-          <el-radio-group  v-model="getFileMethod" style="margin-left:20px;" @change="fileMethodChange">
+          <el-radio-group  v-model="getFileMethod" style="margin-left:20px;" @change="fileMethodChange"  v-bind="$attrs" v-on="$listeners">
             <div class="fileMethodBox">
               <el-radio :label="1">上传 <el-icon class="el-icon-upload2"/></el-radio>
               <el-radio :label="0">拍照  <el-icon class="el-icon-camera"/></el-radio>
@@ -77,7 +79,7 @@
                       <i class="el-icon-delete" style="color:red" @click="removeDescFile(index,file)" v-if="isEdit"></i>
                     </div>
                   </div>
-                  <el-progress :percentage="file.percentage" :status="file.percentage===100 ? 'success' : undefined" v-if="file.blob"/>
+                  <el-progress :percentage="file.percentage" :status="file.percentage===100 ? 'success' : undefined" v-if="file.blob"  v-bind="$attrs" v-on="$listeners"/>
                 </div>
               </div>
             </el-form>

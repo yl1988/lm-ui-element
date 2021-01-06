@@ -2,7 +2,7 @@
   "name": "lm-ui-element",
   "version": "0.4.6",
   "private": false,
-  "main": "lib/lm-ui-element.js",
+  "main": "lib/lm-ui-element.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -36,5 +36,6 @@
     "vue-template-compiler": "^2.6.11",
     "vue": "^2.6.12",
     "vue-cli": "^2.9.6"
-  }
+  },
+  "bundledDependencies": ["vue-cropper"]
 }

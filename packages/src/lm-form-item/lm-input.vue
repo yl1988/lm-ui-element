@@ -23,16 +23,18 @@
                                  :trigger-on-focus="triggerOnFocus"
                                  :disabled="disabled"
                                  :show-word-limit="lmShowWordLimit"
+                                 v-bind="$attrs"
+                                 v-on="$listeners"
                 >
                     <template slot="append">
                         <slot name="append">
                             <span v-if="appendText">{{appendText}}</span>
-                            <i v-if="appendIcon" :class="appendIcon"></i>
+                            <i v-if="appendIcon" class="iconfont"  :class="appendIcon"></i>
                         </slot>
                     </template>
                     <template>
                         <slot name="prefix" class="rowCenter">
-                            <i :class="prefixIcon" v-if="prefixIcon"></i>
+                            <i :class="prefixIcon"  class="iconfont" v-if="prefixIcon"></i>
                         </slot>
                     </template>
                 </el-autocomplete>
@@ -48,17 +50,19 @@
                           :autosize="autosize"
                           :disabled="disabled"
                           :show-word-limit="lmShowWordLimit"
+                          v-bind="$attrs"
+                          v-on="$listeners"
 
                 >
                     <template slot="append">
                         <slot name="append">
                             <span v-if="appendText">{{appendText}}</span>
-                            <i v-if="appendIcon" :class="appendIcon"></i>
+                            <i v-if="appendIcon" class="iconfont"  :class="appendIcon"></i>
                         </slot>
                     </template>
                     <template slot="prefix">
                         <slot name="prefix">
-                            <i :class="prefixIcon" v-if="prefixIcon"></i>
+                            <i :class="prefixIcon" class="iconfont"  v-if="prefixIcon"></i>
                         </slot>
                     </template>
                 </el-input>

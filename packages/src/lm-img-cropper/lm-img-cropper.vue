@@ -38,6 +38,8 @@
                                     :fixedBox="fixedBox"
                                     @realTime="realTime"
                                     @imgLoad="imgLoad"
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
                             ></vueCropper>
                             <div class="rowCenter loadingBox" v-if="showLoading">
                                 <i class="el-icon-loading font40 gray666"></i>
@@ -82,7 +84,7 @@
   import LmDialog from '../lm-dialog/lm-dialog'
   import VueCropper  from 'vue-cropper'
   Vue.use(VueCropper)
-  export default {
+export default {
     name: 'LmImgCropper',
     components:{
       LmDialog
