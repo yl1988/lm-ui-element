@@ -30,8 +30,6 @@
                             :picker-options="pickerOptions[0]"
                             :size="size" :disabled="disabled"
                             :default-value="defaultDateTimeValue[0]"
-                            v-bind="$attrs"
-                            v-on="$listeners"
                     ></el-date-picker>
                     <slot name="conection">
                         <div class="dateTimeConnection">{{conectionText}}</div>
@@ -47,8 +45,6 @@
                             :picker-options="pickerOptions[1]"
                             :size="size" :disabled="disabled"
                             :default-value="defaultDateTimeValue[1]"
-                            v-bind="$attrs"
-                            v-on="$listeners"
                     ></el-date-picker>
                 </div>
             </div>

@@ -27,8 +27,6 @@
                             :style="{width:lmFormItemWidth,margin:multiMargin}"
                             :filterable="filterable" clearable
                             :id="lmRef[0] ? lmRef[0][index] : undefined"
-                            v-bind="$attrs"
-                            v-on="$listeners"
                     >
                         <el-option
                                 :label="oName instanceof Array ? o[oName[index]] : (o[oName] || o)"
@@ -38,8 +36,7 @@
                     </el-select>
                 </div>
                 <!--单选按钮-->
-                <el-radio-group v-if="formType==='radio'"  :value="lmFormValue" @input="lmFormItemChange" :size="size" :style="{width:lmFormItemWidth}"  v-bind="$attrs"
-                                v-on="$listeners">
+                <el-radio-group v-if="formType==='radio'"  :value="lmFormValue" @input="lmFormItemChange" :size="size" :style="{width:lmFormItemWidth}">
                     <el-radio style="margin-right:20px;color:#888888;" :label="o[oValue] || index" v-for="(o,index) in list" :key="index">{{o[oName] || o}}</el-radio>
                 </el-radio-group>
             </div>

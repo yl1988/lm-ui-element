@@ -79,7 +79,7 @@
                       <i class="el-icon-delete" style="color:red" @click="removeDescFile(index,file)" v-if="isEdit"></i>
                     </div>
                   </div>
-                  <el-progress :percentage="file.percentage" :status="file.percentage===100 ? 'success' : undefined" v-if="file.blob"  v-bind="$attrs" v-on="$listeners"/>
+                  <el-progress :percentage="file.percentage" :status="file.percentage===100 ? 'success' : undefined" v-if="file.blob"/>
                 </div>
               </div>
             </el-form>

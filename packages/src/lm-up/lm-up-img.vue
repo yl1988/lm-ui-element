@@ -64,7 +64,7 @@
           </slot>
         </div>
         <slot name="fileMethod" v-if="!hiddenCamera">
-          <el-radio-group  v-model="getFileMethod" :style="{height:fileImgHeight}" @change="fileMethodChange"  v-bind="$attrs" v-on="$listeners">
+          <el-radio-group  v-model="getFileMethod" :style="{height:fileImgHeight}" @change="fileMethodChange">
             <div class="fileMethodBox columnCenter">
               <p style="margin-bottom:20px;"> <el-radio :label="1">上传 <el-icon class="el-icon-upload2"/></el-radio></p>
               <p> <el-radio :label="0">拍照  <el-icon class="el-icon-camera"/></el-radio></p>
