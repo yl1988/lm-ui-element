@@ -1,22 +1,26 @@
 {
   "name": "lm-ui-element",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "private": false,
-  "main": "lib/frog-ui.umd.min.js",
+  "main": "lib/lm-ui-element.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "build:style": "gulp build --gulpfile packages/lm-ui-element-style/gulpfile.js && cp-cli packages/lm-ui-element-style/lib lib/lm-ui-element-style && cp-cli packages/lm-ui-element-style/src/utils lib/lm-ui-element-style/utils",
     "build:utils": "cp-cli packages/utils lib/utils",
-    "build:lib": "vue-cli-service build --target lib --name frog-ui --dest lib packages/index.js && npm run build:style && npm run build:utils",
+    "build:lib": "vue-cli-service build --target lib --name lm-ui-element --dest lib packages/index.js && npm run build:style && npm run build:utils",
     "pub": "npm publish --registry https://registry.npmjs.org"
   },
   "author": "杨涟",
   "dependencies": {
     "core-js": "^3.8.1",
     "vue-cropper": "^0.5.6"
-
+  },
+  "peerDependencies": {
+    "vue-cropper": "^0.5.6",
+    "vue": "^2.5.17",
+    "element-ui": "^2.13.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

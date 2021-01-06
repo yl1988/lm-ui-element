@@ -1,0 +1,9 @@
+{
+  "lm-address": "./packages/lm-address/index.js",
+  "lm-calendar": "./packages/lm-calendar/index.js",
+  "lm-dialog": "./packages/lm-dialog/index.js",
+  "lm-form-item": "./packages/lm-form-item/index.js",
+  "lm-img-cropper": "./packages/lm-img-cropper/index.js",
+  "lm-multi-option-btns": "./packages/lm-multi-option-btns/index.js",
+  "lm-up": "./packages/lm-up/index.js"
+}
