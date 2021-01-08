@@ -23,6 +23,9 @@
                                  :trigger-on-focus="triggerOnFocus"
                                  :disabled="disabled"
                                  :show-word-limit="lmShowWordLimit"
+                                 @focus="v=>$emit('focus',v)"
+                                 @keydown.native="v=>$emit('keydown',v)"
+                                 @keyup.native="v=>$emit('keyup',v)"
                 >
                     <template slot="append">
                         <slot name="append">
@@ -48,6 +51,9 @@
                           :autosize="autosize"
                           :disabled="disabled"
                           :show-word-limit="lmShowWordLimit"
+                          @focus="v=>$emit('focus',v)"
+                          @keydown.native="v=>$emit('keydown',v)"
+                          @keyup.native="v=>$emit('keyup',v)"
 
                 >
                     <template slot="append">
