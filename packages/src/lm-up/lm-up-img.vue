@@ -33,6 +33,8 @@
                          :data="otherData"
                          :on-exceed="handleExceed"
                          :limit="limit"
+                         v-bind="$attrs"
+                         v-on="$listeners"
               >
                 <div >
                   <slot name="chooseFileBtn">

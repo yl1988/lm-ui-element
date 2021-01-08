@@ -22,9 +22,9 @@ export function isvalidCardNo(idCard) {
         if(idCard.length===18){
             let idCardWi=[7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2] //将前17位加权因子保存在数组里
             let idCardY=[1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2] //这是除以11后，可能产生的11位余数、验证码，也保存成数组
-            let idCardWiSum=0; //用来保存前17位各自乖以加权因子后的总和
+            let idCardWiSum=0 //用来保存前17位各自乖以加权因子后的总和
             for(let i=0;i<17;i++){
-                idCardWiSum+=idCard.substring(i,i+1)*idCardWi[i];
+                idCardWiSum+=idCard.substring(i,i+1)*idCardWi[i]
             }
             let idCardMod=idCardWiSum%11;//计算出校验码所在数组的位置
             let idCardLast=idCard.substring(17);//得到最后一位身份证号码
@@ -78,13 +78,13 @@ export function isvalidNo(str){
  */
 export function toThousands(num,isFloat=true) {
   if(isFloat){
-    let numStr = num.toString().split(".");
-    let int = numStr[0].replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
-    let dotEnd = numStr[1];
-    return int+"."+dotEnd;
+    let numStr = num.toString().split(".")
+    let int = numStr[0].replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+    let dotEnd = numStr[1]
+    return int+"."+dotEnd
   }else{
-    let int = num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
-    return int;
+    let int = num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+    return int
   }
 
 }
@@ -95,7 +95,7 @@ export function toThousands(num,isFloat=true) {
 export function isValidDate(dateTime) {
     let yourDate=dateTime
     try {
-        ;(typeof dateTime === 'string') && (dateTime=dateTime.replace(/-/g,'/'))
+        (typeof dateTime === 'string') && (dateTime=dateTime.replace(/-/g,'/'))
         dateTime=new Date(dateTime)
         if(dateTime instanceof Date && !isNaN(dateTime.getTime())){
             return {

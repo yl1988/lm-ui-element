@@ -26,6 +26,8 @@
                                  @focus="v=>$emit('focus',v)"
                                  @keydown.native="v=>$emit('keydown',v)"
                                  @keyup.native="v=>$emit('keyup',v)"
+                                 v-bind="$attrs"
+                                 v-on="$listeners"
                 >
                     <template slot="append">
                         <slot name="append">
@@ -54,6 +56,8 @@
                           @focus="v=>$emit('focus',v)"
                           @keydown.native="v=>$emit('keydown',v)"
                           @keyup.native="v=>$emit('keyup',v)"
+                          v-bind="$attrs"
+                          v-on="$listeners"
 
                 >
                     <template slot="append">

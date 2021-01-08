@@ -14,6 +14,8 @@
                                 :default-value="defaultDateTimeValue"
                                 :id="lmRef[0]"
                                 :disabled="disabled"
+                                v-bind="$attrs"
+                                v-on="$listeners"
                 ></el-date-picker>
                 <!--日期范围选择-->
                 <div v-if="formType==='rangeDateTime'">

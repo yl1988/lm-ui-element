@@ -3,7 +3,7 @@
     <el-row>
         <el-form-item :label="label" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':edit ? '22px' : '0'}">
             <div v-if="edit" class="rowStart">
-                <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable" :style="{width:lmSelectWidth}">
+                <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable" :style="{width:lmSelectWidth}" >
                     <el-option
                             v-for="item in provinceList"
                             :key="item.id"
@@ -11,7 +11,7 @@
                             :value="item.id">
                     </el-option>
                 </el-select>
-                <el-select class="addressFormItem" :size="size" :value="address.cityId" @change="changeCity" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}">
+                <el-select class="addressFormItem" :size="size" :value="address.cityId" @change="changeCity" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}" >
                     <el-option
                             v-for="item in cityList"
                             :key="item.id"
@@ -19,7 +19,7 @@
                             :value="item.id">
                     </el-option>
                 </el-select>
-                <el-select class="addressFormItem" v-if="isNotTwoLevels" :size="size" :value="address.districtId" @change="changeDistrict" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}">
+                <el-select class="addressFormItem" v-if="isNotTwoLevels" :size="size" :value="address.districtId" @change="changeDistrict" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}" >
                     <el-option
                             v-for="item in districtList"
                             :key="item.id"
@@ -35,6 +35,8 @@
                             @blur="streetBlur" @input="streetInput"
                             @select="inputAutoSelect" :fetch-suggestions="inputQuerySearch"
                             :value-key="valueKey" :placement="placement" :trigger-on-focus="triggerOnFocus"
+                            v-bind="$attrs"
+                            v-on="$listeners"
                     >
                         <template slot-scope="{ item }">
                             <div class="autoCompleteBox columnStart" :style="{'max-width':streetInputWidth}">
@@ -51,6 +53,8 @@
                             :value="address.street"
                             @blur="streetBlur" @input="streetInput"
                             :maxlength="maxlength"
+                            v-bind="$attrs"
+                            v-on="$listeners"
                     ></el-input>
                 </div>
             </div>
