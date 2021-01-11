@@ -15,7 +15,7 @@
                     </div>                  
                   </slot>
                 </div>
-                <slot name="delIcon" v-if="isEdit">
+                <slot name="delIcon" v-if="isEdit && limit!==1">
                       <span class="delImgBox rowCenter" @click="removeDescFile(index,file)">
                     <i class="el-icon-plus delIcon"></i>
                   </span>
