@@ -1,8 +1,8 @@
 <!--选择地址，搭配高德地图使用-->
 <template>
     <el-row>
-        <el-form-item :label="label" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':edit ? '22px' : '0'}">
-            <div v-if="edit" class="rowStart">
+        <el-form-item :label="label" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':isEdit ? '22px' : '0'}">
+            <div v-if="isEdit" class="rowStart">
                 <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable" :style="{width:lmSelectWidth}" >
                     <el-option
                             v-for="item in provinceList"
@@ -90,7 +90,7 @@
                     return {}
                 }
             },//默认地址
-            edit: {
+          isEdit: {
                 type: Boolean,
                 default: true
             },//是否可编辑
