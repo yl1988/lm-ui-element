@@ -1,7 +1,7 @@
 <!--自定义弹窗-->
 <template>
   <div class="customDialogBox">
-    <div class="overy" @click="close" ref="overy"></div>
+    <div class="overy" @click="overyClick" ref="overy"></div>
     <div class="customDialogWhiteBox" :style="{width:width+'px',background,'padding-bottom':bottomPadding+'px'}">
       <div class="customDialogTitleBox rowBtween">
         <el-button type="primary" :style="{background:titleBk}" class="titleBk"></el-button>
@@ -16,7 +16,7 @@
       <div class="confirmCancelFotterBox" v-if="showFooter">
         <slot name="footer">
           <div class="rowCenter">
-            <el-button @click="$emit('cancel')" :style="{width:btnWidth,height:btnHeight}">{{backText || '返回'}}</el-button>
+            <el-button v-if="showCancel" @click="$emit('cancel')" :style="{width:btnWidth,height:btnHeight}">{{backText || '返回'}}</el-button>
             <el-button type="primary" @click="$emit('sure')" :style="{width:btnWidth,height:btnHeight}" :icon="showLoading ? 'el-icon-loading' : ''">{{saveText || '保存'}}</el-button>
           </div>
         </slot>
@@ -83,12 +83,28 @@
                     return {}
                 }
             },//内容框样式
+          showCancel:{
+              type:Boolean,
+            default:true
+          },//显示返回、取消
+          closeOnClickModal:{
+            type:Boolean,
+            default:true
+          },//是否可以通过点击 modal 关闭 Dialog
         },
         methods: {
             //关闭弹窗
             close(){
                 this.$emit('close')
             },
+          //遮罩点击
+          overyClick(){
+              if(this.closeOnClickModal){
+                this.$emit('close')
+                return
+              }
+            this.$emit('modalClick')
+          }
         },
 
     }
