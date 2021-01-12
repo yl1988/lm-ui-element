@@ -168,7 +168,7 @@
             },
             // // 点击切换城市
             changeCity(val) {
-                this.districtList = districts[val]
+                this.districtList = districts[val] || []
                 this.isNotTwoLevels=!!this.districtList.length
                 this.$set(this.address, 'cityId', val)
                 this.$set(this.address, 'districtId', '')
@@ -287,7 +287,7 @@
             async handleGetCityAndDistrict(provinceId, cityId, districtId, street) {
                 if (provinceId && cityId) {
                     this.getDefault = true
-                    this.cityList = citys[provinceId]
+                    this.cityList = citys[provinceId] || []
                     this.districtList = districts[cityId]
                     this.isNotTwoLevels = !!this.districtList.length
                     let province = provinceId ? this.provinceList.filter(item => item.id === provinceId)[0].name : ''
@@ -343,6 +343,7 @@
                         this.districtList = []
                         this.getDefault = false
                     }
+                  this.address = value || {}
                     let {cityId, provinceId, districtId, street} = value
                     //有数据时只允许更新一次
                     if (this.getDefault) return
