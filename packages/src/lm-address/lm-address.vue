@@ -35,8 +35,6 @@
                             @blur="streetBlur" @input="streetInput"
                             @select="inputAutoSelect" :fetch-suggestions="inputQuerySearch"
                             :value-key="valueKey" :placement="placement" :trigger-on-focus="triggerOnFocus"
-                            v-bind="$attrs"
-                            v-on="$listeners"
                     >
                         <template slot-scope="{ item }">
                             <div class="autoCompleteBox columnStart" :style="{'max-width':streetInputWidth}">
@@ -53,8 +51,6 @@
                             :value="address.street"
                             @blur="streetBlur" @input="streetInput"
                             :maxlength="maxlength"
-                            v-bind="$attrs"
-                            v-on="$listeners"
                     ></el-input>
                 </div>
             </div>
@@ -212,9 +208,12 @@
             },
             //输入框输入内容
             async streetInput(value) {
+              console.log('输入框改变')
+              console.log(value)
                 this.$set(this.address, 'street', value)
                 this.$emit('input', this.address)
                 this.$emit('addressChange',this.address)
+
                 if (value) {
                     let addressInfos = await this.getSearchAddresList(value)
                     this.inputQueryData = addressInfos instanceof Array ? addressInfos.reduce((result, current) => {
@@ -234,6 +233,8 @@
             //输入框搜索点击完成
             inputAutoSelect(item) {
                 //console.log(item)
+              console.log('点击返回的输入建议数据')
+              console.log(this.address)
                 this.addressArea[3] = item.name
                 this.hasLngLag = true
                 this.$emit('getLngLatInfo', {
@@ -343,7 +344,9 @@
                         this.districtList = []
                         this.getDefault = false
                     }
-                  this.address = value || {}
+                    console.log('监听defaultAddress')
+                  console.log(value)
+                  this.address = value
                     console.log(this.address)
                     let {cityId, provinceId, districtId, street} = value
                     //有数据时只允许更新一次

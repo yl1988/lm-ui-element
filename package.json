@@ -1,6 +1,6 @@
 {
   "name": "lm-ui-element",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": false,
   "main": "lib/lm-ui-element.umd.min.js",
   "scripts": {
