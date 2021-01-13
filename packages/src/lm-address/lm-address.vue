@@ -344,6 +344,7 @@
                         this.getDefault = false
                     }
                   this.address = value || {}
+                    console.log(this.address)
                     let {cityId, provinceId, districtId, street} = value
                     //有数据时只允许更新一次
                     if (this.getDefault) return
