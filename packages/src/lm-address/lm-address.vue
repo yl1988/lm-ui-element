@@ -208,8 +208,8 @@
             },
             //输入框输入内容
             async streetInput(value) {
-              console.log('输入框改变')
-              console.log(value)
+              // console.log('输入框改变')
+              // console.log(value)
                 this.$set(this.address, 'street', value)
                 this.$emit('input', this.address)
                 this.$emit('addressChange',this.address)
@@ -233,8 +233,8 @@
             //输入框搜索点击完成
             inputAutoSelect(item) {
                 //console.log(item)
-              console.log('点击返回的输入建议数据')
-              console.log(this.address)
+              // console.log('点击返回的输入建议数据')
+              // console.log(this.address)
                 this.addressArea[3] = item.name
                 this.hasLngLag = true
                 this.$emit('getLngLatInfo', {
@@ -344,10 +344,10 @@
                         this.districtList = []
                         this.getDefault = false
                     }
-                    console.log('监听defaultAddress')
-                  console.log(value)
+                    // console.log('监听defaultAddress')
+                  // console.log(value)
                   this.address = value
-                    console.log(this.address)
+                    // console.log(this.address)
                     let {cityId, provinceId, districtId, street} = value
                     //有数据时只允许更新一次
                     if (this.getDefault) return

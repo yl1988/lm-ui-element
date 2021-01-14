@@ -34,8 +34,7 @@
                          :data="otherData"
                          :on-exceed="handleExceed"
                          :limit="limit"
-                         v-bind="$attrs"
-                         v-on="$listeners"
+                         :headers="headers"
               >
                 <div >
                   <slot name="chooseFileBtn">
@@ -59,9 +58,8 @@
                          :drag="drag"
                          :show-file-list="false"
                          :data="otherData"
-                         :limit="limit"
-                         v-bind="$attrs"
-                         v-on="$listeners"
+                         :multiple="false"
+                         :headers="headers"
               >
                 <div >
                   <slot name="chooseFileBtn">

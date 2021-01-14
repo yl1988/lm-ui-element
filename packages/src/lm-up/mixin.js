@@ -32,6 +32,7 @@ export default {
         },//上传地址
         fileBaseUrl:String,//文件域名
         customPreviewImgMethod:Function,//自定义图片预览方法
+        headers:Object,//请求头信息
     },
     data() {
         return {
@@ -53,6 +54,7 @@ export default {
         async beforeUploadWithProgress(file){
             // //console.log(file)
             let blob=URL.createObjectURL(file)
+            console.log(this.limit)
             if(this.limit===1){
                 //单张
                 this.fileList.splice(0,1,{
