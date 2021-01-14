@@ -53,14 +53,27 @@ export default {
         async beforeUploadWithProgress(file){
             // //console.log(file)
             let blob=URL.createObjectURL(file)
-            this.fileList.unshift({
-                fileId:'javascript:;',
-                fileName:file.name,
-                uid:file.uid,
-                percentage:0,
-                loading:true,
-                blob
-            })
+            if(this.limit===1){
+                //单张
+                this.fileList.splice(0,1,{
+                    fileId:'javascript:;',
+                    fileName:file.name,
+                    uid:file.uid,
+                    percentage:0,
+                    loading:true,
+                    blob
+                })
+            }else{
+                this.fileList.unshift({
+                    fileId:'javascript:;',
+                    fileName:file.name,
+                    uid:file.uid,
+                    percentage:0,
+                    loading:true,
+                    blob
+                })
+            }
+
             this.$emit('beforeUpload')
             let compressFile=file
             let cropperFile=''
