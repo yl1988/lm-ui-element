@@ -110,7 +110,7 @@ export default {
             }
             let {fileList}=this
             let fileIndex=fileList.findIndex(item=>item.uid===file.uid)
-            let fileId=(/^http/.test(data.url) || /^\/\//.test(data.url)) ? data.url : `${this.fileBaseUrl}${data.url}`
+            let fileId=(/^http/.test(data.url) || /^\/\//.test(data.url) || !this.fileBaseUr) ? data.url : `${this.fileBaseUrl}${data.url}`
             let fileObj={
                 ... fileList[fileIndex],
                 fileId,
