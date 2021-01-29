@@ -199,6 +199,7 @@
                 } else {
                     !this.hasLngLag && this.addressArea[1] && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
                     this.address.districtId = this.address.cityId
+                  this.addressArea[2] = this.addressArea[1]
                 }
                 //console.log(this.addressArea)
                 this.address.addressArea = this.addressArea
@@ -210,6 +211,7 @@
             async streetInput(value) {
               // console.log('输入框改变')
               // console.log(value)
+              value=value.trim()
                 this.$set(this.address, 'street', value)
                 this.$emit('input', this.address)
                 this.$emit('addressChange',this.address)
