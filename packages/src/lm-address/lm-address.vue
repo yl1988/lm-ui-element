@@ -283,9 +283,7 @@
                         })
                     })
                 })
-
             },
-
             // 根据省ID获取市县
             async handleGetCityAndDistrict(provinceId, cityId, districtId, street) {
                 if (provinceId && cityId) {
