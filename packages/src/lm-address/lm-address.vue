@@ -1,8 +1,8 @@
 <!--选择地址，搭配高德地图使用-->
 <template>
     <el-row>
-        <el-form-item :label="label" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':edit ? '22px' : '0'}">
-            <div v-if="edit" class="rowStart">
+        <el-form-item :label="label" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':isEdit ? '22px' : '0'}">
+            <div v-if="isEdit" class="rowStart">
                 <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable" :style="{width:lmSelectWidth}" >
                     <el-option
                             v-for="item in provinceList"
@@ -35,8 +35,6 @@
                             @blur="streetBlur" @input="streetInput"
                             @select="inputAutoSelect" :fetch-suggestions="inputQuerySearch"
                             :value-key="valueKey" :placement="placement" :trigger-on-focus="triggerOnFocus"
-                            v-bind="$attrs"
-                            v-on="$listeners"
                     >
                         <template slot-scope="{ item }">
                             <div class="autoCompleteBox columnStart" :style="{'max-width':streetInputWidth}">
@@ -53,8 +51,6 @@
                             :value="address.street"
                             @blur="streetBlur" @input="streetInput"
                             :maxlength="maxlength"
-                            v-bind="$attrs"
-                            v-on="$listeners"
                     ></el-input>
                 </div>
             </div>
@@ -90,7 +86,7 @@
                     return {}
                 }
             },//默认地址
-            edit: {
+          isEdit: {
                 type: Boolean,
                 default: true
             },//是否可编辑
@@ -168,7 +164,7 @@
             },
             // // 点击切换城市
             changeCity(val) {
-                this.districtList = districts[val]
+                this.districtList = districts[val] || []
                 this.isNotTwoLevels=!!this.districtList.length
                 this.$set(this.address, 'cityId', val)
                 this.$set(this.address, 'districtId', '')
@@ -203,6 +199,7 @@
                 } else {
                     !this.hasLngLag && this.addressArea[1] && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
                     this.address.districtId = this.address.cityId
+                  this.addressArea[2] = this.addressArea[1]
                 }
                 //console.log(this.addressArea)
                 this.address.addressArea = this.addressArea
@@ -212,9 +209,13 @@
             },
             //输入框输入内容
             async streetInput(value) {
+              // console.log('输入框改变')
+              // console.log(value)
+              value=value.trim()
                 this.$set(this.address, 'street', value)
                 this.$emit('input', this.address)
                 this.$emit('addressChange',this.address)
+
                 if (value) {
                     let addressInfos = await this.getSearchAddresList(value)
                     this.inputQueryData = addressInfos instanceof Array ? addressInfos.reduce((result, current) => {
@@ -234,6 +235,8 @@
             //输入框搜索点击完成
             inputAutoSelect(item) {
                 //console.log(item)
+              // console.log('点击返回的输入建议数据')
+              // console.log(this.address)
                 this.addressArea[3] = item.name
                 this.hasLngLag = true
                 this.$emit('getLngLatInfo', {
@@ -287,7 +290,7 @@
             async handleGetCityAndDistrict(provinceId, cityId, districtId, street) {
                 if (provinceId && cityId) {
                     this.getDefault = true
-                    this.cityList = citys[provinceId]
+                    this.cityList = citys[provinceId] || []
                     this.districtList = districts[cityId]
                     this.isNotTwoLevels = !!this.districtList.length
                     let province = provinceId ? this.provinceList.filter(item => item.id === provinceId)[0].name : ''
@@ -343,6 +346,10 @@
                         this.districtList = []
                         this.getDefault = false
                     }
+                    // console.log('监听defaultAddress')
+                  // console.log(value)
+                  this.address = value
+                    // console.log(this.address)
                     let {cityId, provinceId, districtId, street} = value
                     //有数据时只允许更新一次
                     if (this.getDefault) return

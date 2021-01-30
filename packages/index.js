@@ -15,8 +15,6 @@ import LmDialog from './src/lm-dialog/lm-dialog'
 import LmImgCropper from './src/lm-img-cropper/lm-img-cropper'
 
 
-import $lm from './utils/$lm'
-
 
 import './lm-ui-element-style/src/index.scss'
 
@@ -27,8 +25,6 @@ const install=function (Vue) {
         return
     }
     components.map(component=>Vue.component(component.name,component))
-    Vue.use($lm)
-    Vue.prototype.$lm=$lm
 
 }
 if(typeof window!=='undefined' && window.Vue){

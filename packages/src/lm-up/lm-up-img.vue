@@ -5,17 +5,18 @@
       <div style="display:flex;">
         <div style="margin-right:20px;flex:1;">
           <div v-if="hiddenCamera || getFileMethod" class="rowStart" style="flex:1;">
-            <div class="rowStart upImgListBox">
+            <!--              多张-->
+            <div class="rowStart upImgListBox" v-if="multiple || (typeof limit==='undefined') || limit>1">
               <div class="fileOutBox rowCenter" v-for="(file,index) in fileList" :key="index">
                 <div class="fileListBox rowCenter" :style="{width:fileImgWidth,height:fileImgHeight}">
                   <slot name="fileView" :index="index" :file="file">
                     <img class="fileImg" :src="file.blob || file.fileId">
                     <div class="circleProgressBk rowCenter" v-if="file.loading">
                       <el-progress :width="progressWidth" type="circle" :percentage="file.percentage" :status="file.percentage===100 ? 'success' : undefined"/>
-                    </div>                  
+                    </div>
                   </slot>
                 </div>
-                <slot name="delIcon" v-if="isEdit">
+                <slot name="delIcon" v-if="isEdit && limit!==1">
                       <span class="delImgBox rowCenter" @click="removeDescFile(index,file)">
                     <i class="el-icon-plus delIcon"></i>
                   </span>
@@ -33,8 +34,7 @@
                          :data="otherData"
                          :on-exceed="handleExceed"
                          :limit="limit"
-                         v-bind="$attrs"
-                         v-on="$listeners"
+                         :headers="headers"
               >
                 <div >
                   <slot name="chooseFileBtn">
@@ -46,6 +46,48 @@
                   </slot>
                 </div>
               </el-upload>
+            </div>
+            <!--              单张-->
+            <div v-else>
+              <el-upload class="avatar-uploader" v-if="isEdit"
+                         :action="action"
+                         :before-upload="beforeUploadWithProgress"
+                         :on-success="fileSuccessWithProgress"
+                         accept="image/*"
+                         :on-progress="fileProgress"
+                         :drag="drag"
+                         :show-file-list="false"
+                         :data="otherData"
+                         :multiple="false"
+                         :headers="headers"
+              >
+                <div >
+                  <slot name="chooseFileBtn">
+                    <div class="fileListBox rowCenter" :style="{width:fileImgWidth,height:fileImgHeight}" v-if="fileList.length">
+                      <slot name="fileView" :file="fileList[0]">
+                        <img class="fileImg" :src="fileList[0].blob || fileList[0].fileId">
+                        <div class="circleProgressBk rowCenter" v-if="fileList[0].loading">
+                          <el-progress :width="progressWidth" type="circle" :percentage="fileList[0].percentage" :status="fileList[0].percentage===100 ? 'success' : undefined"/>
+                        </div>
+                      </slot>
+                    </div>
+                    <div :style="{width:fileImgWidth,height:fileImgHeight}" v-else>
+                      <i class="el-icon-upload" v-if="drag"></i>
+                      <div class="el-upload__text" v-if="drag">将文件拖到此处，或<em>点击上传</em></div>
+                      <i v-else class="el-icon-plus avatar-uploader-icon" :style="{width:fileImgWidth,height:fileImgHeight,'line-height':fileImgHeight}"></i>
+                    </div>
+                  </slot>
+                </div>
+              </el-upload>
+              <div v-else>
+                <div class="fileOutBox rowCenter" v-for="(file,index) in fileList" :key="index">
+                  <div class="fileListBox rowCenter" :style="{width:fileImgWidth,height:fileImgHeight}">
+                    <slot name="fileView" :index="index" :file="file">
+                      <img class="fileImg" :src="file.blob || file.fileId">
+                    </slot>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <slot name="cameraFile" v-else>

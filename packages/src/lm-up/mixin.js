@@ -32,6 +32,7 @@ export default {
         },//上传地址
         fileBaseUrl:String,//文件域名
         customPreviewImgMethod:Function,//自定义图片预览方法
+        headers:Object,//请求头信息
     },
     data() {
         return {
@@ -53,14 +54,28 @@ export default {
         async beforeUploadWithProgress(file){
             // //console.log(file)
             let blob=URL.createObjectURL(file)
-            this.fileList.unshift({
-                fileId:'javascript:;',
-                fileName:file.name,
-                uid:file.uid,
-                percentage:0,
-                loading:true,
-                blob
-            })
+            console.log(this.limit)
+            if(this.limit===1){
+                //单张
+                this.fileList.splice(0,1,{
+                    fileId:'javascript:;',
+                    fileName:file.name,
+                    uid:file.uid,
+                    percentage:0,
+                    loading:true,
+                    blob
+                })
+            }else{
+                this.fileList.unshift({
+                    fileId:'javascript:;',
+                    fileName:file.name,
+                    uid:file.uid,
+                    percentage:0,
+                    loading:true,
+                    blob
+                })
+            }
+
             this.$emit('beforeUpload')
             let compressFile=file
             let cropperFile=''
@@ -110,7 +125,7 @@ export default {
             }
             let {fileList}=this
             let fileIndex=fileList.findIndex(item=>item.uid===file.uid)
-            let fileId=(/^http/.test(data.url) || /^\/\//.test(data.url)) ? data.url : `${this.fileBaseUrl}${data.url}`
+            let fileId=(/^http/.test(data.url) || /^\/\//.test(data.url) || !this.fileBaseUr) ? data.url : `${this.fileBaseUrl}${data.url}`
             let fileObj={
                 ... fileList[fileIndex],
                 fileId,
