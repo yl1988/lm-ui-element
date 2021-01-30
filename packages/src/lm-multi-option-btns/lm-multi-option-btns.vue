@@ -66,22 +66,6 @@
                 }
                 this.showMulti=true
             },
-            //确定批量操作
-            sureMultiOption(){
-                let {activeOption}=this
-                if(activeOption===null){
-                    return
-                }
-                if(!this.selectData.length){
-                    this.$message.warning(this.sureToastText || '请先选择数据')
-                    return
-                }
-                if(activeOption===null){
-                    this.$message.warning('请先选择操作类型')
-                    return
-                }
-                this.$emit('sure',activeOption)
-            },
             //取消批量操作
             cancelMultiOption(){
                 this.showMulti=false
