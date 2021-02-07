@@ -3,6 +3,7 @@ import App from './App.vue'
 import ElementUi from 'element-ui'
 import LmUI from '../../packages/index'
 import 'element-ui/lib/theme-chalk/index.css'
+
 Vue.use(ElementUi)
 //console.log(LmUI)
 Vue.use(LmUI)

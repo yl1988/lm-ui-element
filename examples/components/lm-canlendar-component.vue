@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </template>
-            <template #haveDataTag="{day}">
+            <template>
                 <div class="haveDataTag rowCenter font12 violet"></div>
             </template>
             <template #day="{day,index}">
