@@ -3,7 +3,7 @@
   <el-row>
     <el-form-item :label="label" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':isEdit ? '22px' : '0'}">
       <div v-if="isEdit" class="rowStart">
-        <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable" :style="{width:lmSelectWidth}" >
+        <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable" :style="{width:lmSelectWidth}" :disabled="typeof disabled==='boolean' ? disabled : (!!disabled[3] || !!disabled[2] || !!disabled[1] || !!disabled[0])">
           <el-option
               v-for="item in provinceList"
               :key="item.id"
@@ -11,7 +11,7 @@
               :value="item.id">
           </el-option>
         </el-select>
-        <el-select class="addressFormItem" :size="size" :value="address.cityId" @change="changeCity" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}" >
+        <el-select class="addressFormItem" :size="size" :value="address.cityId" @change="changeCity" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}" :disabled="typeof disabled==='boolean' ? disabled : (!!disabled[3] || !!disabled[2] || !!disabled[1])">
           <el-option
               v-for="item in cityList"
               :key="item.id"
@@ -19,7 +19,7 @@
               :value="item.id">
           </el-option>
         </el-select>
-        <el-select class="addressFormItem" v-if="isNotTwoLevels" :size="size" :value="address.districtId" @change="changeDistrict" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}" >
+        <el-select class="addressFormItem" v-if="isNotTwoLevels" :size="size" :value="address.districtId" @change="changeDistrict" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}" :disabled="typeof disabled==='boolean' ? disabled : (!!disabled[3] || !!disabled[2])">
           <el-option
               v-for="item in districtList"
               :key="item.id"
@@ -35,6 +35,7 @@
               @blur="streetBlur" @input="streetInput"
               @select="inputAutoSelect" :fetch-suggestions="inputQuerySearch"
               :value-key="valueKey" :placement="placement" :trigger-on-focus="triggerOnFocus"
+              :disabled="typeof disabled==='boolean' ? disabled : !!disabled[3]"
           >
             <template slot-scope="{ item }">
               <div class="autoCompleteBox columnStart" :style="{'max-width':streetInputWidth}">
@@ -51,6 +52,7 @@
               :value="address.street"
               @blur="streetBlur" @input="streetInput"
               :maxlength="maxlength"
+              :disabled="typeof disabled==='boolean' ? disabled : !!disabled[3]"
           ></el-input>
         </div>
       </div>
@@ -80,12 +82,7 @@ export default {
       type: Boolean,
       default: true
     },//是否显示输入详情地址
-    defaultAddress: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },//默认地址
+    defaultAddress: Object,//默认地址
     isEdit: {
       type: Boolean,
       default: true
@@ -119,6 +116,8 @@ export default {
     triggerOnFocus: Boolean,//是否在输入框 focus 时显示建议列表
     maxlength:[String,Number],//地址输入框的最大长度
     selectWidth:[Number,String],//下拉框宽度
+    disabled:[Boolean,Array],//是否可见
+    value:Object,//值
   },
   data() {
     return {
@@ -141,9 +140,19 @@ export default {
     let {inputWidth,selectWidth,lmSelectWidth} = this
     this.streetInputWidth = (typeof inputWidth === 'number' || isNumber(inputWidth)) ? (inputWidth + 'px') : inputWidth
     this.lmSelectWidth = (typeof selectWidth === 'number' || isNumber(selectWidth)) ? (selectWidth + 'px') : lmSelectWidth
-    this.address = this.defaultAddress
-    let {cityId, provinceId, districtId, street} = this.defaultAddress
-    this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
+    if(this.value){
+      this.address =JSON.parse(JSON.stringify(this.value))
+      let {cityId, provinceId, districtId, street} = this.value
+      this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
+    }else{
+      if(this.defaultAddress){
+        this.address =JSON.parse(JSON.stringify(this.defaultAddress))
+        let {cityId, provinceId, districtId, street} = this.defaultAddress
+        this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
+      }
+    }
+
+
   },
   methods: {
     // // 点击切换省份
@@ -201,7 +210,7 @@ export default {
         this.address.districtId = this.address.cityId
         this.addressArea[2] = this.addressArea[1]
       }
-      //console.log(this.addressArea)
+      console.log(this.addressArea)
       this.address.addressArea = this.addressArea
       let {isNotTwoLevels, showStreet} = this
       this.address = {...this.address, addressArea: this.addressArea, isNotTwoLevels, showStreet}
@@ -216,7 +225,6 @@ export default {
       if(value || this.addressArea.length){
         let searchValue=this.addressArea.join('')+(value || '')
         let addressInfos=await this.getSearchAddresList(searchValue)
-        // console.log(addressInfos)
         this.inputQueryData=addressInfos instanceof Array ? addressInfos.reduce((result,current)=>{
           let {name,address,location={}}=current
           typeof address !=='string' && (address='')
@@ -304,6 +312,16 @@ export default {
         } else {
           this.addressArea[2] = street
         }
+        //有默认值时获取经纬度
+        if(this.isNotTwoLevels){
+          if(this.addressArea[0] && this.addressArea[1] && this.addressArea[2] && this.addressArea[3]){
+            this.getLngLatFun(this.addressArea.join(''))
+          }
+        }else{
+          if(this.addressArea[0] && this.addressArea[1] && this.addressArea[2]){
+            this.getLngLatFun(this.addressArea.join(''))
+          }
+        }
       }
     },
     //通过地址查询经纬度
@@ -336,26 +354,38 @@ export default {
     }
   },
   watch: {
-    defaultAddress: {
-      deep: true,
-      handler: async function (value) {
-        if (!value || !Object.keys(value).length) {
+    // defaultAddress:function (value){
+    //   console.log(value)
+    //   if (!value || !Object.keys(value).length) {
+    //     //没有数据时，清空
+    //     this.address = {}
+    //     this.cityList = []
+    //     this.districtList = []
+    //     this.getDefault = false
+    //   }
+    //   this.address =JSON.parse(JSON.stringify(value))
+    //   let {cityId, provinceId, districtId, street} = value
+    //   //有数据时只允许更新一次
+    //   // if (this.getDefault) return
+    //   this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
+    // },
+    value:function (v){
+      // console.log(v)
+      this.address=v
+        if (!v || !Object.keys(v).length) {
           //没有数据时，清空
           this.address = {}
           this.cityList = []
           this.districtList = []
           this.getDefault = false
         }
-        // console.log('监听defaultAddress')
-        // console.log(value)
-        this.address = value
-        // console.log(this.address)
-        let {cityId, provinceId, districtId, street} = value
+        this.address =JSON.parse(JSON.stringify(v))
+        let {cityId, provinceId, districtId, street} = v
         //有数据时只允许更新一次
         // if (this.getDefault) return
         this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
-      }
-    },
+    }
+
   },
 }
 </script>

@@ -19,7 +19,18 @@
                         <lm-date-time label="入学日期：" v-model="form.date" form-type="rangeDateTime" date-time-type="datetime"/>
                         <lm-cascader label="证书：" :options="cascaders"/>
                     </el-row>
-                    <lm-address label="住址：" v-model="form.address" :required="false"/>
+                    <lm-address label="住址："
+                                v-model="form.address" :required="false"
+                                @getLngLatInfo="getLngLatInfo"
+
+                                @addressChange="addressChange"
+                                :disabled="[false,false,false,false]"
+                    />
+<!--                  :defaultAddress="{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}"-->
+                  <el-row>
+                    <lm-input label="经度：" v-model="form.lng"/>
+                    <lm-input label="纬度：" v-model="form.lat"/>
+                  </el-row>
                     <lm-up-img :limit="6"/>
                     <lm-up-file :limit="4"/>
                 </el-form>
@@ -46,7 +57,7 @@
         },
         data() {
             return {
-               form:{},//保单
+              form:{address:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}},//保单
                 cascaders:[
                     {
                         name:'建筑工程',
@@ -94,7 +105,11 @@
         computed: {
         },
         mounted() {
-
+          // setTimeout(()=>{
+          //   this.form={
+          //     address:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}
+          //   }//保单
+          // },1000)
         },
         methods: {
             save(){},
@@ -111,7 +126,14 @@
                 setTimeout(()=>{
                     this.dialogText='打开弹窗'
                 },2000)
-            }
+            },
+          getLngLatInfo({lng,lat}){
+              this.$set(this.form,'lng',lng)
+              this.$set(this.form,'lat',lat)
+          },
+          addressChange(value){
+              console.log(value)
+          }
 
         },
 
