@@ -1,6 +1,6 @@
 <!--图片预览弹窗-->
 <template>
-    <lm-dialog @closeDialog="$emit('closeDialog')" title="图片预览" width="800" @cancel="$emit('closeDialog')">
+    <lm-dialog @close="$emit('closeDialog')" title="图片预览" width="800" @cancel="$emit('closeDialog')">
         <div id="previewLargImgBox" class="rowCenter previewLargImgBox" ref="previewLargImgBox">
             <img :src="previewImgSrc" ref="previewImg" class="previewLargImg" :style="{width:previewImgWidth+'%',transform:`rotate(${imgRotate}deg)`}" />
         </div>
