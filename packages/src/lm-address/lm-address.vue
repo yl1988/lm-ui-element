@@ -322,6 +322,8 @@ export default {
             this.getLngLatFun(this.addressArea.join(''))
           }
         }
+        this.address.addressArea=this.addressArea
+        this.$emit("input", this.address)
       }
     },
     //通过地址查询经纬度
