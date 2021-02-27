@@ -142,13 +142,11 @@ export default {
     this.lmSelectWidth = (typeof selectWidth === 'number' || isNumber(selectWidth)) ? (selectWidth + 'px') : lmSelectWidth
     if(this.value){
       this.address =JSON.parse(JSON.stringify(this.value))
-      let {cityId, provinceId, districtId, street} = this.value
-      this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
+      this.handleGetCityAndDistrict(this.value)
     }else{
       if(this.defaultAddress){
         this.address =JSON.parse(JSON.stringify(this.defaultAddress))
-        let {cityId, provinceId, districtId, street} = this.defaultAddress
-        this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
+        this.handleGetCityAndDistrict(this.defaultAddress)
       }
     }
 
@@ -289,42 +287,42 @@ export default {
       })
     },
     // 根据省ID获取市县
-    async handleGetCityAndDistrict(provinceId, cityId, districtId, street) {
-      if (provinceId && cityId) {
-        this.getDefault = true
-        this.cityList = citys[provinceId] || []
-        this.districtList = districts[cityId]
-        this.isNotTwoLevels = !!this.districtList.length
-        let provinceInfo=provinceId ? this.provinceList.filter(item => item.id === provinceId)[0] : null
-        let province = provinceInfo ? provinceInfo.name : ''
-        let cityInfo=cityId ? this.cityList.filter(item => item.id === cityId)[0] : null
-        let city = cityInfo ? cityInfo.name : ''
-        let district=''
-        if(districtId){
-          let districtInfo=this.districtList.filter(item => item.id === districtId)[0]
-          districtInfo && (district=districtInfo.name )
-        }
-        this.fullAddress = `${province} ${city} ${district} ${street}`
-        this.addressArea = [province, city]
-        if (district) {
-          this.addressArea[2] = district
-          this.addressArea[3] = street
-        } else {
-          this.addressArea[2] = street
-        }
-        //有默认值时获取经纬度
-        if(this.isNotTwoLevels){
-          if(this.addressArea[0] && this.addressArea[1] && this.addressArea[2] && this.addressArea[3]){
-            this.getLngLatFun(this.addressArea.join(''))
-          }
-        }else{
-          if(this.addressArea[0] && this.addressArea[1] && this.addressArea[2]){
-            this.getLngLatFun(this.addressArea.join(''))
-          }
-        }
-        this.address.addressArea=this.addressArea
-        this.$emit("input", this.address)
+    async handleGetCityAndDistrict({provinceId, cityId, districtId, street}) {
+      if (!(provinceId && cityId)){
+        return
       }
+      this.cityList = citys[provinceId] || []
+      this.districtList = districts[cityId]
+      this.isNotTwoLevels = !!this.districtList.length
+      let provinceInfo=provinceId ? this.provinceList.filter(item => item.id === provinceId)[0] : null
+      let province = provinceInfo ? provinceInfo.name : ''
+      let cityInfo=cityId ? this.cityList.filter(item => item.id === cityId)[0] : null
+      let city = cityInfo ? cityInfo.name : ''
+      let district=''
+      if(districtId){
+        let districtInfo=this.districtList.filter(item => item.id === districtId)[0]
+        districtInfo && (district=districtInfo.name )
+      }
+      this.fullAddress = `${province} ${city} ${district} ${street}`
+      this.addressArea = [province, city]
+      if (district) {
+        this.addressArea[2] = district
+        this.addressArea[3] = street
+      } else {
+        this.addressArea[2] = street
+      }
+      //有默认值时获取经纬度
+      if(this.isNotTwoLevels){
+        if(this.addressArea[0] && this.addressArea[1] && this.addressArea[2] && this.addressArea[3]){
+          this.getLngLatFun(this.addressArea.join(''))
+        }
+      }else{
+        if(this.addressArea[0] && this.addressArea[1] && this.addressArea[2]){
+          this.getLngLatFun(this.addressArea.join(''))
+        }
+      }
+      this.address.addressArea=this.addressArea
+      this.$emit("input", this.address)
     },
     //通过地址查询经纬度
     getLngLatFun(address) {
@@ -356,38 +354,19 @@ export default {
     }
   },
   watch: {
-    // defaultAddress:function (value){
-    //   console.log(value)
-    //   if (!value || !Object.keys(value).length) {
-    //     //没有数据时，清空
-    //     this.address = {}
-    //     this.cityList = []
-    //     this.districtList = []
-    //     this.getDefault = false
-    //   }
-    //   this.address =JSON.parse(JSON.stringify(value))
-    //   let {cityId, provinceId, districtId, street} = value
-    //   //有数据时只允许更新一次
-    //   // if (this.getDefault) return
-    //   this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
-    // },
-    value:function (v){
-      // console.log(v)
-      this.address=v
-        if (!v || !Object.keys(v).length) {
-          //没有数据时，清空
-          this.address = {}
-          this.cityList = []
-          this.districtList = []
-          this.getDefault = false
-        }
-        this.address =JSON.parse(JSON.stringify(v))
-        let {cityId, provinceId, districtId, street} = v
-        //有数据时只允许更新一次
-        // if (this.getDefault) return
-        this.handleGetCityAndDistrict(provinceId, cityId, districtId, street)
-    }
-
+    value:function (value,oldValue){
+      if(JSON.stringify(value)===JSON.stringify(oldValue)){
+        return
+      }
+      this.address = value
+      if (!value || !Object.keys(value).length) {
+        //没有数据时，清空
+        this.address = {}
+        this.cityList = []
+        this.districtList = []
+      }
+      this.handleGetCityAndDistrict(value)
+    },
   },
 }
 </script>
