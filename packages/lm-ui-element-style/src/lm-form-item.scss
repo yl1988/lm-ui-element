@@ -9,13 +9,16 @@
   }
 }
 .lmTexts {
-  height:40px;
+  min-height:40px;
   .textSpan{
     display:inline-block;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
     margin-right:10px;
+    width:100%;
+  }
+  .textareaSpan{
 
   }
 }

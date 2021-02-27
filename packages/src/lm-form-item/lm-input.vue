@@ -74,7 +74,7 @@
                 </el-input>
             </div>
             <div class="lmTexts" v-else>
-                <span class="textSpan" :style="{...spanStyle}">{{value}}</span>
+                <span :class="type==='textarea' ? 'textareaSpan' : 'textSpan'" :style="{...spanStyle}">{{value}}</span>
                 <span class="textSpan" :style="{...spanStyle}" v-if="appendText">{{appendText}}</span>
             </div>
         </el-form-item>
