@@ -11,8 +11,6 @@
                            :style="{width:lmFormItemWidth}"
                            :filterable="filterable" :disabled="disabled"
                            :id="lmRef[0]" clearable
-                           v-bind="$attrs"
-                           v-on="$listeners"
                 >
                     <el-option :label="o[oName] || o" :value="o[oValue] || index" v-for="(o,index) in list" :key="index"></el-option>
                 </el-select>
