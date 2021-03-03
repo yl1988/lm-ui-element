@@ -163,7 +163,7 @@
             }
         },
         mounted() {
-            if(this.value){
+            if(this.value || this.value===0){
                 if(this.formType==='multiSelect'){
                     this.lmFormMultiValues=this.value
                 }else{

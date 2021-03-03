@@ -150,7 +150,7 @@
 
         },
         mounted() {
-            if(this.value){
+            if(this.value || this.value===0){
                 this.lmFormValue=this.value
             }
         },
