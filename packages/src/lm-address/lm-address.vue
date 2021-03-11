@@ -305,11 +305,11 @@ export default {
       }
       this.fullAddress = `${province} ${city} ${district} ${street}`
       this.addressArea = [province, city]
+      this.addressArea[3] = street
       if (district) {
         this.addressArea[2] = district
-        this.addressArea[3] = street
       } else {
-        this.addressArea[2] = street
+        this.addressArea[2] = city
       }
       //有默认值时获取经纬度
       if(this.isNotTwoLevels){
