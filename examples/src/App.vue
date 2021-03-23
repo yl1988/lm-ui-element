@@ -36,7 +36,7 @@
                     <lm-input label="身份证：" v-model="form.idcard" type="idcard"/>
                   </el-row>
                     <lm-up-img :limit="6"/>
-                    <lm-up-file :limit="4"/>
+                    <lm-up-file :limit="4" :file-preview-option="{baseUrl:'http://10.2.100.20:8012/onlinePreview'}" action="/fileservice/file/upload"/>
                 </el-form>
                 <div class="rowCenter">
                     <el-button type="primary" @click="save" style="width:120px;">保存</el-button>
