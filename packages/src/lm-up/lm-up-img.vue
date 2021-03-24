@@ -121,91 +121,93 @@
 </template>
 
 <script>
-    import {isNumber} from "../../utils/lm-validate"
-    import mixin from './mixin'
-    import LmImgCropper from '../lm-img-cropper/lm-img-cropper'
+import {isNumber} from "../../utils/lm-validate"
+import mixin from './mixin'
+import LmImgCropper from '../lm-img-cropper/lm-img-cropper'
 
-    export default {
-        name: 'LmUpImg',
-        mixins:[mixin],
-        components:{
-            LmImgCropper
-        },
-        props:{
-            label:String,//标题
-            type:{
-                type:Number,
-                default:2,
-            },
-            imgWidth:{
-                type:[String,Number],
-                default:'120px'
-            },//图片宽度
-            imgHeight:{
-                type:[String,Number],
-                default:'90px'
-            },//图片高度
-            compressSize:{
-                type:Object,
-                default:()=>{
-                    return {
-                        width:400
-                    }
-                }
-            },//压缩尺寸
-            hiddenCropper:{
-                type:Boolean,
-                default:true
-            },//不裁剪图片
-            multiple:{
-                type:Boolean,
-                default:false
-            },//是否多张
-
-        },
-        data() {
-            return {
-                strokeWidth:20,//进度条宽度
-                fileImgWidth:'120px',//图片宽度
-                fileImgHeight:'90px',//图片高度
-                showCropper:false,//显示裁剪框
-                cropperImg:'',//裁剪图片路径
-                cropperFile:null,//裁剪的文件
-                cropperImgType:'',//裁剪文件后缀
-                file:null,//头像上传时用于裁剪的文件数据
-                progressWidth:126,//进度条宽度
-
-            }
-        },
-        created(){
-            let {imgWidth,imgHeight}=this
-            this.fileImgWidth=(typeof imgWidth==='number' || isNumber(imgWidth)) ? (imgWidth+'px') : imgWidth
-            this.fileImgHeight=(typeof imgHeight==='number' || isNumber(imgHeight)) ? (imgHeight+'px') : imgHeight
-            if(typeof imgWidth==='number' || isNumber(imgWidth)){
-                this.progressWidth=(Number(imgWidth)/2)
-            }else{
-                if(/px/.test(imgWidth)) {
-                    this.progressWidth = (Number(imgWidth.replace('px', '')) / 2)
-                }
-            }
-            if(this.progressWidth<126){
-                this.strokeWidth=10
-            }
-        },
-        methods:{
-            // 文件预览
-            filePreview(file){
-                let {fileId}=file
-                typeof this.customPreviewImgMethod==='function' ? this.customPreviewImgMethod(fileId) : this.imgPreview(fileId)
-                this.$emit('filePreview',file)
-            },
-            //关闭图像裁剪弹窗
-            closeCropperDialog(){
-                this.showCropper=false
-                this.cropperImg=''
-                this.cropperFile=null
-                this.file=null
-            },
+export default {
+  name: 'LmUpImg',
+  mixins:[mixin],
+  components:{
+    LmImgCropper
+  },
+  props:{
+    label:String,//标题
+    type:{
+      type:Number,
+      default:2,
+    },
+    imgWidth:{
+      type:[String,Number],
+      default:'120px'
+    },//图片宽度
+    imgHeight:{
+      type:[String,Number],
+      default:'90px'
+    },//图片高度
+    compressSize:{
+      type:Object,
+      default:()=>{
+        return {
+          width:400
         }
+      }
+    },//压缩尺寸
+    hiddenCropper:{
+      type:Boolean,
+      default:true
+    },//不裁剪图片
+    multiple:{
+      type:Boolean,
+      default:false
+    },//是否多张
+
+  },
+  data() {
+    return {
+      strokeWidth:20,//进度条宽度
+      fileImgWidth:'120px',//图片宽度
+      fileImgHeight:'90px',//图片高度
+      showCropper:false,//显示裁剪框
+      cropperImg:'',//裁剪图片路径
+      cropperFile:null,//裁剪的文件
+      cropperImgType:'',//裁剪文件后缀
+      file:null,//头像上传时用于裁剪的文件数据
+      progressWidth:126,//进度条宽度
+
     }
+  },
+  created(){
+    let {imgWidth,imgHeight}=this
+    this.fileImgWidth=(typeof imgWidth==='number' || isNumber(imgWidth)) ? (imgWidth+'px') : imgWidth
+    this.fileImgHeight=(typeof imgHeight==='number' || isNumber(imgHeight)) ? (imgHeight+'px') : imgHeight
+    if(typeof imgWidth==='number' || isNumber(imgWidth)){
+      this.progressWidth=(Number(imgWidth)/2)
+    }else{
+      if(/px/.test(imgWidth)) {
+        this.progressWidth = (Number(imgWidth.replace('px', '')) / 2)
+      }
+    }
+    if(this.progressWidth<126){
+      this.strokeWidth=10
+    }
+  },
+  methods:{
+    // 文件预览
+    filePreview(file){
+      let {fileId}=file
+      this.$emit('filePreview',file)
+      let hasFileOption=this.hasFilePreviewOption(fileId)
+      if(!hasFileOption) return
+      this.imgPreview(fileId)
+    },
+    //关闭图像裁剪弹窗
+    closeCropperDialog(){
+      this.showCropper=false
+      this.cropperImg=''
+      this.cropperFile=null
+      this.file=null
+    },
+  }
+}
 </script>

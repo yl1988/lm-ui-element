@@ -92,57 +92,58 @@
 </template>
 
 <script>
-  import mixin from './mixin'
-    export default {
-        name: 'LmUpFile',
-        mixins: [mixin],
-        props:{
-            label:String,//标题
-            btnText:{
-                type:String,
-                default:'选择文件'
-            },//按钮名称
-            fileAccept:{
-                type:String,
-                default:`.jpg,.jpeg,.png,.pdf,.webp'`
-            },//文件类型
-            toastText:String,//提示文字
-            cameraText:{
-                type:String,
-                default:'点击拍照'
-            },//相机按钮文字
-            toastColumn:Boolean,//提示文字是否竖排
-            fileListStyle:{
-                type:Object,
-                default:()=>{
-                    return {}
-                }
-            },//文件列表样式
-        },
-        data() {
-            return {
-                fileForm:{},//预览文件表单
-                overViewAccept:['.png','.jpg','.jpeg','.webp','.pdf','.docx'],//可预览的文件类型
-            }
-        },
-        methods: {
-            //文件预览
-            filePreview(file){
-                let {fileId,fileType}=file
-                if(fileType){
-                    if(!/\./.test(fileType)){
-                        fileType=`.${fileType}`
-                    }
-                }else{
-                    fileType='.'+fileId.split('.')[1]
-                }
-                if(['.jpg','.png','.jpeg','.webp'].indexOf(fileType)>-1){
-                    typeof this.customPreviewImgMethod==='function' ? this.customPreviewImgMethod(fileId) : this.imgPreview(fileId)
-                    return
-                }
-                this.$emit('filePreview',file)
-            },
-        },
-
+import mixin from './mixin'
+export default {
+  name: 'LmUpFile',
+  mixins: [mixin],
+  props:{
+    label:String,//标题
+    btnText:{
+      type:String,
+      default:'选择文件'
+    },//按钮名称
+    fileAccept:{
+      type:String,
+      default:`.jpg,.jpeg,.png,.pdf,.webp'`
+    },//文件类型
+    toastText:String,//提示文字
+    cameraText:{
+      type:String,
+      default:'点击拍照'
+    },//相机按钮文字
+    toastColumn:Boolean,//提示文字是否竖排
+    fileListStyle:{
+      type:Object,
+      default:()=>{
+        return {}
+      }
+    },//文件列表样式
+  },
+  data() {
+    return {
+      fileForm:{},//预览文件表单
+      overViewAccept:['.png','.jpg','.jpeg','.webp','.pdf','.docx'],//可预览的文件类型
     }
+  },
+  methods: {
+    //文件预览
+    filePreview(file){
+      let {fileId,fileType}=file
+      if(fileType){
+        if(!/\./.test(fileType)){
+          fileType=`.${fileType}`
+        }
+      }else{
+        fileType='.'+fileId.split('.')[1]
+      }
+      this.$emit('filePreview',file)
+      let hasFileOption=this.hasFilePreviewOption(fileId)
+      if(!hasFileOption) return
+      if(['.jpg','.png','.jpeg','.webp'].indexOf(fileType)>-1){
+        this.imgPreview(fileId)
+      }
+    },
+  },
+
+}
 </script>

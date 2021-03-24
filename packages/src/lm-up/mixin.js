@@ -31,8 +31,8 @@ export default {
             default:''
         },//上传地址
         fileBaseUrl:String,//文件域名
-        customPreviewImgMethod:Function,//自定义图片预览方法
         headers:Object,//请求头信息
+        filePreviewOption:Object,//文件预览配置
     },
     data() {
         return {
@@ -167,6 +167,30 @@ export default {
         //文件方式改变
         fileMethodChange(v){
             this.$emit('fileMethodChange',v)
+        },
+        //是否启用自定义预览
+        hasFilePreviewOption(fileId){
+            if(this.filePreviewOption instanceof Object){
+                let {baseUrl,query,queryConfig={}}=this.filePreviewOption
+                let {urlName='url',encode=true,base64=true}=queryConfig
+                let url=''
+                if(query instanceof Object){
+                    for(let i in query){
+                        url+=`${i}=${query[i]}&`
+                    }
+                    url=url.substring(0,url.length-1)
+                }
+                url=`${urlName}=${fileId}&${url}`
+                if(encode && base64){
+                    url=encodeURIComponent(btoa(url))
+                }else{
+                    encode && (url=encodeURIComponent(url))
+                    base64 && (url=btoa(url))
+                }
+                window.open(`${baseUrl}?${url}`,'_blank')
+                return `${baseUrl}?${url}`
+            }
+            return  false
         }
     },
 }
