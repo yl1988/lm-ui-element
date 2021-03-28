@@ -221,7 +221,9 @@ export default {
       this.$emit('input', this.address)
       this.$emit('addressChange',this.address)
       if(value || this.addressArea.length){
-        let searchValue=this.addressArea.join('')+(value || '')
+        let searchAddressArea=JSON.parse(JSON.stringify(this.addressArea))
+        ;(searchAddressArea[1]===searchAddressArea[2]) && (searchAddressArea.splice(2,1))
+        let searchValue=searchAddressArea.join('')+(value || '')
         let addressInfos=await this.getSearchAddresList(searchValue)
         this.inputQueryData=addressInfos instanceof Array ? addressInfos.reduce((result,current)=>{
           let {name,address,location={}}=current
@@ -305,11 +307,11 @@ export default {
       }
       this.fullAddress = `${province} ${city} ${district} ${street}`
       this.addressArea = [province, city]
+      this.addressArea[3] = street
       if (district) {
         this.addressArea[2] = district
-        this.addressArea[3] = street
       } else {
-        this.addressArea[2] = street
+        this.addressArea[2] = city
       }
       //有默认值时获取经纬度
       if(this.isNotTwoLevels){

@@ -12,7 +12,7 @@
             <div style="padding-top:60px;">
                 <el-form width="1000" ref="form" :model="form" label-width="100px">
                     <el-row>
-                        <lm-input label="姓名：" v-model="form.name"></lm-input>
+                        <lm-input label="姓名：" v-model="form.name" maxlength="50"></lm-input>
                         <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
                     </el-row>
                     <el-row>
@@ -28,11 +28,15 @@
                     />
 <!--                  :defaultAddress="{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}"-->
                   <el-row>
-                    <lm-input label="经度：" v-model="form.lng"/>
-                    <lm-input label="纬度：" v-model="form.lat"/>
+                    <lm-input label="经度：" v-model="form.lng" type="number" maxlength="10" to-fixed="4"/>
+                    <lm-input label="纬度：" v-model="form.lat" type="idcard"/>
+                  </el-row>
+                  <el-row>
+                    <lm-input label="电话：" v-model="form.tess " type="tel"/>
+                    <lm-input label="身份证：" v-model="form.idcard" type="idcard"/>
                   </el-row>
                     <lm-up-img :limit="6"/>
-                    <lm-up-file :limit="4"/>
+                    <lm-up-file :limit="4" :file-preview-option="{baseUrl:'http://10.2.100.20:8012/onlinePreview'}" action="/fileservice/file/upload"/>
                 </el-form>
                 <div class="rowCenter">
                     <el-button type="primary" @click="save" style="width:120px;">保存</el-button>

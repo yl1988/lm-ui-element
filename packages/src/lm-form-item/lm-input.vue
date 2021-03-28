@@ -27,7 +27,7 @@
                                  @keydown.native="v=>$emit('keydown',v)"
                                  @keyup.native="v=>$emit('keyup',v)"
                                  v-bind="$attrs"
-                                 v-on="$listeners"
+                                 ref="lmInput"
                 >
                     <template slot="append">
                         <slot name="append">
@@ -57,7 +57,7 @@
                           @keydown.native="v=>$emit('keydown',v)"
                           @keyup.native="v=>$emit('keyup',v)"
                           v-bind="$attrs"
-                          v-on="$listeners"
+                          ref="lmInput"
 
                 >
                     <template slot="append">
@@ -81,7 +81,7 @@
     </el-col>
 </template>
 <script>
-    // import {mapState} from 'vuex'
+
     import mixin from './mixin'
     export default {
         name: 'LmInput',
@@ -135,9 +135,6 @@
                 lmShowWordLimit:false,//是否显示数字统计
             }
         },
-        computed: {
-            // ...mapState(['focusHiddenData']),
-        },
         created(){
             let {maxlength,type,minlength}=this
             maxlength && (this.lmInputMaxlength=Math.abs(parseInt(maxlength)))
@@ -147,10 +144,22 @@
             type==='tel' && (this.lmInputMaxlength=11)
             type==='idcard' && (this.lmInputMaxlength=18)
             type==='number' && (this.lmInputMaxlength=maxlength || 15)
+          if(this.lmShowWordLimit){
+            this.$nextTick(()=>{
+              let lmCol=this.$refs.lmCol.$el
+              let wordLimitDom=lmCol.querySelector('.el-input__suffix')
+              if(wordLimitDom){
+                let inputDom=this.$refs.lmInput.$el.getElementsByTagName('input')
+                if(inputDom[0]){
+                  inputDom[0].style.paddingRight=wordLimitDom.clientWidth+10+'px'
+                }
+              }
+            })
+          }
 
         },
         mounted() {
-            if(this.value){
+            if(this.value || this.value===0){
                 this.lmFormValue=this.value
             }
         },
@@ -159,6 +168,7 @@
             lmInputInput(v){
                 let {type,min,toFixed,lmInputMaxlength}=this
                 toFixed=Number(toFixed)
+              lmInputMaxlength=Number(lmInputMaxlength)
                 if(type==='tel'){
                     //电话
                     this.$emit('input',v.replace(/\D/g,''))
@@ -167,23 +177,32 @@
                     if( typeof min==='number' ){
                         min===0 && (v<min && (v=min))
                     }
-                    // typeof min==='number' && (v && (v<min && (v=min)))
-                    // typeof max==='number' && (v && (v>max && (v=max)))
                     if(new RegExp(v.toString()).test('.')){
                         v=v.toString().replace(/\.\./g,'.')
                     }
-                    toFixed && (v=Number(v).toFixed(toFixed))
-                    toFixed===0 && (v=parseInt(v))
-                    if(typeof lmInputMaxlength==='number'){
-                        v=v.toString().slice(0,lmInputMaxlength)
+                  let valueArr=v.toString().split('.')
+                  let firstValue=valueArr[0]
+                  let lastValue=valueArr[1]
+                  if(!(isNaN(toFixed))){
+                    toFixed<0 && (toFixed=0)
+                    lastValue=lastValue ? lastValue.substring(0,toFixed) : ''
+                    v=lastValue ? `${firstValue}.${lastValue}` : firstValue
+                  }
+                  if(lmInputMaxlength){
+                    if(firstValue.length>lmInputMaxlength){
+                      let inLengthNum=firstValue.substring(0,lmInputMaxlength)
+                      v=lastValue ? (inLengthNum+'.'+lastValue) : inLengthNum
                     }
+                  }
                     this.$emit('input',Number(v))
                 }else if(type==='idcard'){
                     //身份证
-                    /x/.test(v) && (v=v.replace('x','X'))
-                    this.$emit('input',v)
+                  v=v.replace(/[^\d|xX]/g,'')
+                  ;/x/.test(v) && (v=v.replace(/x/g,'X'))
+                  ;/XX/.test(v) && (v=v.replace(/XX/g,'X'))
+                  this.$emit('input',v)
                 }else{
-                    v=v.replace(/(^\s*)/g, "")
+                    v=v.replace(/(^\s*)/g, "") //sql注入
                     this.$emit('input',v)
                 }
 
