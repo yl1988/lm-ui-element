@@ -12,9 +12,14 @@
             <div style="padding-top:60px;">
                 <el-form width="1000" ref="form" :model="form" label-width="100px">
                     <el-row>
-                        <lm-input label="姓名：" v-model="form.name" maxlength="50"></lm-input>
-                        <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
+<!--                        <lm-input label="姓名：" v-model="form.name" maxlength="50"></lm-input>-->
+<!--                        <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>-->
+                      <lm-select form-type="radio" label="类型：" v-model="form.type "/>
                     </el-row>
+                  <el-row v-if="form.type===0">
+                    <lm-input label="姓名：" v-model="form.name"></lm-input>
+                    <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
+                  </el-row>
                     <el-row>
                         <lm-date-time label="入学日期：" v-model="form.date" form-type="rangeDateTime" date-time-type="datetime"/>
                         <lm-cascader label="证书：" :options="cascaders"/>
@@ -137,6 +142,9 @@
           },
           addressChange(value){
               console.log(value)
+          },
+          onkeydown(event){
+              console.log(event)
           }
 
         },
