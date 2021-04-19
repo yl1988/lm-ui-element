@@ -14,7 +14,7 @@
                     <el-row>
 <!--                        <lm-input label="姓名：" v-model="form.name" maxlength="50"></lm-input>-->
 <!--                        <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>-->
-                      <lm-select form-type="radio" label="类型：" v-model="form.type "/>
+                      <lm-select form-type="radio" label="类型：" v-model="form.type " disabled/>
                     </el-row>
                   <el-row v-if="form.type===0">
                     <lm-input label="姓名：" v-model="form.name"></lm-input>
