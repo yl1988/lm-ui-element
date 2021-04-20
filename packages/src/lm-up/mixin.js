@@ -33,6 +33,7 @@ export default {
         fileBaseUrl:String,//文件域名
         headers:Object,//请求头信息
         filePreviewOption:Object,//文件预览配置
+        customPreviewFun:Function,//自定义预览函数
     },
     data() {
         return {
@@ -137,7 +138,7 @@ export default {
                 fileType:data.fileType
             }
             fileList.splice(fileIndex,1,fileObj)
-            let noUpFiles=fileList.filter(item=>/javascript:;/.test(item.fullFileUrl))
+            let noUpFiles=fileList.filter(item=>/javascript:;/.test(item.fullurl))
             //console.log(noUpFiles)
             this.$emit('fileSuccess',{canICommit:!noUpFiles.length,fileList})
         },
@@ -169,26 +170,26 @@ export default {
             this.$emit('fileMethodChange',v)
         },
         //是否启用自定义预览
-        hasFilePreviewOption(fileId){
+        hasFilePreviewOption(fileId,file){
             if(this.filePreviewOption instanceof Object){
-                let {baseUrl,query,queryConfig={}}=this.filePreviewOption
-                let {urlName='url',encode=true,base64=true}=queryConfig
-                let url=''
-                if(query instanceof Object){
-                    for(let i in query){
-                        url+=`${i}=${query[i]}&`
-                    }
-                    url=url.substring(0,url.length-1)
+                let {baseUrl,port}=this.filePreviewOption
+                const isProduction = process.env.NODE_ENV === 'production'
+                let hostname=window.location.hostname
+                port =port ||  window.location.port
+                ;!port && isIP(hostname) && (port='8012')
+                if(!baseUrl){
+                    baseUrl=hostname+port
                 }
-                url=`${urlName}=${fileId}&${url}`
-                if(encode && base64){
-                    url=encodeURIComponent(btoa(url))
-                }else{
-                    encode && (url=encodeURIComponent(url))
-                    base64 && (url=btoa(url))
-                }
-                window.open(`${baseUrl}?${url}`,'_blank')
-                return `${baseUrl}?${url}`
+                /^http:/.test(baseUrl) && (baseUrl=baseUrl.replace('http:',''))
+                ;/^https:/.test(baseUrl) && (baseUrl=baseUrl.replace('https:',''))
+                fileId = encodeURIComponent(btoa(`http:${baseUrl}${fileId}`))
+                fileId = isProduction ? `${baseUrl}${port ? ':' + port : ''}/onlinePreview?url=${fileId}` : `${baseUrl}:8012/onlinePreview?url=${fileId}`
+                window.open(fileId,'_blank')
+                return fileId
+            }
+            if(this.customPreviewFun){
+                this.customPreviewFun(file)
+                return true
             }
             return  false
         }

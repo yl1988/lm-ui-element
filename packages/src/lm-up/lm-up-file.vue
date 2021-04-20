@@ -137,8 +137,8 @@ export default {
         fileType='.'+fileId.split('.')[1]
       }
       this.$emit('filePreview',file)
-      let hasFileOption=this.hasFilePreviewOption(fileId)
-      if(!hasFileOption) return
+      let hasFileOption=this.hasFilePreviewOption(fileId,file)
+      if(hasFileOption) return
       if(['.jpg','.png','.jpeg','.webp'].indexOf(fileType)>-1){
         this.imgPreview(fileId)
       }

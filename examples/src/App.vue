@@ -40,8 +40,8 @@
                     <lm-input label="电话：" v-model="form.tess " type="tel"/>
                     <lm-input label="身份证：" v-model="form.idcard" type="idcard"/>
                   </el-row>
-                    <lm-up-img :limit="6"/>
-                    <lm-up-file :limit="4" :file-preview-option="{baseUrl:'http://10.2.100.20:8012/onlinePreview'}" action="/fileservice/file/upload"/>
+                    <lm-up-img :limit="6" action="/admin/sys-file/upload" :other-data="otherData" :file-list="imgList"/>
+                    <lm-up-file :limit="4" action="/admin/sys-file/upload" :other-data="otherData" :file-list="fileList"/>
                 </el-form>
                 <div class="rowCenter">
                     <el-button type="primary" @click="save" style="width:120px;">保存</el-button>
@@ -66,6 +66,7 @@
         },
         data() {
             return {
+              otherData:{ bucketName: 'smart-park'},
               form:{address:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}},//保单
                 cascaders:[
                     {
@@ -109,6 +110,8 @@
                 ],
                 showDialog:false,//是否显示弹窗
                 dialogText:'',//弹窗文字
+              fileList:[],//
+              imgList:[]
             }
         },
         computed: {
@@ -121,7 +124,10 @@
           // },1000)
         },
         methods: {
-            save(){},
+            save(){
+              console.log(this.fileList)
+              console.log(this.imgList)
+            },
             sure(){
                 this.dialogText='点击确定'
                 this.showDialog=false
