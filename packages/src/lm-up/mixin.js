@@ -55,7 +55,6 @@ export default {
         async beforeUploadWithProgress(file){
             // //console.log(file)
             let blob=URL.createObjectURL(file)
-            console.log(this.limit)
             if(this.limit===1){
                 //单张
                 this.fileList.splice(0,1,{
@@ -64,7 +63,8 @@ export default {
                     uid:file.uid,
                     percentage:0,
                     loading:true,
-                    blob
+                    blob,
+                    fileForm:{}
                 })
             }else{
                 this.fileList.unshift({

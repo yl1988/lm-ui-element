@@ -41,7 +41,11 @@
                     <lm-input label="身份证：" v-model="form.idcard" type="idcard"/>
                   </el-row>
                     <lm-up-img :limit="6" action="/admin/sys-file/upload" :other-data="otherData" :file-list="imgList"/>
-                    <lm-up-file :limit="4" action="/admin/sys-file/upload" :other-data="otherData" :file-list="fileList"/>
+                    <lm-up-file action="/admin/sys-file/upload" :other-data="otherData" :file-list="fileList">
+                      <template #filePrev="{file}">
+                        <lm-input v-model="file.fileText"></lm-input>
+                      </template>
+                    </lm-up-file>
                 </el-form>
                 <div class="rowCenter">
                     <el-button type="primary" @click="save" style="width:120px;">保存</el-button>
