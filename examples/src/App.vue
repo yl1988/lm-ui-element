@@ -12,9 +12,14 @@
             <div style="padding-top:60px;">
                 <el-form width="1000" ref="form" :model="form" label-width="100px">
                     <el-row>
-                        <lm-input label="姓名：" v-model="form.name" maxlength="50"></lm-input>
-                        <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
+<!--                        <lm-input label="姓名：" v-model="form.name" maxlength="50"></lm-input>-->
+<!--                        <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>-->
+                      <lm-select form-type="radio" label="类型：" v-model="form.type " disabled/>
                     </el-row>
+                  <el-row v-if="form.type===0">
+                    <lm-input label="姓名：" v-model="form.name"></lm-input>
+                    <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
+                  </el-row>
                     <el-row>
                         <lm-cascader label="证书：" :options="cascaders"/>
                     </el-row>
@@ -39,8 +44,12 @@
                     <lm-input label="电话：" v-model="form.tess " type="tel"/>
                     <lm-input label="身份证：" v-model="form.idcard" type="idcard"/>
                   </el-row>
-                    <lm-up-img :limit="6"/>
-                    <lm-up-file :limit="4" :file-preview-option="{baseUrl:'http://10.2.100.20:8012/onlinePreview'}" action="/fileservice/file/upload"/>
+                    <lm-up-img :limit="6" action="/admin/sys-file/upload" :other-data="otherData" :file-list="imgList"/>
+                    <lm-up-file action="/admin/sys-file/upload" :other-data="otherData" :file-list="fileList">
+                      <template #filePrev="{file}">
+                        <lm-input v-model="file.fileText"></lm-input>
+                      </template>
+                    </lm-up-file>
                 </el-form>
                 <div class="rowCenter">
                     <el-button type="primary" @click="save" style="width:120px;">保存</el-button>
@@ -65,6 +74,7 @@
         },
         data() {
             return {
+              otherData:{ bucketName: 'smart-park'},
               form:{address:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}},//保单
                 cascaders:[
                     {
@@ -108,6 +118,8 @@
                 ],
                 showDialog:false,//是否显示弹窗
                 dialogText:'',//弹窗文字
+              fileList:[],//
+              imgList:[]
             }
         },
         computed: {
@@ -120,7 +132,10 @@
           // },1000)
         },
         methods: {
-            save(){},
+            save(){
+              console.log(this.fileList)
+              console.log(this.imgList)
+            },
             sure(){
                 this.dialogText='点击确定'
                 this.showDialog=false
@@ -141,6 +156,9 @@
           },
           addressChange(value){
               console.log(value)
+          },
+          onkeydown(event){
+              console.log(event)
           }
 
         },

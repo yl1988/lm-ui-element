@@ -35,7 +35,7 @@
                 </div>
                 <!--单选按钮-->
                 <el-radio-group v-if="formType==='radio'"  :value="lmFormValue" @input="lmFormItemChange" :size="size" :style="{width:lmFormItemWidth}">
-                    <el-radio style="margin-right:20px;color:#888888;" :label="o[oValue] || index" v-for="(o,index) in list" :key="index">{{o[oName] || o}}</el-radio>
+                    <el-radio :disabled="disabled" style="margin-right:20px;color:#888888;" :label="o[oValue] || index" v-for="(o,index) in list" :key="index">{{o[oName] || o}}</el-radio>
                 </el-radio-group>
             </div>
             <div class="lmTexts" v-else>

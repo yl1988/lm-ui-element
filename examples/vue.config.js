@@ -14,7 +14,7 @@ module.exports = {
     port: 6060,                                 // 端口号
     https: false,
     hotOnly: false,                             // 设置代理
-    proxy:'http://10.2.100.242',// 配置多个代理
+    proxy:'http://10.2.100.23',// 配置多个代理
     before: app => { }
   },
 

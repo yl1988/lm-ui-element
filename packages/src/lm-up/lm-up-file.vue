@@ -63,9 +63,9 @@
       <div class="fileList" :style="{...fileListStyle}">
         <div class="fileListBox" v-for="(file,index) in fileList" :key="index">
           <slot name="fileView" :index="index" :file="file">
-            <el-form ref="fileForm" :model="fileForm" style="width:100%;">
+            <el-form ref="fileForm" :model="fileList[index].fileForm" style="width:100%;" v-model="fileList[index].fileForm">
               <div class="rowStart">
-                <slot name="filePrev" :fileForm="fileForm" :file="file"></slot>
+                <slot name="filePrev" :fileForm="fileList[index].fileForm" :file="file"></slot>
                 <div style="flex:1;">
                   <div class="rowBtween" style="padding-right:20px;">
                     <div class="rowStart">
@@ -137,8 +137,8 @@ export default {
         fileType='.'+fileId.split('.')[1]
       }
       this.$emit('filePreview',file)
-      let hasFileOption=this.hasFilePreviewOption(fileId)
-      if(!hasFileOption) return
+      let hasFileOption=this.hasFilePreviewOption(fileId,file)
+      if(hasFileOption) return
       if(['.jpg','.png','.jpeg','.webp'].indexOf(fileType)>-1){
         this.imgPreview(fileId)
       }
