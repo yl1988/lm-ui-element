@@ -16,17 +16,21 @@
                         <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
                     </el-row>
                     <el-row>
-                        <lm-date-time label="入学日期：" v-model="form.date" form-type="rangeDateTime" date-time-type="datetime"/>
                         <lm-cascader label="证书：" :options="cascaders"/>
                     </el-row>
+                  <el-row>
+                    <lm-date-time :span="24" label="入学日期：" v-model="form.date" form-type="rangeDateTime"
+                                  :picker-options="[
+                                      {disabledDate:time=>$lm.dateRangeDisabled(time,[0,form.date && form.date[1] ? form.date[1] : new Date()])},
+                                      {disabledDate:time=>$lm.dateRangeDisabled(time,[form.date && form.date[0] ? form.date[0] : 0,new Date()])}
+                                      ]"/>
+                  </el-row>
                     <lm-address label="住址："
                                 v-model="form.address" :required="false"
                                 @getLngLatInfo="getLngLatInfo"
-
                                 @addressChange="addressChange"
                                 :disabled="[false,false,false,false]"
                     />
-<!--                  :defaultAddress="{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}"-->
                   <el-row>
                     <lm-input label="经度：" v-model="form.lng" type="number" maxlength="10" to-fixed="4"/>
                     <lm-input label="纬度：" v-model="form.lat" type="idcard"/>
