@@ -24,10 +24,17 @@
                         <lm-cascader label="证书：" :options="cascaders"/>
                     </el-row>
                   <el-row>
-                    <lm-date-time :span="24" label="入学日期：" v-model="form.date" form-type="rangeDateTime"
+                    <lm-date-time :span="24" label="周范围：" v-model="form.date" form-type="rangeDateTime" width="200"
                                   :picker-options="[
-                                      {disabledDate:time=>$lm.dateRangeDisabled(time,[0,form.date && form.date[1] ? form.date[1] : new Date()])},
-                                      {disabledDate:time=>$lm.dateRangeDisabled(time,[form.date && form.date[0] ? form.date[0] : 0,new Date()])}
+                                      {disabledDate:time=>disableDate(time,form.date ? form.date[1] : 0,'start','week')},
+                                      {disabledDate:time=>disableDate(time,form.date ? form.date[0] : 0,'end','week')}
+                                      ]"/>
+                  </el-row>
+                  <el-row>
+                    <lm-date-time :span="24" label="月范围：" v-model="form.month" form-type="rangeDateTime" width="200"
+                                  :picker-options="[
+                                      {disabledDate:time=>disableDate(time,form.month ? form.month[1] : 0,'start','month')},
+                                      {disabledDate:time=>disableDate(time,form.month ? form.month[0] : 0,'end','month')}
                                       ]"/>
                   </el-row>
                     <lm-address label="住址："
@@ -130,8 +137,55 @@
           //     address:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}
           //   }//保单
           // },1000)
+          //
+
         },
         methods: {
+          disableDate(time,cDate,type,planType){
+            if(!cDate){
+              return  false
+            }
+            let chooseDate=new Date(cDate)
+            let nowYear=chooseDate.getFullYear()
+            let nowMonth=chooseDate.getMonth()
+            let nowDate=chooseDate.getDate()
+            let nowDay=chooseDate.getDay()
+            let weekStart=new Date(nowYear,nowMonth,nowDate - nowDay +1)
+            let weekEnd=new Date(nowYear,nowMonth,nowDate + (7 - nowDay))
+            let monthStart=new Date(nowYear,nowMonth,1)
+            let monthEnd=new Date((new Date(nowYear,nowMonth + 1,1)).getTime() - 1000 * 60 * 60* 24)
+            let dateObj={
+              weekStart,
+              weekEnd,
+              monthStart,
+              monthEnd,
+            }
+            if(time<dateObj[`${planType}Start`]){
+              return true
+            }
+            if(time>dateObj[`${planType}End`]){
+              return  true
+            }
+            if(type==='end'){
+              //判断的是后一个
+              if(time<chooseDate){
+                return  true
+              }
+            }
+            if(type==='start'){
+              //判断的是前一个
+              if(time>chooseDate){
+                return  true
+              }
+            }
+            return  false
+          },
+          // 获取本月
+          getMonth (nowYear,nowMonth,nowDate,nowDay) {
+            var MonthStart = new Date(nowYear,nowMonth,1);
+            var MonthEnd = new Date((new Date(nowYear,nowMonth + 1,1)).getTime() - 1000 * 60 * 60* 24);
+            return [formatDate(MonthStart),formatDate(MonthEnd)];
+          },
             save(){
               console.log(this.fileList)
               console.log(this.imgList)
