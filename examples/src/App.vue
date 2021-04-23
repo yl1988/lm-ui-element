@@ -24,10 +24,10 @@
                         <lm-cascader label="证书：" :options="cascaders"/>
                     </el-row>
                   <el-row>
-                    <lm-date-time :span="24" label="周范围：" v-model="form.date" form-type="rangeDateTime" width="200"
+                    <lm-date-time :span="24" label="周范围：" v-model="form.week" form-type="rangeDateTime" width="200"
                                   :picker-options="[
-                                      {disabledDate:time=>disableDate(time,form.date ? form.date[1] : 0,'start','week')},
-                                      {disabledDate:time=>disableDate(time,form.date ? form.date[0] : 0,'end','week')}
+                                      {disabledDate:time=>disableDate(time,form.week ? form.week[1] : 0,'start','week')},
+                                      {disabledDate:time=>disableDate(time,form.week ? form.week[0] : 0,'end','week')}
                                       ]"/>
                   </el-row>
                   <el-row>
@@ -35,6 +35,27 @@
                                   :picker-options="[
                                       {disabledDate:time=>disableDate(time,form.month ? form.month[1] : 0,'start','month')},
                                       {disabledDate:time=>disableDate(time,form.month ? form.month[0] : 0,'end','month')}
+                                      ]"/>
+                  </el-row>
+                  <el-row>
+                    <lm-date-time :span="24" label="上半月范围：" v-model="form.halfMonthFirst" form-type="rangeDateTime" width="200"
+                                  :picker-options="[
+                                      {disabledDate:time=>disableDate(time,form.halfMonthFirst ? form.halfMonthFirst[1] : 0,'start','halfMonthFirst')},
+                                      {disabledDate:time=>disableDate(time,form.halfMonthFirst ? form.halfMonthFirst[0] : 0,'end','halfMonthFirst')}
+                                      ]"/>
+                  </el-row>
+                  <el-row>
+                    <lm-date-time :span="24" label="下半月范围：" v-model="form.halfMonthTwo" form-type="rangeDateTime" width="200"
+                                  :picker-options="[
+                                      {disabledDate:time=>disableDate(time,form.halfMonthTwo ? form.halfMonthTwo[1] : 0,'start','halfMonthTwo')},
+                                      {disabledDate:time=>disableDate(time,form.halfMonthTwo ? form.halfMonthTwo[0] : 0,'end','halfMonthTwo')}
+                                      ]"/>
+                  </el-row>
+                  <el-row>
+                    <lm-date-time :span="24" label="年范围：" v-model="form.year" form-type="rangeDateTime" width="200"
+                                  :picker-options="[
+                                      {disabledDate:time=>disableDate(time,form.year ? form.year[1] : 0,'start','year')},
+                                      {disabledDate:time=>disableDate(time,form.year ? form.year[0] : 0,'end','year')}
                                       ]"/>
                   </el-row>
                     <lm-address label="住址："
@@ -143,6 +164,23 @@
         methods: {
           disableDate(time,cDate,type,planType){
             if(!cDate){
+              // if(/First/.test(planType) || /Two/.test(planType)){
+              //   let timeYear=time.getFullYear()
+              //   let timeMonth=time.getMonth()
+              //   let timeDate=time.getDate()
+              //   let timeDay=time.getDay()
+              //   let timeMonthStart=new Date(timeYear,timeMonth,1)
+              //   let timeMonthEnd=new Date((new Date(timeYear,timeMonth + 1,1)).getTime() - 1000 * 60 * 60* 24)
+              //   if(/First/.test(planType)){
+              //     if(time<timeMonthStart){
+              //       return  true
+              //     }
+              //     if(time>timeMonthEnd){
+              //       return  true
+              //     }
+              //   }
+              // }
+
               return  false
             }
             let chooseDate=new Date(cDate)
@@ -154,12 +192,22 @@
             let weekEnd=new Date(nowYear,nowMonth,nowDate + (7 - nowDay))
             let monthStart=new Date(nowYear,nowMonth,1)
             let monthEnd=new Date((new Date(nowYear,nowMonth + 1,1)).getTime() - 1000 * 60 * 60* 24)
+            let monthMiddle=monthStart.getTime()+(monthEnd.getTime()-monthStart.getTime())/2
+            let yearStart = new Date(nowYear, 0, 1);
+            let yearEnd = new Date((new Date(nowYear + 1, 1, 1)).getTime() - 1000 * 60 * 60* 24)
             let dateObj={
               weekStart,
               weekEnd,
               monthStart,
               monthEnd,
+              halfMonthFirstStart:monthStart,
+              halfMonthFirstEnd:monthMiddle,
+              halfMonthTwoStart:monthMiddle,
+              halfMonthTwoEnd:monthEnd,
+              yearStart,
+              yearEnd
             }
+
             if(time<dateObj[`${planType}Start`]){
               return true
             }
