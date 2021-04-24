@@ -27,6 +27,7 @@
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
-    "element-ui": "^2.13.2"
+    "element-ui": "^2.13.2",
+    "vue-cropper": "^0.5.6"
   }
 }

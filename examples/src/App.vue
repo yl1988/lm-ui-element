@@ -162,52 +162,48 @@
 
         },
         methods: {
-          disableDate(time,cDate,type,planType){
+          disableDate(time,userDate,type,planType){
             if(!cDate){
-              // if(/First/.test(planType) || /Two/.test(planType)){
-              //   let timeYear=time.getFullYear()
-              //   let timeMonth=time.getMonth()
-              //   let timeDate=time.getDate()
-              //   let timeDay=time.getDay()
-              //   let timeMonthStart=new Date(timeYear,timeMonth,1)
-              //   let timeMonthEnd=new Date((new Date(timeYear,timeMonth + 1,1)).getTime() - 1000 * 60 * 60* 24)
-              //   if(/First/.test(planType)){
-              //     if(time<timeMonthStart){
-              //       return  true
-              //     }
-              //     if(time>timeMonthEnd){
-              //       return  true
-              //     }
-              //   }
-              // }
-
+              if(/First/.test(planType) || /Two/.test(planType)){
+                //上半月下半月控制
+                let timeYear=time.getFullYear()
+                let timeMonth=time.getMonth()
+                let timeMonthStart=new Date(timeYear,timeMonth,1)
+                let timeMonthEnd=new Date((new Date(timeYear,timeMonth + 1,1)).getTime() - 1000 * 60 * 60* 24)
+                let timeMiddle=timeMonthStart.getTime()+(timeMonthEnd.getTime()-timeMonthStart.getTime())/2
+                if(/First/.test(planType)){
+                  if(time>timeMiddle){
+                    return  true
+                  }
+                }
+                if(/Two/.test(planType)){
+                  if(time<timeMiddle){
+                    return  true
+                  }
+                }
+              }
               return  false
             }
-            let chooseDate=new Date(cDate)
-            let nowYear=chooseDate.getFullYear()
-            let nowMonth=chooseDate.getMonth()
-            let nowDate=chooseDate.getDate()
-            let nowDay=chooseDate.getDay()
-            let weekStart=new Date(nowYear,nowMonth,nowDate - nowDay +1)
-            let weekEnd=new Date(nowYear,nowMonth,nowDate + (7 - nowDay))
-            let monthStart=new Date(nowYear,nowMonth,1)
-            let monthEnd=new Date((new Date(nowYear,nowMonth + 1,1)).getTime() - 1000 * 60 * 60* 24)
+            let chooseDate=new Date(userDate)
+            let cYear=chooseDate.getFullYear()
+            let cMonth=chooseDate.getMonth()
+            let cDate=chooseDate.getDate()
+            let cDay=chooseDate.getDay()
+            let monthStart=new Date(cYear,cMonth,1)
+            let monthEnd=new Date((new Date(cYear,cMonth + 1,1)).getTime() - 1000 * 60 * 60* 24)
             let monthMiddle=monthStart.getTime()+(monthEnd.getTime()-monthStart.getTime())/2
-            let yearStart = new Date(nowYear, 0, 1);
-            let yearEnd = new Date((new Date(nowYear + 1, 1, 1)).getTime() - 1000 * 60 * 60* 24)
             let dateObj={
-              weekStart,
-              weekEnd,
+              weekStart:new Date(cYear,cMonth,cDate - cDay +1),
+              weekEnd:new Date(cYear,cMonth,cDate + (7 - cDay)),
               monthStart,
               monthEnd,
               halfMonthFirstStart:monthStart,
               halfMonthFirstEnd:monthMiddle,
               halfMonthTwoStart:monthMiddle,
               halfMonthTwoEnd:monthEnd,
-              yearStart,
-              yearEnd
+              yearStart:new Date(cYear, 0, 1),
+              yearEnd:new Date((new Date(cYear + 1, 1, 1)).getTime() - 1000 * 60 * 60* 24)
             }
-
             if(time<dateObj[`${planType}Start`]){
               return true
             }
@@ -227,12 +223,6 @@
               }
             }
             return  false
-          },
-          // 获取本月
-          getMonth (nowYear,nowMonth,nowDate,nowDay) {
-            var MonthStart = new Date(nowYear,nowMonth,1);
-            var MonthEnd = new Date((new Date(nowYear,nowMonth + 1,1)).getTime() - 1000 * 60 * 60* 24);
-            return [formatDate(MonthStart),formatDate(MonthEnd)];
           },
             save(){
               console.log(this.fileList)
