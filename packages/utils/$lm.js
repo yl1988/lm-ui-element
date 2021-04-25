@@ -32,7 +32,7 @@ export default {
                 }
                 if(endDate){
                     // //console.log(date>=endDate)
-                    return date>=endDate
+                    return date>endDate
                 }
 
                 return false
