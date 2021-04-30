@@ -215,7 +215,7 @@ export default {
         this.address.districtId = this.address.cityId
         this.addressArea[2] = this.addressArea[1]
       }
-      console.log(this.addressArea)
+      // console.log(this.addressArea)
       this.address.addressArea = this.addressArea
       let {isNotTwoLevels, showStreet} = this
       this.address = {...this.address, addressArea: this.addressArea, isNotTwoLevels, showStreet}

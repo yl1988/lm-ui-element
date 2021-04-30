@@ -63,14 +63,14 @@
                                 @getLngLatInfo="getLngLatInfo"
                                 @addressChange="addressChange"
                                 :disabled="[false,false,false,false]"
-                                :get-lng-lat="false"
+                                :get-lng-lat="getLngLat"
                     />
                   <el-row>
                     <lm-input label="经度：" v-model="form.lng" type="number" maxlength="10" to-fixed="4"/>
                     <lm-input label="纬度：" v-model="form.lat" type="idcard"/>
                   </el-row>
                   <el-row>
-                    <lm-input label="电话：" v-model="form.tess " type="tel"/>
+                    <lm-input label="电话：" v-model="form.tess " type="tel" @change="phoneChange"/>
                     <lm-input label="身份证：" v-model="form.idcard" type="idcard"/>
                   </el-row>
                     <lm-up-img :limit="6" action="/admin/sys-file/upload" :other-data="otherData" :file-list="imgList"/>
@@ -148,7 +148,8 @@
                 showDialog:false,//是否显示弹窗
                 dialogText:'',//弹窗文字
               fileList:[],//
-              imgList:[]
+              imgList:[],
+              getLngLat:true
             }
         },
         computed: {
@@ -252,6 +253,9 @@
           },
           onkeydown(event){
               console.log(event)
+          },
+          phoneChange(){
+            this.getLngLat=false
           }
 
         },
