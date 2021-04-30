@@ -59,10 +59,11 @@
                                       ]"/>
                   </el-row>
                     <lm-address label="住址："
-                                v-model="form.address" :required="false"
+                                v-model="form.companyAddress" :required="false"
                                 @getLngLatInfo="getLngLatInfo"
                                 @addressChange="addressChange"
                                 :disabled="[false,false,false,false]"
+                                :get-lng-lat="false"
                     />
                   <el-row>
                     <lm-input label="经度：" v-model="form.lng" type="number" maxlength="10" to-fixed="4"/>
@@ -103,7 +104,7 @@
         data() {
             return {
               otherData:{ bucketName: 'smart-park'},
-              form:{address:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}},//保单
+              form:{},//保单
                 cascaders:[
                     {
                         name:'建筑工程',
@@ -153,17 +154,17 @@
         computed: {
         },
         mounted() {
-          // setTimeout(()=>{
-          //   this.form={
-          //     address:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}
-          //   }//保单
-          // },1000)
+          setTimeout(()=>{
+            this.form={
+              companyAddress:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}
+            }//保单
+          },1000)
           //
 
         },
         methods: {
           disableDate(time,userDate,type,planType){
-            if(!cDate){
+            if(!userDate){
               if(/First/.test(planType) || /Two/.test(planType)){
                 //上半月下半月控制
                 let timeYear=time.getFullYear()
