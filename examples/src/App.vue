@@ -24,6 +24,13 @@
                         <lm-cascader label="证书：" :options="cascaders"/>
                     </el-row>
                   <el-row>
+                    <lm-date-time :span="24" label="时间" form-type="rangeDateTime" v-model="form.rangeDate" placeholder="请选择时间" width="200"
+                                  :picker-options="[
+                            {disabledDate:(time)=>$lm.dateRangeDisabled(time,[0, form.rangeDate ? (form.rangeDate[1] || new Date()) : new Date(),{endEqual:true}])},
+                            {disabledDate:(time)=>$lm.dateRangeDisabled(time,[form.rangeDate ? (form.rangeDate[0] || 0) : 0, new Date(),{startEqual:true}])}
+                            ]"/>
+                  </el-row>
+                  <el-row>
                     <lm-date-time :span="24" label="周范围：" v-model="form.week" form-type="rangeDateTime" width="200"
                                   :picker-options="[
                                       {disabledDate:time=>disableDate(time,form.week ? form.week[1] : 0,'start','week')},
