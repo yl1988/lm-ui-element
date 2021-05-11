@@ -24,7 +24,7 @@ export default {
                     return false
                 }
                 if(startDate && endDate){
-                    return  !(date>startDate && date<endDate)
+                    return  !(date>startDate && date<=endDate)
                 }
                 if(startDate){
                     return date<startDate
