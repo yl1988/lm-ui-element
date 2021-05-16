@@ -118,6 +118,10 @@ export default {
     selectWidth:[Number,String],//下拉框宽度
     disabled:[Boolean,Array],//是否可见
     value:Object,//值
+    getLngLat:{
+      type:Boolean,
+      default:true
+    },//是否获取默认经纬度
   },
   data() {
     return {
@@ -168,6 +172,7 @@ export default {
       this.address.addressArea = this.addressArea
       this.$emit('input', this.address)
       this.$emit('addressChange',this.address)
+      this.$emit('provinceChange',this.address)
     },
     // // 点击切换城市
     changeCity(val) {
@@ -182,6 +187,7 @@ export default {
       this.address.addressArea = this.addressArea
       this.$emit('input', this.address)
       this.$emit('addressChange',this.address)
+      this.$emit('cityChange',this.address)
     },
     // 点击切换区县
     async changeDistrict(val) {
@@ -191,28 +197,30 @@ export default {
       this.hasLngLag = false
       let thisdistrictList = districtList.filter(item => item.id === val)
       this.addressArea[2] = thisdistrictList[0].name
-      !this.hasLngLag && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
+      this.getLngLat && !this.hasLngLag && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
       this.address.addressArea = this.addressArea
       this.address.showStreet = this.showStreet
       this.$emit('input', this.address)
       this.$emit('addressChange',this.address)
+      this.$emit('districtChange',this.address)
     },
     //详细地址改变
     streetBlur(e) {
       this.addressArea[3] = e.target.value
       this.hasLngLag = false
       if (this.isNotTwoLevels) {
-        !this.hasLngLag && this.addressArea[2] && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
+        this.getLngLat && !this.hasLngLag && this.addressArea[2] && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
       } else {
-        !this.hasLngLag && this.addressArea[1] && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
+        this.getLngLat && !this.hasLngLag && this.addressArea[1] && this.addressArea[3] && this.getLngLatFun(this.addressArea.join(''))
         this.address.districtId = this.address.cityId
         this.addressArea[2] = this.addressArea[1]
       }
-      console.log(this.addressArea)
+      // console.log(this.addressArea)
       this.address.addressArea = this.addressArea
       let {isNotTwoLevels, showStreet} = this
       this.address = {...this.address, addressArea: this.addressArea, isNotTwoLevels, showStreet}
       this.$emit('input', this.address)
+      this.$emit('streetChange', this.address)
     },
     //输入框输入内容
     async streetInput(value){
@@ -313,14 +321,16 @@ export default {
       } else {
         this.addressArea[2] = city
       }
-      //有默认值时获取经纬度
-      if(this.isNotTwoLevels){
-        if(this.addressArea[0] && this.addressArea[1] && this.addressArea[2] && this.addressArea[3]){
-          this.getLngLatFun(this.addressArea.join(''))
-        }
-      }else{
-        if(this.addressArea[0] && this.addressArea[1] && this.addressArea[2]){
-          this.getLngLatFun(this.addressArea.join(''))
+      //有默认值，并且需要获取默认经纬度时，获取经纬度
+      if(this.getLngLat){
+        if(this.isNotTwoLevels){
+          if(this.addressArea[0] && this.addressArea[1] && this.addressArea[2] && this.addressArea[3]){
+            this.getLngLatFun(this.addressArea.join(''))
+          }
+        }else{
+          if(this.addressArea[0] && this.addressArea[1] && this.addressArea[2]){
+            this.getLngLatFun(this.addressArea.join(''))
+          }
         }
       }
       this.address.addressArea=this.addressArea

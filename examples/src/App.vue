@@ -24,6 +24,13 @@
                         <lm-cascader label="证书：" :options="cascaders"/>
                     </el-row>
                   <el-row>
+                    <lm-date-time :span="24" label="时间" form-type="rangeDateTime" v-model="form.rangeDate" placeholder="请选择时间" width="200"
+                                  :picker-options="[
+                            {disabledDate:(time)=>$lm.dateRangeDisabled(time,[0, form.rangeDate ? (form.rangeDate[1] || new Date()) : new Date(),{endEqual:true}])},
+                            {disabledDate:(time)=>$lm.dateRangeDisabled(time,[form.rangeDate ? (form.rangeDate[0] || 0) : 0, new Date(),{startEqual:true}])}
+                            ]"/>
+                  </el-row>
+                  <el-row>
                     <lm-date-time :span="24" label="周范围：" v-model="form.week" form-type="rangeDateTime" width="200"
                                   :picker-options="[
                                       {disabledDate:time=>disableDate(time,form.week ? form.week[1] : 0,'start','week')},
@@ -59,17 +66,18 @@
                                       ]"/>
                   </el-row>
                     <lm-address label="住址："
-                                v-model="form.address" :required="false"
+                                v-model="form.companyAddress" :required="false"
                                 @getLngLatInfo="getLngLatInfo"
                                 @addressChange="addressChange"
                                 :disabled="[false,false,false,false]"
+                                :get-lng-lat="getLngLat"
                     />
                   <el-row>
                     <lm-input label="经度：" v-model="form.lng" type="number" maxlength="10" to-fixed="4"/>
                     <lm-input label="纬度：" v-model="form.lat" type="idcard"/>
                   </el-row>
                   <el-row>
-                    <lm-input label="电话：" v-model="form.tess " type="tel"/>
+                    <lm-input label="电话：" v-model="form.tess " type="tel" @change="phoneChange"/>
                     <lm-input label="身份证：" v-model="form.idcard" type="idcard"/>
                   </el-row>
                     <lm-up-img :limit="6" action="/admin/sys-file/upload" :other-data="otherData" :file-list="imgList"/>
@@ -103,7 +111,7 @@
         data() {
             return {
               otherData:{ bucketName: 'smart-park'},
-              form:{address:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}},//保单
+              form:{},//保单
                 cascaders:[
                     {
                         name:'建筑工程',
@@ -147,23 +155,24 @@
                 showDialog:false,//是否显示弹窗
                 dialogText:'',//弹窗文字
               fileList:[],//
-              imgList:[]
+              imgList:[],
+              getLngLat:true
             }
         },
         computed: {
         },
         mounted() {
-          // setTimeout(()=>{
-          //   this.form={
-          //     address:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}
-          //   }//保单
-          // },1000)
+          setTimeout(()=>{
+            this.form={
+              companyAddress:{cityId:'520100',provinceId:'520000',districtId:'520102',street:'dd',}
+            }//保单
+          },1000)
           //
 
         },
         methods: {
           disableDate(time,userDate,type,planType){
-            if(!cDate){
+            if(!userDate){
               if(/First/.test(planType) || /Two/.test(planType)){
                 //上半月下半月控制
                 let timeYear=time.getFullYear()
@@ -251,6 +260,9 @@
           },
           onkeydown(event){
               console.log(event)
+          },
+          phoneChange(){
+            this.getLngLat=false
           }
 
         },
