@@ -135,8 +135,9 @@ export default {
                 percentage:100,
                 name:file.name,
                 fileSize:data.fileSize,
-                fileType:data.fileType
+                fileType:data.fileType,
             }
+            Object.prototype.hasOwnProperty.call(fileObj, 'err') && delete fileObj.err
             fileList.splice(fileIndex,1,fileObj)
             let noUpFiles=fileList.filter(item=>/javascript:;/.test(item.fullurl))
             //console.log(noUpFiles)
@@ -153,6 +154,20 @@ export default {
                 })
             this.fileList.splice(index,1)
             this.$emit('delFile')
+        },
+        // 文件出错
+        async fileErr(err,file){
+            console.log(err)
+            let {fileList}=this
+            let fileIndex=fileList.findIndex(item=>item.uid===file.uid)
+            console.log(fileIndex)
+            let fileObj={
+                ... fileList[fileIndex],
+                err:true,
+                loading:false,
+            }
+            this.fileList.splice(fileIndex,1,fileObj)
+            this.$emit('fileErr',{err,file,fileList})
         },
         //图片预览
         imgPreview(url){

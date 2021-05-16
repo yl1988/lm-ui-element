@@ -6,7 +6,7 @@
         <div>
           <div v-if="hiddenCamera || getFileMethod">
             <el-upload class="avatar-uploader" :action="action"
-                       :multiple="true"
+                       :multiple="limit===1 ? false : multiple"
                        :before-upload="beforeUploadWithProgress"
                        :on-success="fileSuccessWithProgress"
                        :accept="fileAccept"
@@ -18,6 +18,7 @@
                        :data="otherData"
                        :auto-upload="true"
                        :on-change="fileChange"
+                       :on-error="fileErr"
                        v-if="isEdit && (typeof limit==='undefined' || (typeof limit==='number' && (fileList.length<limit)))"
                        v-bind="$attrs"
                        v-on="$listeners"
@@ -79,7 +80,7 @@
                       <i class="el-icon-delete" style="color:red" @click="removeDescFile(index,file)" v-if="isEdit"></i>
                     </div>
                   </div>
-                  <el-progress :percentage="file.percentage" :status="file.percentage===100 ? 'success' : undefined" v-if="file.blob"/>
+                  <el-progress :percentage="file.percentage" :status="file.err ? 'exception' : (file.percentage===100 ? 'success' : undefined)" v-if="file.blob"/>
                 </div>
               </div>
             </el-form>
@@ -118,6 +119,10 @@ export default {
         return {}
       }
     },//文件列表样式
+    multiple:{
+      type:Boolean,
+      default:true
+    },//是否多张
   },
   data() {
     return {
@@ -143,6 +148,7 @@ export default {
         this.imgPreview(fileId)
       }
     },
+
   },
 
 }
