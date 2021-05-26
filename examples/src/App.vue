@@ -83,7 +83,7 @@
                     <lm-up-img :limit="6" action="/admin/sys-file/upload" :other-data="otherData" :file-list="imgList"/>
                     <lm-up-file action="/admin/sys-file/upload" :other-data="otherData" :file-list="fileList">
                       <template #filePrev="{file}">
-                        <lm-input v-model="file.fileText"></lm-input>
+                        <lm-input size="small" v-model="file.fileText" margin-bottom="0"></lm-input>
                       </template>
                     </lm-up-file>
                 </el-form>

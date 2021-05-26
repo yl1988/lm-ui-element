@@ -8,10 +8,11 @@ export default {
         Vue.prototype.$lm = {
             // 控制在一个日期范围内不可见
             dateRangeDisabled(time,range=[],config={}){
-                let {startEqual,endEqual}=config
+                let {startEqual,endEqual,disNow}=config
                 /**
                  *startEqual //开始时间是否可以相等
                  *endEqual //结束时间是可否以相等
+                 *disNow //今天是否不可见
                  */
                 let [start,end]=range
                 let startDate=start ? new Date(formatDate(start)).getTime() : NaN
@@ -31,6 +32,11 @@ export default {
                 }
                 if(endDate){
                     return date>endDate
+                }
+                if(disNow){
+                   if(formatDate(time)===formatDate(new Date())){
+                       return  true
+                   }
                 }
                 return false
             },
