@@ -9,9 +9,3 @@ export default {
     name: "LmLoading",
 }
 </script>
-<style scoped lang="scss">
-@import "~lm-ui-element/lib/lm-ui-element-style/utils/mix";
-.loadingBox{
-  @include positionLeftTopSizeIndex($position:fixed,$z-index:9999999999);
-}
-</style>

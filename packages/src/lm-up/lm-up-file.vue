@@ -123,11 +123,14 @@ export default {
       type:Boolean,
       default:true
     },//是否多张
+    overViewAccept:{
+      type:Array,
+      default:()=>['.png','.jpg','.jpeg','.webp','.pdf','.docx']
+    }
   },
   data() {
     return {
       fileForm:{},//预览文件表单
-      overViewAccept:['.png','.jpg','.jpeg','.webp','.pdf','.docx'],//可预览的文件类型
     }
   },
   methods: {
