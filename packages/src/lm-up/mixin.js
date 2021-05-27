@@ -144,7 +144,8 @@ export default {
             this.$emit('fileSuccess',{canICommit:!noUpFiles.length,fileList})
         },
         //删除文件（描述文件）
-        async removeDescFile(index,{fileName,name}){
+        async removeDescFile(index,fileInfo){
+            let {fileName,name}=fileInfo
             await this.$confirm(
                 `确定删除 ${name || fileName} 吗？`,
                 {
@@ -153,7 +154,7 @@ export default {
                     type: 'warning'
                 })
             this.fileList.splice(index,1)
-            this.$emit('delFile')
+            this.$emit('delFile',fileInfo)
         },
         // 文件出错
         async fileErr(err,file){
