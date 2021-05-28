@@ -18,6 +18,7 @@ export default {
                 let startDate=start ? new Date(formatDate(start)).getTime() : NaN
                 let endDate=end ? new Date(formatDate(end)).getTime() : NaN
                 let date=new Date(formatDate(time)).getTime()
+
                 if(startEqual && (date===startDate)){
                     return false
                 }
@@ -25,7 +26,7 @@ export default {
                     return false
                 }
                 if(startDate && endDate){
-                    return  !(date>startDate && date<=endDate)
+                    return  !(date>=startDate && date<=endDate)
                 }
                 if(startDate){
                     return date<startDate
