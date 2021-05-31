@@ -4,11 +4,15 @@
         <div class="lm-ui-title rowCenter">
             <strong>龙马-ui</strong>
         </div>
+      <div style="width:200px;">
+        <lm-calendar></lm-calendar>
+      </div>
         <div class="componentsBox rowAround">
             <div class="componentItemBox columnCenter">
                 <lm-canlendar-component style="width:500px;"/>
                 <el-button type="text">日历</el-button>
             </div>
+
             <div style="padding-top:60px;">
                 <el-form width="1000" ref="form" :model="form" label-width="100px">
                     <el-row>

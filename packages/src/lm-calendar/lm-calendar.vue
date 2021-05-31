@@ -19,18 +19,21 @@
         <slot name="weeks">
           <span class="body-title rowCenter" :ref="index ? '' : 'calenCellTitle'" :style="{height:cellTitleHeight,color:cellTitleColor}" v-for="(week,index) in weeks" :key="index">{{week}}</span>
         </slot>
+        <span class="calendarLeftLine"></span>
       </div>
-      <div class="calen-content rowCenter">
-        <div class="calen-cell" :id="'calen'+index" :ref="index ? '' : 'calenCell'" :class="[calenCellClass,index<7 ? 'firstRowCellClass': '',index%7===0 ? 'firstColumCellClass' : '']"  :style="{...calenCellStyle,...cellBorderStyle(index)}" v-for="(day,index) in calendarList" :key="index" @click="choose(day,index)">
+      <div class="calen-content">
+        <div class="calen-cell" :id="'calen'+index" :ref="index ? '' : 'calenCell'" :class="[calenCellClass,index<7 ? 'firstRowCellClass': '',index%7===0 ? 'firstColumCellClass' : '']"  :style="{...cellBorderStyle(index)}" v-for="(day,index) in calendarList" :key="index" @click="choose(day,index)">
           <slot name="day" :day="day" :index="index">
             <span class="dateSpan rowCenter" :class="day.dateClass">{{day.day}}</span>
           </slot>
-          <div class="rowCenter" v-show="day.hasData && day.isThis">
-            <slot name="haveDataTag" :hasData="day.hasData" :isThis="day.isThis">
+          <slot name="haveDataTag" :hasData="day.hasData" :isThis="day.isThis">
+            <div class="rowCenter tabBox" v-show="day.hasData && day.isThis">
               <div class="tag"></div>
-            </slot>
-          </div>
+            </div>
+          </slot>
         </div>
+        <span class="calendarLeftLine"></span>
+        <span class="calendarBottomLine"></span>
       </div>
     </div>
   </div>
@@ -112,7 +115,6 @@
                 chooseDate: '',//选择的日期
                 calenCellHeight:0,//日历单元格高度
                 calenBotyTitleCellStyle:{},//日历顶部单元格样式
-                calenCellStyle:{},//日历单元格样式
                 calendarWidth:'100%',//日历宽度
                 calendarHeight:'100%',//日历高度
                 titleHeight:'35px',//年月标题高度

@@ -3,10 +3,8 @@
         <lm-calendar ref="canlendar" @getChooseDate="checkDate=>date=checkDate" :insert-data="insertData" :options="{range:['',new Date()]}" date-prop="hasDataDate" @monthChange="v=>date=v">
             <template #weeks>
                 <div class="weeksBox rowCenter">
-                    <div class="weekItem rowCenter font16" v-for="(week,index) in weeks" :key="week">
+                    <div class="weekItem rowCenter font16" v-for="(week) in weeks" :key="week">
                         <span class="week">{{week}}</span>
-                        <span class="rightLine verticalLine"></span>
-                        <span class="leftLine verticalLine" v-if="index===0"></span>
                     </div>
                 </div>
             </template>
@@ -22,11 +20,11 @@
                     </div>
                 </div>
             </template>
-            <template>
-                <div class="haveDataTag rowCenter font12 violet"></div>
+            <template #haveDataTag="{hasData,isThis}">
+                <div class="tagIcon" v-show="hasData && isThis"></div>
             </template>
-            <template #day="{day,index}">
-                <div class="dayBox columnStart" :class="[day.dateClass,index%7===0 ? 'dayBorderLeft' : '',index<7 ? 'dayBorderTop' : '']">
+            <template #day="{day}">
+                <div class="dayBox" :class="[day.dateClass]">
                     <span class="font30 daySpan">{{day.day}}</span>
                     <div class="otherDataBox font20 rowBtween">
                         <i class="iconfont icon-weather-qing" :style="{color:'#333333'}"></i>
@@ -89,122 +87,92 @@
         watch: {}
     }
 </script>
-<style lang="scss" scoped type="text/scss">
+<style lang="scss" scoped>
     @import "../../packages/lm-ui-element-style/src/utils/mix";
     .canlendarExample{
-        .customCalendarHeadBox{
-            background:#ffffff;
-            padding:20px;
-            border-bottom:solid 1px #dddddd;
-            .monthBox{
-                .changeMonthBtnBox{
-                    width:50px;
-                    font-weight: bold;
-                    margin-right:20px;
-                    cursor:pointer;
-                }
-                .monthTextBox{
-                    strong{
-                        cursor:default;
-                        letter-spacing: 2px;
-                    }
-                }
+      .customCalendarHeadBox{
+        background:#ffffff;
+        padding:20px;
+        border-bottom:solid 1px #dddddd;
+        .monthBox{
+          .changeMonthBtnBox{
+            width:50px;
+            font-weight: bold;
+            margin-right:20px;
+            cursor:pointer;
+          }
+          .monthTextBox{
+            strong{
+              cursor:default;
+              letter-spacing: 2px;
             }
+          }
         }
-        .canlendar-top-box{
-            margin-bottom:20px;
-            .canlendar-top-inner-box{
-                width:100%;
-                position: relative;
-                .year-back-box{
-                    .changeMonth{
-                        width: 38px;
-                        height: 38px;
-                        background: #FFFFFF;
-                        border: 1px solid #CCCCCC;
-                        border-radius: 2px;
-                        cursor:pointer;
-                        display:flex;
-                    }
-                }
-                .back-today{
-                    margin-right:10px;
-                    cursor:pointer;
-                    @include positionTopRightSizeIndex($width:auto,$height:auto,$translateX:-50%,$translateY:-50%,$top:50%);
-                }
+      }
+      .canlendar-top-box{
+        margin-bottom:20px;
+        .canlendar-top-inner-box{
+          width:100%;
+          position: relative;
+          .year-back-box{
+            .changeMonth{
+              width: 38px;
+              height: 38px;
+              background: #FFFFFF;
+              border: 1px solid #CCCCCC;
+              border-radius: 2px;
+              cursor:pointer;
+              display:flex;
             }
+          }
+          .back-today{
+            margin-right:10px;
+            cursor:pointer;
+            @include positionTopRightSizeIndex($width:auto,$height:auto,$translateX:-50%,$translateY:-50%,$top:50%);
+          }
+        }
 
+      }
+      .dayBox{
+        height:40px;
+        padding:10px 0 10px 15px;
+        align-items: flex-start;
+        position: relative;
+      }
+      .dateDefaultCss{
+        .daySpan{
+          color:#333333;
         }
-        .dayBox{
-            height:40px;
-            border-right:solid 1px #cccccc;
-            border-bottom:solid 1px #cccccc;
-            padding:10px 0 10px 15px;
-            align-items: flex-start;
-            position: relative;
+      }
+      .dateActiveCss{
+        background:rgba(84, 94, 188, 0.2);
+        .daySpan{
+          color:#333333;
         }
-        .dateDefaultCss{
-            .daySpan{
-                color:#333333;
-            }
+      }
+      .otherDataBox{
+        flex-wrap:wrap;
+        @include positionTopRightSizeIndex($width:50%,$height:72px,$top:5px,$right:1px);
+        .iconfont{
+          width:50%;
         }
-        .dateActiveCss{
-            background:rgba(84, 94, 188, 0.2);
-            .daySpan{
-                color:#333333;
-            }
+      }
+      .weeksBox{
+        width:100%;
+        .weekItem{
+          height:48px;
+          width:calc(100% / 7);
+          flex-shrink: 0;
+          box-shadow: -1px 0 0 #cccccc inset;
+          background:#ebeef5;
+          position: relative;
         }
-        .disableDateCss{
-
-        }
-        .dayBorderLeft{
-            border-left:solid 1px #cccccc;
-        }
-        .dayBorderTop{
-            border-Top:solid 1px #E7E9FC;
-        }
-        .haveDataTag{
-            @include positionLeftBottomSizeIndex($width:6px,$height:6px,$radius:50%,$bottom:10px,$left:50%,$translateX:-50%);
-            background:#37C37C;
-        }
-        .otherDataBox{
-            flex-wrap:wrap;
-            @include positionTopRightSizeIndex($width:50%,$height:72px,$top:5px,$right:1px);
-            .iconfont{
-                width:50%;
-            }
-        }
-        .weeksBox{
-            width:100%;
-            .weekItem{
-                height:48px;
-                width:14%;
-                border-top:solid 1px #cccccc;
-                border-bottom:solid 1px #cccccc;
-                background:#ebeef5;
-                position: relative;
-                .week{
-
-                }
-                .verticalLine{
-                    background:#cccccc;
-                    @include positionTopRightSizeIndex($width:1px,$height:48px);
-                }
-                .leftLine{
-                    left:0;
-                }
-            }
-        }
+      }
+      .tagIcon{
+        @include positionLeftBottomSizeIndex($width:6px,$height:6px,$radius:50%,$bottom:10px,$left:50%,$translateX:-50%,$z-index:99);
+        background:#37C37C;
+      }
     }
 
 </style>
-<style>
-    .canlendarExample .calen-cell{
-        margin-bottom:0 !important;
-    }
-    .canlendarExample .body-title{
-        border-bottom:solid 1px #cccccc;
-        border-top:solid 1px #cccccc;
-        background:#eeeeee;
-    }
-</style>
+

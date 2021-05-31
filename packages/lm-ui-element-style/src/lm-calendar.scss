@@ -1,4 +1,4 @@
-
+@import "./utils/mix";
 .dateDefaultCss{
   color: black;
   cursor: pointer
@@ -33,19 +33,29 @@
   .calendar-body {
     padding-bottom: 10px;
     .bodyTitleBox {
+      //box-shadow: 1px 0 0 #cccccc inset;
+      position: relative;
       .body-title {
-        width: 14%;
+        width:calc(100% / 7);
+        box-shadow: -1px 1px 0 #cccccc inset;
+        flex-shrink: 0;
       }
     }
     .calen-content {
       flex-wrap: wrap;
+      display: flex;
+      justify-content: center;
+      position: relative;
     }
     .calen-cell {
       color: #000;
-      width: 14%;
-      margin-bottom: 5px;
+      width:calc(100% / 7);
+      flex-shrink: 0;
       position: relative;
       cursor:pointer;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -1px 1px 0 #cccccc inset;
       .dateSpan {
         padding: 3px;
         -webkit-border-radius: 50%;
@@ -54,14 +64,27 @@
         width: 20px;
         height: 20px;
         margin: 0 auto;
+        flex:1;
       }
-      .tag {
-        width: 3px;
-        height: 3px;
-        border-radius: 50%;
-        background: #3a82fa;
-        margin: 0 auto;
+      .tabBox{
+        @include positionLeftBottomSizeIndex($height:10px,$z-index:10);
+        .tag {
+          width: 3px;
+          height: 3px;
+          border-radius: 50%;
+          background: #3a82fa;
+          margin: 0 auto;
+
+        }
       }
+    }
+    .calendarLeftLine{
+      @include positionLeftTopSizeIndex($width:1px,$z-index:10);
+      background:#cccccc;
+    }
+    .calendarBottomLine{
+      @include positionLeftBottomSizeIndex($height:1px,$z-index:10);
+      background:#cccccc;
     }
   }
 }
