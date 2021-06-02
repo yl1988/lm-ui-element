@@ -10,13 +10,15 @@
 }
 .lmTexts {
   min-height:40px;
+  display: flex;
+  align-items: center;
   .textSpan{
     display:inline-block;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
     margin-right:10px;
-    width:100%;
+    width:auto;
   }
   .textareaSpan{
 
