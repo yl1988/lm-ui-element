@@ -195,3 +195,5 @@ export function compressImage(path, config) {
     img.src = path
   })
 }
+//保留小数点位数
+export const toFixed=(n,fixed)=>~~(Math.pow(10,fixed)*n)/Math.pow(10,fixed)
