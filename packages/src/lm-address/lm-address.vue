@@ -278,14 +278,16 @@ export default {
         console.error('获取高德地图实例window.AMap失败,请确保正确引入并初始化高德地图')
         return
       }
+      let {version}=AMap
       return new Promise((resolve) => {
-        window.AMap.plugin('AMap.Autocomplete', () => {
+
+        window.AMap.plugin(/^2\./.test(version) ? 'AMap.AutoComplete' : 'AMap.Autocomplete', () => {
           // 实例化Autocomplete
           let autoOptions = {
             //city 限定城市，默认全国
             city
           }
-          let autoComplete = new AMap.Autocomplete(autoOptions);
+          let autoComplete = /^2\./.test(version) ? new AMap.AutoComplete(autoOptions) : new AMap.Autocomplete(autoOptions)
           autoComplete.search(keyword, (status, result) => {
             // 搜索成功时，result即是对应的匹配数据
             if (status === 'complete' && result.info === 'OK') {
@@ -347,7 +349,7 @@ export default {
         window.AMap.plugin('AMap.Geocoder', () => {
           let geocoder = new AMap.Geocoder({})
           geocoder.getLocation(address, (status, result) => {
-            // //console.log(result)
+            console.log(result)
             let {geocodes = []} = result
             // //console.log(geocodes)
             if(!(geocodes instanceof Array) || !geocodes.length){
