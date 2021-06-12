@@ -8,7 +8,7 @@
         <el-button type="primary" :style="{background:titleBk}" class="titleBk"></el-button>
         <span class="title font16" :style="{color:titleTextColor}">{{title}}</span>
         <div class="rightBox rowEnd">
-          <i class="el-icon-full-screen fullScreenIcon" :style="{color:titleTextColor}" @click="togetherFullScreen"></i>
+          <i class="el-icon-full-screen fullScreenIcon" v-if="!hiddenFullScreen" :style="{color:titleTextColor}" @click="togetherFullScreen"></i>
           <div class="rowCenter closeBox"  @click="close" ref="closeIcon">
             <i class="el-icon-close" :style="{color:titleTextColor}"></i>
           </div>
@@ -101,17 +101,31 @@
             type:Boolean,
             default:true
           },//是否可以通过点击 modal 关闭 Dialog
+          hiddenFullScreen:Boolean,//是否隐藏全屏
         },
       data(){
           return {
             isFullScreen:false,//是否是全屏
             contentOriginHeight:0,//内容框默认高度
+            contentNochangeOriginHeight:0,//内容框默认高度
           }
       },
         methods: {
             //关闭弹窗
             close(){
-                this.$emit('close')
+              if(this.isFullScreen){
+                this.contentOriginHeight=this.contentNochangeOriginHeight+'px'
+                clearTimeout(this.timeOut)
+                clearTimeout(this.screenTime)
+                this.isFullScreen=false
+                let timeOut=setTimeout(()=>{
+                  clearTimeout(timeOut)
+                  this.contentOriginHeight=0
+                  this.$emit('close')
+                },200)
+                return
+              }
+              this.$emit('close')
             },
           //遮罩点击
           overyClick(){
@@ -122,19 +136,22 @@
             this.$emit('modalClick')
           },
           //全屏切换
-          togetherFullScreen(){
-              let {isFullScreen,contentOriginHeight}=this
+          async togetherFullScreen(){
+              await this.$lm.preventContinuePoint(this)
+              let {isFullScreen,contentOriginHeight,contentNochangeOriginHeight}=this
             clearTimeout(this.timeOut)
             clearTimeout(this.screenTime)
-            if(!contentOriginHeight){
+            if(!isFullScreen){
               contentOriginHeight=this.$refs.customDialogContentBox.clientHeight
               this.contentOriginHeight=contentOriginHeight+'px'
+              this.contentNochangeOriginHeight=contentOriginHeight
             }else{
-              this.timeOut=setTimeout(()=>{
-                this.contentOriginHeight=0
-                clearTimeout(this.timeOut)
-              },1000)
+              this.contentOriginHeight=contentNochangeOriginHeight+'px'
             }
+            this.timeOut=setTimeout(()=>{
+              this.contentOriginHeight=0
+              clearTimeout(this.timeOut)
+            },1000)
             this.screenTime=setTimeout(()=>{
               clearTimeout(this.screenTime)
               this.isFullScreen=!isFullScreen
