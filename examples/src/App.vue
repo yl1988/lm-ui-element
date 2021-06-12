@@ -16,9 +16,12 @@
             <div style="padding-top:60px;">
                 <el-form width="1000" ref="form" :model="form" label-width="100px">
                     <el-row>
-<!--                        <lm-input label="姓名：" v-model="form.name" maxlength="50"></lm-input>-->
-<!--                        <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>-->
+                        <lm-input label="姓名：" v-model="form.name" maxlength="50"></lm-input>
+                        <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
+                    </el-row>
+                  <el-row>
                       <lm-select form-type="radio" label="类型：" v-model="form.type " disabled/>
+                      <lm-date-time  label="开始时间：" v-model="form.startDate " placeholder="请选择开始时间"/>
                     </el-row>
                   <el-row v-if="form.type===0">
                     <lm-input label="姓名：" v-model="form.name"></lm-input>
@@ -99,7 +102,7 @@
         <div>
             <el-button type="primary" @click="showDialog=true">{{ dialogText || '打开弹窗' }}</el-button>
         </div>
-        <lm-dialog v-if="showDialog" @cancel="showDialog=false" @closeDialog="closeDialog" @sure="sure">
+        <lm-dialog v-show="showDialog" @cancel="showDialog=false" @close="closeDialog" @sure="sure" title="标题">
             <span>弹窗内容</span>
         </lm-dialog>
     </div>
@@ -160,7 +163,8 @@
                 dialogText:'',//弹窗文字
               fileList:[],//
               imgList:[],
-              getLngLat:true
+              getLngLat:true,
+              isStart:false,//
             }
         },
         computed: {
@@ -289,7 +293,6 @@
             flex-wrap:wrap;
             align-items: flex-start;
         }
-
 
     }
 </style>

@@ -3,15 +3,23 @@
   <transition name="fade">
   <div class="customDialogBox">
     <div class="overy" @click="overyClick" ref="overy"></div>
-    <div class="customDialogWhiteBox" :style="{width:width+'px',background,'padding-bottom':bottomPadding+'px'}">
+    <div class="customDialogWhiteBox dialogTransition" :style="{width:width+'px',background,'padding-bottom':bottomPadding+'px'}" :class="{boxFullScreen:isFullScreen}">
       <div class="customDialogTitleBox rowBtween">
         <el-button type="primary" :style="{background:titleBk}" class="titleBk"></el-button>
         <span class="title font16" :style="{color:titleTextColor}">{{title}}</span>
-        <div class="rowCenter closeBox"  @click="close" ref="closeIcon">
-          <i class="el-icon-close" :style="{color:titleTextColor}"></i>
+        <div class="rightBox rowEnd">
+          <i class="el-icon-full-screen fullScreenIcon" :style="{color:titleTextColor}" @click="togetherFullScreen"></i>
+          <div class="rowCenter closeBox"  @click="close" ref="closeIcon">
+            <i class="el-icon-close" :style="{color:titleTextColor}"></i>
+          </div>
         </div>
+
       </div>
-      <div class="customDialogContentBox" ref="customDialogContentBox" :style="{'margin-bottom':contentMarginBottom+'px',padding:contentPadding,...contentBoxStyle}">
+      <div class="customDialogContentBox dialogTransition"
+           ref="customDialogContentBox"
+           :style="{'margin-bottom':contentMarginBottom+'px',padding:contentPadding,...contentBoxStyle,height:contentOriginHeight || 'auto'}"
+           :class="{fullScreenContent:isFullScreen}"
+      >
         <slot></slot>
       </div>
       <div class="confirmCancelFotterBox" v-if="showFooter">
@@ -94,6 +102,12 @@
             default:true
           },//是否可以通过点击 modal 关闭 Dialog
         },
+      data(){
+          return {
+            isFullScreen:false,//是否是全屏
+            contentOriginHeight:0,//内容框默认高度
+          }
+      },
         methods: {
             //关闭弹窗
             close(){
@@ -106,7 +120,28 @@
                 return
               }
             this.$emit('modalClick')
+          },
+          //全屏切换
+          togetherFullScreen(){
+              let {isFullScreen,contentOriginHeight}=this
+            clearTimeout(this.timeOut)
+            clearTimeout(this.screenTime)
+            if(!contentOriginHeight){
+              contentOriginHeight=this.$refs.customDialogContentBox.clientHeight
+              this.contentOriginHeight=contentOriginHeight+'px'
+            }else{
+              this.timeOut=setTimeout(()=>{
+                this.contentOriginHeight=0
+                clearTimeout(this.timeOut)
+              },1000)
+            }
+            this.screenTime=setTimeout(()=>{
+              clearTimeout(this.screenTime)
+              this.isFullScreen=!isFullScreen
+            },50)
+
           }
+
         },
 
     }
