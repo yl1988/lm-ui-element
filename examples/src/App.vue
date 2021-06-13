@@ -245,19 +245,14 @@
               console.log(this.fileList)
               console.log(this.imgList)
             },
-            sure(){
-                this.dialogText='点击确定'
-                this.showDialog=false
-                setTimeout(()=>{
-                    this.dialogText='打开弹窗'
-                },2000)
+            async sure(callback){
+              await callback()
+              this.showDialog=false
+
             },
             closeDialog(){
-                this.dialogText='点击取消或关闭'
                 this.showDialog=false
-                setTimeout(()=>{
-                    this.dialogText='打开弹窗'
-                },2000)
+
             },
           getLngLatInfo({lng,lat}){
               this.$set(this.form,'lng',lng)

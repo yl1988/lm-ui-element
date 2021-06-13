@@ -9,7 +9,7 @@
         <span class="title font16" :style="{color:titleTextColor}">{{title}}</span>
         <div class="rightBox rowEnd">
           <i class="el-icon-full-screen fullScreenIcon" v-if="!hiddenFullScreen" :style="{color:titleTextColor}" @click="togetherFullScreen"></i>
-          <div class="rowCenter closeBox"  @click="close" ref="closeIcon">
+          <div class="rowCenter closeBox"  @click="close('close')" ref="closeIcon">
             <i class="el-icon-close" :style="{color:titleTextColor}"></i>
           </div>
         </div>
@@ -25,8 +25,8 @@
       <div class="confirmCancelFotterBox" v-if="showFooter">
         <slot name="footer">
           <div class="rowCenter">
-            <el-button v-if="showCancel" @click="$emit('cancel')" :style="{width:btnWidth,height:btnHeight}">{{backText || '返回'}}</el-button>
-            <el-button type="primary" @click="$emit('sure')" :style="{width:btnWidth,height:btnHeight}" :icon="showLoading ? 'el-icon-loading' : ''">{{saveText || '保存'}}</el-button>
+            <el-button v-if="showCancel" @click="close('cancel')" :style="{width:btnWidth,height:btnHeight}">{{backText || '返回'}}</el-button>
+            <el-button type="primary" @click="sure" :style="{width:btnWidth,height:btnHeight}" :icon="showLoading ? 'el-icon-loading' : ''">{{saveText || '保存'}}</el-button>
           </div>
         </slot>
       </div>
@@ -112,25 +112,36 @@
       },
         methods: {
             //关闭弹窗
-            close(){
-              if(this.isFullScreen){
-                this.contentOriginHeight=this.contentNochangeOriginHeight+'px'
-                clearTimeout(this.timeOut)
-                clearTimeout(this.screenTime)
-                this.isFullScreen=false
-                let timeOut=setTimeout(()=>{
-                  clearTimeout(timeOut)
-                  this.contentOriginHeight=0
-                  this.$emit('close')
-                },200)
-                return
-              }
-              this.$emit('close')
+            async close(eventStr){
+              await this.startCloseDialogAnimation()
+              this.$emit(eventStr)
             },
+          //开始关闭时动画
+          async startCloseDialogAnimation(){
+              return new Promise((resolve)=>{
+                if(this.isFullScreen){
+                  this.contentOriginHeight=this.contentNochangeOriginHeight+'px'
+                  clearTimeout(this.timeOut)
+                  clearTimeout(this.screenTime)
+                  this.isFullScreen=false
+                  let timeOut=setTimeout(()=>{
+                    clearTimeout(timeOut)
+                    this.contentOriginHeight=0
+                    resolve(true)
+                  },200)
+                  return
+                }
+                resolve(true)
+              })
+          },
+          //点击确定
+          sure(){
+              this.$emit('sure',this.startCloseDialogAnimation)
+          },
           //遮罩点击
           overyClick(){
               if(this.closeOnClickModal){
-                this.$emit('close')
+                this.close('close')
                 return
               }
             this.$emit('modalClick')
