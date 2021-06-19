@@ -67,11 +67,11 @@
             <el-form ref="fileForm" :model="fileList[index].fileForm" style="width:100%;" v-model="fileList[index].fileForm">
               <div class="rowStart">
                 <slot name="filePrev" :fileForm="fileList[index].fileForm" :file="file"></slot>
-                <div style="flex:1;">
-                  <div class="rowBtween" style="padding-right:20px;">
-                    <div class="rowStart">
+                <div class="fileProgressBox">
+                  <div class="rowBtween fileItemBox">
+                    <div class="rowStart fileNameBox">
                       <a class="file blue" :href="file.fileId" :download="file.name || file.fileName">
-                        <el-button type="text"> {{file.name || file.fileName}}</el-button>
+                        <el-button class="fileName" type="text"> {{file.name || file.fileName}}</el-button>
                       </a>
                       <i class="el-icon-loading yellow" style="margin-left:10px;" v-if="file.loading"></i>
                     </div>

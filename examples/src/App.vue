@@ -13,8 +13,8 @@
                 <el-button type="text">日历</el-button>
             </div>
 
-            <div style="padding-top:60px;">
-                <el-form width="1000" ref="form" :model="form" label-width="100px">
+            <div style="padding-top:60px; width: 1000px">
+                <el-form ref="form" :model="form" label-width="100px">
                     <el-row>
                         <lm-input label="姓名：" v-model="form.name" maxlength="50"></lm-input>
                         <lm-select label="学历：" v-model="form.stuty" :list="['文盲','小学','初中','高中','中专','大专','本科','硕士','博士']"/>
@@ -88,11 +88,7 @@
                     <lm-input label="身份证：" v-model="form.idcard" type="idcard"/>
                   </el-row>
                     <lm-up-img :limit="6" action="/admin/sys-file/upload" :other-data="otherData" :file-list="imgList"/>
-                    <lm-up-file action="/admin/sys-file/upload" :other-data="otherData" :file-list="fileList">
-                      <template #filePrev="{file}">
-                        <lm-input size="small" v-model="file.fileText" margin-bottom="0"></lm-input>
-                      </template>
-                    </lm-up-file>
+                    <lm-up-file action="/admin/sys-file/upload" :other-data="otherData" :file-list="fileList"/>
                 </el-form>
                 <div class="rowCenter">
                     <el-button type="primary" @click="save" style="width:120px;">保存</el-button>

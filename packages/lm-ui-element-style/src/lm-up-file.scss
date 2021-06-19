@@ -10,49 +10,31 @@
       p{
         cursor:pointer;
       }
-      .fileItemBox{
-        overflow:hidden;
-        position: relative;
-        .fileImgBox{
-          position: relative;
+      .fileProgressBox{
+        width:100%;
+        .fileItemBox{
+          padding-right:20px;
           width:100%;
-          overflow:hidden;
-          .fileImg{
-            width:100%;
-            z-index:1;
-          }
-          .imgPreviewBox{
-            @include positionCenter();
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,0.5);
-            display:none;
-            .imgPreview{
-              font-size:40px;
-              color:#ffffff;
-              cursor:pointer;
+          box-sizing: border-box;
+          .fileNameBox{
+            width:calc(100% - 40px);
+            .file{
+              width:100%;
+              .el-button{
+                width:100%;
+                display: flex;
+                span{
+                  max-width: 100%;
+                  word-break: break-all;
+                  white-space: normal;
+                  text-align: left;
+                }
+              }
             }
           }
-          .fileImgInnerBox{
-            &:hover .imgPreviewBox{
-              display:flex;
-            }
-          }
-          .el-icon-loading{
-            position: absolute;
-            z-index:100;
-          }
-          .deleteBk{
-            @include positionTopRightSizeIndex($width:30px,$height:30px,$radius:50%,$z-index:99);
-            background:rgba(255,255,255,0.9);
-          }
-
-        }
-        .circleProgressBk{
-          @include positionCenter();
-          z-index:10;
         }
       }
+
     }
   }
   .el-dialog{
