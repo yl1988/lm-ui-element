@@ -163,7 +163,7 @@
           height:48px;
           width:calc(100% / 7);
           flex-shrink: 0;
-          box-shadow: -1px 0 0 #cccccc inset;
+          box-shadow: -1px 1px 0 #cccccc inset;
           background:#ebeef5;
           position: relative;
         }
