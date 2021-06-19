@@ -83,6 +83,8 @@
 <script>
 
     import mixin from './mixin'
+    import {lmToFixed} from "../../utils/lm-methods";
+
     export default {
         name: 'LmInput',
         mixins:[mixin],
@@ -183,10 +185,8 @@
                   let valueArr=v.toString().split('.')
                   let firstValue=valueArr[0]
                   let lastValue=valueArr[1]
-                  if(!(isNaN(toFixed))){
-                    toFixed<0 && (toFixed=0)
-                    lastValue=lastValue ? lastValue.substring(0,toFixed) : ''
-                    v=lastValue ? `${firstValue}.${lastValue}` : firstValue
+                  if(!(isNaN(toFixed)) && toFixed>=0){
+                    v=lmToFixed(v,toFixed)
                   }
                   if(lmInputMaxlength){
                     if(firstValue.length>lmInputMaxlength){
