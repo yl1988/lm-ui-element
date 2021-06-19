@@ -62,7 +62,6 @@
     </el-col>
 </template>
 <script>
-    // import {mapState} from 'vuex'
     import {lmFormItemWatch} from "./util";
     import mixin from './mixin'
     export default {
@@ -96,6 +95,10 @@
                 type:String,
                 default:'-'
             },//时间范围连接符
+          placeholder:{
+            type:String,
+            default:'请选择'
+          },//placeholder
         },
         data() {
             return {
@@ -107,9 +110,6 @@
                 lmDateTimeFormat:'yyyy-MM-dd',//时间显示格式
                 lmDateTimeValueFormat:'yyyy-MM-dd',//时间值格式
             }
-        },
-        computed: {
-            // ...mapState(['focusHiddenData']),
         },
         created(){
             let {formType,placeholder,dateTimeType,dateTimeValueFormat,dateTimeFormat}=this
