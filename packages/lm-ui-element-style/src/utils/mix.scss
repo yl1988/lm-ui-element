@@ -72,4 +72,13 @@ scss混合
   bottom:$bottom;
   @include W_H_ZIndexTransformRadius($width:$width,$height:$height,$z-index:$z-index,$translateX:$translateX,$translateY:$translateY,$rotate:$rotate,$radius:$radius)
 }
+//多行省略
+@mixin textMultiLineEllipsis($clamp:2){
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $clamp;
+  -webkit-box-orient: vertical;
+}
+
 
