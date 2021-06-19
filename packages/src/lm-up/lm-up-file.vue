@@ -69,12 +69,9 @@
                 <slot name="filePrev" :fileForm="fileList[index].fileForm" :file="file"></slot>
                 <div class="fileProgressBox">
                   <div class="rowBtween fileItemBox">
-                    <div class="rowStart fileNameBox">
-                      <a class="file blue" :href="file.fileId" :download="file.name || file.fileName">
-                        <el-button class="fileName" type="text"> {{file.name || file.fileName}}</el-button>
-                      </a>
-                      <i class="el-icon-loading yellow" style="margin-left:10px;" v-if="file.loading"></i>
-                    </div>
+                    <a class="file blue" :href="file.fileId" :download="file.name || file.fileName">
+                      <el-button class="fileName" type="text" :loading="file.loading"> {{file.name || file.fileName}}</el-button>
+                    </a>
                     <div class="rowEnd">
                       <i class="el-icon-view blue" style="font-size:18px;margin-right:10px;" @click="filePreview(file)" v-if="file.fileType && overViewAccept.indexOf(file.fileType)>-1"></i>
                       <i class="el-icon-delete" style="color:red" @click="removeDescFile(index,file)" v-if="isEdit"></i>

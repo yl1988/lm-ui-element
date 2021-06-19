@@ -7,28 +7,23 @@
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
-      p{
-        cursor:pointer;
-      }
       .fileProgressBox{
         width:100%;
         .fileItemBox{
           padding-right:20px;
           width:100%;
           box-sizing: border-box;
-          .fileNameBox{
-            width:calc(100% - 40px);
-            .file{
-              width:100%;
-              .el-button{
-                width:100%;
-                display: flex;
-                span{
-                  max-width: 100%;
-                  word-break: break-all;
-                  white-space: normal;
-                  text-align: left;
-                }
+          .file{
+            max-width:100%;
+            .el-button{
+              display: flex;
+              span{
+                word-break: break-all;
+                white-space: normal;
+                text-align: left;
+              }
+              .el-icon-loading{
+                color:#FC982A;
               }
             }
           }
