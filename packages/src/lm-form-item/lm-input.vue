@@ -83,7 +83,6 @@
 <script>
 
     import mixin from './mixin'
-    import {lmToFixed} from "../../utils/lm-methods";
 
     export default {
         name: 'LmInput',
@@ -186,7 +185,9 @@
                   let firstValue=valueArr[0]
                   let lastValue=valueArr[1]
                   if(!(isNaN(toFixed)) && toFixed>=0){
-                    v=lmToFixed(v,toFixed)
+                    toFixed<0 && (toFixed=0)
+                    lastValue=lastValue ? lastValue.substring(0,toFixed) : ''
+                    v=lastValue ? `${firstValue}.${lastValue}` : firstValue
                   }
                   if(lmInputMaxlength){
                     if(firstValue.length>lmInputMaxlength){
@@ -194,7 +195,7 @@
                       v=lastValue ? (inLengthNum+'.'+lastValue) : inLengthNum
                     }
                   }
-                    this.$emit('input',Number(v))
+                    this.$emit('input',v)
                 }else if(type==='idcard'){
                     //身份证
                   v=v.replace(/[^\d|xX]/g,'')
