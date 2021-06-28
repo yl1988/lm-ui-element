@@ -107,6 +107,8 @@
 <script>
 
     import LmCanlendarComponent from '../components/lm-canlendar-component'
+
+
     export default {
         components: {
             LmCanlendarComponent
@@ -172,7 +174,9 @@
             }//保单
           },1000)
           //
-
+          // console.log(this.$lmLoading.show())
+          // this.$lmLoading.show()
+          this.$lmLoading.show({color:'#ffffff',size:32})
         },
         methods: {
           disableDate(time,userDate,type,planType){
@@ -272,6 +276,7 @@
 <style scoped lang="scss">
     .exampleBox{
         padding:20px;
+      background: rgba(0,0,0,0.5);
         .lm-ui-title{
             font-size:20px;
             margin-bottom:20px;
