@@ -1,5 +1,5 @@
 <template>
-  <div class="loadingBox rowCenter" v-if="visible">
+  <div class="lmLoadingBox rowCenter" v-if="visible">
     <i class="el-icon-loading font32 gray666"></i>
   </div>
 </template>
