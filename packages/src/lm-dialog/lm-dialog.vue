@@ -148,7 +148,7 @@
           },
           //全屏切换
           async togetherFullScreen(){
-              await this.$lm.preventContinuePoint(this,1000)
+              await this.$lm.preventContinuePoint(this,500)
               let {isFullScreen,contentOriginHeight,contentNochangeOriginHeight}=this
             clearTimeout(this.timeOut)
             clearTimeout(this.screenTime)
