@@ -1,7 +1,7 @@
 <!--上传文件，并显示进度条-->
 <template>
   <div class="upfile-with-progress">
-    <el-form-item :label="label || (isEdit ? '上传文件：' : '文件：')" label-position="top" :required="required">
+    <el-form-item :label="label || (isEdit ? '上传文件：' : '文件：')" label-position="top" :required="required" :prop="fileProp" :error="fileError">
       <div class="rowStart" style="min-height:40px;">
         <div>
           <div v-if="hiddenCamera || getFileMethod">
@@ -69,11 +69,11 @@
                 <slot name="filePrev" :fileForm="fileList[index].fileForm" :file="file"></slot>
                 <div class="fileProgressBox">
                   <div class="rowBtween fileItemBox">
-                    <a class="file blue" :href="file.fileId" :download="file.name || file.fileName">
-                      <el-button class="fileName" type="text" :loading="file.loading"> {{file.name || file.fileName}}</el-button>
+                    <a class="file blue" :href="file[fields.fileId || 'fileId']" :download="file[fields.fileName || 'fileName']">
+                      <el-button class="fileName" type="text" :loading="file.loading"> {{file[fields.fileName || 'fileName']}}</el-button>
                     </a>
                     <div class="rowEnd">
-                      <i class="el-icon-view blue" style="font-size:18px;margin-right:10px;" @click="filePreview(file)" v-if="file.fileType && overViewAccept.indexOf(file.fileType)>-1"></i>
+                      <i class="el-icon-view blue" style="font-size:18px;margin-right:10px;" @click="filePreview(file)" v-if="file[fields.fileType || 'fileType'] && overViewAccept.indexOf(file[fields.fileType || 'fileType'])>-1"></i>
                       <i class="el-icon-delete" style="color:red" @click="removeDescFile(index,file)" v-if="isEdit"></i>
                     </div>
                   </div>
@@ -133,7 +133,8 @@ export default {
   methods: {
     //文件预览
     filePreview(file){
-      let {fileId,fileType}=file
+      let fileId=file[this.fields.fileId || 'fileId']
+      let fileType=file[this.fields.fileType || 'fileType']
       if(fileType){
         if(!/\./.test(fileType)){
           fileType=`.${fileType}`

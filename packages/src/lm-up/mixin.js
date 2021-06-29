@@ -9,6 +9,10 @@ export default {
             type:Array,
             default:()=>[]
         },//文件数据
+        value:{
+            type:Array,
+            default:()=>[]
+        },//文件数据
         isEdit:{
             type:Boolean,
             default:true
@@ -34,11 +38,25 @@ export default {
         headers:Object,//请求头信息
         filePreviewOption:Object,//文件预览配置
         customPreviewFun:Function,//自定义预览函数
+        fileProp: {
+            type:String,
+            default:'fileList'
+        },//校验的prop
+        fields: {
+            type:Object,
+            default:()=>{
+                return {}
+            }
+        },//字段配置
+        resConfig:Object,//返回值配置
     },
     data() {
         return {
             getFileMethod:0,//获取文件类型
             showPreviewDialog:false,//是否显示大图
+            canICommit: true,//是否可以点击
+            fileError:'',//文件错误信息
+            valid:false,//是否校验了
         }
     },
     methods: {
@@ -76,8 +94,6 @@ export default {
                     blob
                 })
             }
-
-            this.$emit('beforeUpload')
             let compressFile=file
             let cropperFile=''
             if(/image/.test(file.type)){
@@ -103,6 +119,8 @@ export default {
                 }
                 compressFile=await compressImageFun({file:cropperFile || file})
             }
+            this.canICommit=false
+            this.$emit('beforeUpload', )
             return compressFile
         },
         //文件上传进度带进度条
@@ -119,6 +137,7 @@ export default {
         fileSuccessWithProgress(res,file){
             //console.log(res)
             //console.log(file)
+            let {fields,resConfig={}}=this
             let {code,data,msg} = res
             if(code!==0) {
                 this.$message.error(msg)
@@ -126,35 +145,68 @@ export default {
             }
             let {fileList}=this
             let fileIndex=fileList.findIndex(item=>item.uid===file.uid)
-            let fileId=(/^http/.test(data.url) || /^\/\//.test(data.url) || !this.fileBaseUr) ? data.url : `${this.fileBaseUrl}${data.url}`
+            let resFileUrl=data[resConfig.fileId || 'url']
+            let fileId=(/^http/.test(resFileUrl) || /^\/\//.test(resFileUrl) || !this.fileBaseUr) ? resFileUrl : `${this.fileBaseUrl}${resFileUrl}`
             let fileObj={
                 ... fileList[fileIndex],
                 fileId,
-                fileName:data.fileName,
+                fileName:file.name,
                 loading:false,
                 percentage:100,
-                name:file.name,
-                fileSize:data.fileSize,
-                fileType:data.fileType,
+                fileSize:data[resConfig.fileSize || 'fileSize'],
+                fileType:data[resConfig.fileType || 'fileType'],
             }
             Object.prototype.hasOwnProperty.call(fileObj, 'err') && delete fileObj.err
             fileList.splice(fileIndex,1,fileObj)
-            let noUpFiles=fileList.filter(item=>/javascript:;/.test(item.fullurl))
+            let noUpFiles=fileList.filter(item=>/javascript:;/.test(item.fileId))
             //console.log(noUpFiles)
             this.$emit('fileSuccess',{canICommit:!noUpFiles.length,fileList})
+            this.canICommit=!noUpFiles.length
+            if(this.canICommit){
+                this.fileError=''
+            }
+            if(this.valid){
+                //手动校验过，重新校验
+                for(let i=0;i<fileList.length;i++){
+                    let {percentage,fileName}=fileList[i]
+                    if(percentage<100){
+                        this.fileError=`请等待${fileName}上传完成`
+                        break
+                    }
+                    if(i===fileList.length){
+                        this.valid=false
+                    }
+                }
+            }
+            console.log(fileList)
+            let upFileList=fileList.reduce((result,current)=>{
+                let fileFieldsConfig=fields
+                !fileFieldsConfig.fileId && (fileFieldsConfig.fileId='fileId')
+                !fileFieldsConfig.fileName && (fileFieldsConfig.fileName='fileName')
+                let fileObj={}
+                for(let i in fileFieldsConfig){
+                    fileObj[fileFieldsConfig[i]]=current[i]
+                }
+                result.push(fileObj)
+                return result
+            },[])
+            this.$emit('input',upFileList)
         },
         //删除文件（描述文件）
         async removeDescFile(index,fileInfo){
-            let {fileName,name}=fileInfo
+            let {fileName}=fileInfo
             await this.$confirm(
-                `确定删除 ${name || fileName} 吗？`,
-                {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                })
+              `确定删除 ${fileName} 吗？`,
+              {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+              })
             this.fileList.splice(index,1)
+            this.canICommit=true
+            this.fileError=''
             this.$emit('delFile',fileInfo)
+            this.$emit('input',this.fileList)
         },
         // 文件出错
         async fileErr(err,file){
@@ -208,6 +260,24 @@ export default {
                 return true
             }
             return  false
+        },
+        //校验是否上传完成
+        validIsEnd(){
+            this.valid=true
+            return new Promise((resolve,reject)=> {
+                let {fileList}=this
+                this.fileError=''
+                for(let i=0;i<fileList.length;i++){
+                    let {percentage,fileName}=fileList[i]
+                    if(percentage<100){
+                        let errMsg=`请等待${fileName}上传完成`
+                        this.fileError=errMsg
+                        reject(errMsg)
+                        break
+                    }
+                }
+                resolve(true)
+            })
         }
     },
 }
