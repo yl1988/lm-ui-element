@@ -276,7 +276,6 @@
 <style scoped lang="scss">
     .exampleBox{
         padding:20px;
-      background: rgba(0,0,0,0.5);
         .lm-ui-title{
             font-size:20px;
             margin-bottom:20px;
