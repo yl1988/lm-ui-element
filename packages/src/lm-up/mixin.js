@@ -150,7 +150,6 @@ export default {
             let fileObj={
                 ... fileList[fileIndex],
                 fileId,
-                fileName:file.name,
                 loading:false,
                 percentage:100,
                 fileSize:data[resConfig.fileSize || 'fileSize'],
@@ -198,8 +197,6 @@ export default {
             await this.$confirm(
               `确定删除 ${fileName} 吗？`,
               {
-                  confirmButtonText: '确定',
-                  cancelButtonText: '取消',
                   type: 'warning'
               })
             this.fileList.splice(index,1)
