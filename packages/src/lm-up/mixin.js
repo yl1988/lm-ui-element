@@ -162,7 +162,7 @@ export default {
             this.$emit('fileSuccess',{canICommit:!noUpFiles.length,fileList})
             this.canICommit=!noUpFiles.length
             if(this.canICommit){
-                this.fileError=''
+                this.fileError=null
             }
             if(this.valid){
                 //手动校验过，重新校验

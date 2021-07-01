@@ -1,7 +1,7 @@
 <!--上传图片，并显示进度条-->
 <template>
   <div class="upImgBox">
-    <el-form-item :label="label || (isEdit ? '上传图片：' : '图片：')" label-position="top" :required="required">
+    <el-form-item :label="label || (isEdit ? '上传图片：' : '图片：')" label-position="top" :required="required"  :prop="fileProp" :error="fileError">
       <div style="display:flex;">
         <div style="margin-right:20px;flex:1;">
           <div v-if="hiddenCamera || getFileMethod" class="rowStart" style="flex:1;">
@@ -10,7 +10,7 @@
               <div class="fileOutBox rowCenter" v-for="(file,index) in fileList" :key="index">
                 <div class="fileListBox rowCenter" :style="{width:fileImgWidth,height:fileImgHeight}">
                   <slot name="fileView" :index="index" :file="file">
-                    <img class="fileImg" :src="file.blob || file.fileId">
+                    <img class="fileImg" :src="file.blob || file[fields.fileId || 'fileId']">
                     <div class="circleProgressBk rowCenter" v-if="file.loading">
                       <el-progress :width="progressWidth" type="circle" :percentage="file.percentage" :status="file.percentage===100 ? 'success' : undefined"/>
                     </div>
@@ -65,7 +65,7 @@
                   <slot name="chooseFileBtn">
                     <div class="fileListBox rowCenter" :style="{width:fileImgWidth,height:fileImgHeight}" v-if="fileList.length">
                       <slot name="fileView" :file="fileList[0]">
-                        <img class="fileImg" :src="fileList[0].blob || fileList[0].fileId">
+                        <img class="fileImg" :src="fileList[0].blob || fileList[0][fields.fileId || 'fileId']">
                         <div class="circleProgressBk rowCenter" v-if="fileList[0].loading">
                           <el-progress :width="progressWidth" type="circle" :percentage="fileList[0].percentage" :status="fileList[0].percentage===100 ? 'success' : undefined"/>
                         </div>
@@ -83,7 +83,7 @@
                 <div class="fileOutBox rowCenter" v-for="(file,index) in fileList" :key="index">
                   <div class="fileListBox rowCenter" :style="{width:fileImgWidth,height:fileImgHeight}">
                     <slot name="fileView" :index="index" :file="file">
-                      <img class="fileImg" :src="file.blob || file.fileId">
+                      <img class="fileImg" :src="file.blob || file[fields.fileId || 'fileId']">
                     </slot>
                   </div>
                 </div>
@@ -95,7 +95,7 @@
               <div class="" v-if="fileList.length">
                 <div class="fileListBox rowCenter" v-for="(file,index) in fileList" :key="index" :style="{width:fileImgWidth,height:fileImgHeight}">
                   <slot name="fileView" :index="index" :file="file">
-                    <img class="fileImg" :src="file.blob || (fileBaseUrl ? fileBaseUrl+file.fileId : file.fileId)" @click="filePreview"/>
+                    <img class="fileImg" :src="file.blob || (fileBaseUrl ? fileBaseUrl+file[fields.fileId || 'fileId'] : file[fields.fileId || 'fileId'])" @click="filePreview"/>
                   </slot>
                 </div>
               </div>
@@ -195,7 +195,7 @@ export default {
   methods:{
     // 文件预览
     filePreview(file){
-      let {fileId}=file
+      let fileId=file[this.fields.fileId || 'fileId']
       this.$emit('filePreview',file)
       let hasFileOption=this.hasFilePreviewOption(fileId)
       if(!hasFileOption) return
