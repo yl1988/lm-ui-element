@@ -66,6 +66,7 @@ import {isNumber} from "../../utils/lm-validate";
 import provinceList from './province.json'
 import citys from './city.json'
 import districts from './district.json'
+import xhlHttp from '../../utils/xml-http'
 
 export default {
   name: 'LmAddress',
@@ -122,6 +123,12 @@ export default {
       type:Boolean,
       default:true
     },//是否获取默认经纬度
+    amapKey:String,//高德地图key
+    bmapKey:String,//百度地图key
+    bmapRetCoordtype:{
+      type:String,
+      default:'gcj02ll'
+    },//坐标系类型
   },
   data() {
     return {
@@ -135,7 +142,6 @@ export default {
       streetInputWidth: 'auto',//地址输入框宽度
       getDefault: false,//是否获取了默认值
       isFilter: false,//是否是筛选
-      inputQueryData: Object.freeze([]),///输入框建议数据
       hasLngLag: false,//是否有经纬度
       lmSelectWidth:'150px',//下拉框宽度
     }
@@ -164,7 +170,6 @@ export default {
       this.$set(this.address, 'districtId', '')
       this.$set(this.address, 'street', '')
       this.districtList = []
-      this.inputQueryData = []
       this.cityList = citys[val]
       let thisProvince = this.provinceList.filter((item) => item.id === val)
       this.addressArea[1] = this.addressArea[2] = ''
@@ -180,7 +185,6 @@ export default {
       this.isNotTwoLevels=!!this.districtList.length
       this.$set(this.address, 'cityId', val)
       this.$set(this.address, 'districtId', '')
-      this.inputQueryData = []
       let thisCity = this.cityList.filter(item => item.id === val)
       this.addressArea[2] = ''
       this.addressArea[1] = thisCity[0].name
@@ -193,7 +197,6 @@ export default {
     async changeDistrict(val) {
       let {districtList} = this
       this.$set(this.address, 'districtId', val)
-      this.inputQueryData = []
       this.hasLngLag = false
       let thisdistrictList = districtList.filter(item => item.id === val)
       this.addressArea[2] = thisdistrictList[0].name
@@ -228,24 +231,6 @@ export default {
       this.$set(this.address,'street',value)
       this.$emit('input', this.address)
       this.$emit('addressChange',this.address)
-      if(value || this.addressArea.length){
-        let searchAddressArea=JSON.parse(JSON.stringify(this.addressArea))
-        ;(searchAddressArea[1]===searchAddressArea[2]) && (searchAddressArea.splice(2,1))
-        let searchValue=searchAddressArea.join('')+(value || '')
-        let addressInfos=await this.getSearchAddresList(searchValue)
-        this.inputQueryData=addressInfos instanceof Array ? addressInfos.reduce((result,current)=>{
-          let {name,address,location={}}=current
-          typeof address !=='string' && (address='')
-          result.push({
-            name:name+' '+address,
-            address,
-            lng:location.lng,
-            lat:location.lat,
-            addTitle:name
-          })
-          return result
-        },[]) : []
-      }
     },
     //输入框搜索点击完成
     inputAutoSelect(item) {
@@ -257,45 +242,105 @@ export default {
       })
     },
     //输入框返回建议数据
-    inputQuerySearch(queryString, cb) {
-      let {inputQueryData} = this
-      let results = queryString ? inputQueryData.filter(this.createFilter(queryString)) : inputQueryData
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    //筛选显示的输入框数据
-    createFilter(queryString) {
-      let {valueKey} = this
-      return (restaurant) => {
-        return (restaurant[valueKey].toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+    async inputQuerySearch(queryString, cb) {
+      let inputQueryData=[]
+      if(queryString || this.addressArea.length){
+        let searchAddressArea=JSON.parse(JSON.stringify(this.addressArea))
+        ;(searchAddressArea[1]===searchAddressArea[2]) && (searchAddressArea.splice(2,1))
+        let searchValue=searchAddressArea.join('')+(queryString || '')
+        let addressInfos=await this.getSearchAddresList(searchValue)
+        inputQueryData=addressInfos instanceof Array ? addressInfos.reduce((result,current)=>{
+          let {name,address,location={}}=current
+          typeof address !=='string' && (address='')
+          if(typeof location==='string'){
+            let locationArr=location.split(',')
+            location={
+              lng:locationArr[0],
+              lat:locationArr[1]
+            }
+          }
+          result.push({
+            name:name+' '+address,
+            address,
+            lng:location.lng,
+            lat:location.lat,
+            addTitle:name
+          })
+          return result
+        },[]) : []
+        cb(inputQueryData.filter(item=>item[this.valueKey].toLowerCase().indexOf(queryString.toLowerCase()) === 0))
       }
     },
     //搜索提示
-    getSearchAddresList(keyword) {
+    getSearchAddresList(keywords) {
       let {provinceId, cityId, districtId} = this.address
       let city = districtId || cityId || provinceId
-      if(!window.AMap){
-        console.error('获取高德地图实例window.AMap失败,请确保正确引入并初始化高德地图')
+      let {amapKey,bmapKey,bmapRetCoordtype}=this
+      if(!window.AMap && !window.BMap && !amapKey && !bmapKey){
+        console.error('获取地图实例失败,请确保正确引入并初始化高德或者百度地图，或者传入正确的高德地图或者百度地图web api Key')
         return
       }
-      let {version}=AMap
-      return new Promise((resolve) => {
-
-        window.AMap.plugin(/^2\./.test(version) ? 'AMap.AutoComplete' : 'AMap.Autocomplete', () => {
-          // 实例化Autocomplete
-          let autoOptions = {
-            //city 限定城市，默认全国
-            city
-          }
-          let autoComplete = /^2\./.test(version) ? new AMap.AutoComplete(autoOptions) : new AMap.Autocomplete(autoOptions)
-          autoComplete.search(keyword, (status, result) => {
-            // 搜索成功时，result即是对应的匹配数据
-            if (status === 'complete' && result.info === 'OK') {
-              // result为对应的地理位置详细信息
-              resolve(result.tips)
+      return new Promise((resolve,reject) => {
+        if(amapKey){
+          //高德地图服务api
+          xhlHttp({
+            url:"https://restapi.amap.com/v3/place/text",
+            params:{
+              key:amapKey,
+              keywords,
+              city
+            }
+          }).then(res=>{
+            let {status,info}=res
+            if(status==='1'){
+              resolve(res.pois)
+            }else{
+              reject(info)
             }
           })
-        })
+          .catch(err=>{
+            reject(err)
+          })
+        }else if(bmapKey){
+          //百度地图服务api
+          xhlHttp({
+            url:"http://api.map.baidu.com/place/v2/suggestion",
+            params:{
+              ak:bmapKey,
+              query:keywords,
+              city,
+              city_limit:true,
+              output:'json',
+              ret_coordtype:bmapRetCoordtype
+            }
+          }).then(res=>{
+            let {status,message,result}=res
+            if(status===0){
+              resolve(result)
+            }else{
+              reject(message)
+            }
+          })
+            .catch(err=>{
+              reject(err)
+            })
+        }else if(window.AMap){
+          //高德地图实例
+          let {version}=AMap
+          window.AMap.plugin(/^2\./.test(version) ? 'AMap.AutoComplete' : 'AMap.Autocomplete', () => {
+            // 实例化Autocomplete
+            let autoComplete = /^2\./.test(version) ? new AMap.AutoComplete({city}) : new AMap.Autocomplete({city})
+            autoComplete.search(keywords, (status, result) => {
+              // 搜索成功时，result即是对应的匹配数据
+              if (status === 'complete' && result.info === 'OK') {
+                // result为对应的地理位置详细信息
+                resolve(result.tips)
+              }
+            })
+          })
+        }else{
+          //百度地图实例
+        }
       })
     },
     // 根据省ID获取市县
@@ -341,25 +386,84 @@ export default {
     //通过地址查询经纬度
     getLngLatFun(address) {
       if (!address) return
-      if(!window.AMap){
-        console.error('获取高德地图实例window.AMap失败,请确保正确引入并初始化高德地图')
+      let {amapKey,bmapKey,bmapRetCoordtype}=this
+      if(!window.AMap && !window.BMap && !amapKey && !bmapKey){
+        console.error('获取地图实例失败,请确保正确引入并初始化高德或者百度地图，确保window.AMap 或 window.BMap有值，或者传入正确的web api Key:高德地图key amapKey或者百度地图bmapKey key')
         return
       }
-      return new Promise((resolve) => {
-        window.AMap.plugin('AMap.Geocoder', () => {
-          let geocoder = new AMap.Geocoder({})
-          geocoder.getLocation(address, (status, result) => {
-            console.log(result)
-            let {geocodes = []} = result
-            // //console.log(geocodes)
-            if(!(geocodes instanceof Array) || !geocodes.length){
-              resolve({})
+      let {provinceId, cityId, districtId} = this.address
+      let city = districtId || cityId || provinceId
+      return new Promise((resolve,reject) => {
+        if(amapKey){
+          //高德地图服务api
+          xhlHttp({
+            url:"https://restapi.amap.com/v3/geocode/geo",
+            params:{
+              key:amapKey,
+              address,
+              city
             }
-            let {lng, lat} = geocodes[0].location
-            this.$emit('getLngLatInfo', {lng, lat})
-            resolve({lng, lat})
+          }).then(res=>{
+            let {status,info}=res
+            if(status==='1'){
+              let {location}=res.geocodes[0] || {}
+              let locationArr=location.split(',')
+              let lng=locationArr[0]
+              let lat=locationArr[1]
+              this.$emit('getLngLatInfo', {lng, lat})
+              resolve({lng, lat})
+            }else{
+              reject(info)
+            }
           })
-        })
+            .catch(err=>{
+              reject(err)
+            })
+        }else if(bmapKey){
+          //百度地图服务api
+
+          xhlHttp({
+            url:"http://api.map.baidu.com/geocoding/v3/",
+            params:{
+              ak:bmapKey,
+              address,
+              region:city,
+              output:'json',
+              ret_coordtype:bmapRetCoordtype
+            }
+          }).then(res=>{
+            let {status,result}=res
+            if(status===0){
+              let {lng,lat}=result.location || {}
+              this.$emit('getLngLatInfo', {lng, lat})
+              resolve({lng, lat})
+            }else{
+              reject(`失败 status=${status}`)
+            }
+          })
+            .catch(err=>{
+              reject(err)
+            })
+        }else if(window.AMap){
+          //高德地图实例
+          window.AMap.plugin('AMap.Geocoder', () => {
+            let geocoder = new AMap.Geocoder({})
+            geocoder.getLocation(address, (status, result) => {
+              console.log(result)
+              let {geocodes = []} = result
+              // //console.log(geocodes)
+              if(!(geocodes instanceof Array) || !geocodes.length){
+                resolve({})
+              }
+              let {lng, lat} = geocodes[0].location
+              this.$emit('getLngLatInfo', {lng, lat})
+              resolve({lng, lat})
+            })
+          })
+        }else{
+          //百度地图实例
+        }
+
       })
     },
     //设置所有地址
