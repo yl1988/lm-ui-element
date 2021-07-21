@@ -66,6 +66,7 @@
                     @addressChange="addressChange"
                     :disabled="[false,false,false,false]"
                     :get-lng-lat="getLngLat"
+                    amap-key="75de5ea5e06bf7f25f26495225594885"
         />
         <el-row>
           <lm-input label="经度：" v-model="form.lng" type="number" maxlength="10" to-fixed="4"/>

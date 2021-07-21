@@ -525,8 +525,9 @@ export default {
 ### 地址选择组件
 自带中国省市区县地址数据，组件较大，请按需引入。提供地址选择，地址搜索，根据地址获取经纬度功能
 
-使用地址组件，请确保在项目中引入高德地图，确保**AMap**实例正确初始化
-可在入口html文件，即index.html中引入
+使用地址组件，请确保在项目中引入高德地图或者百度地图，确保**AMap**或者**BMapGL**或者**BMap**实例正确初始化,也可以不初始化地图实例，使用web服务api
+
+以高德地图为例，实例初始化可在入口html文件，即index.html中引入
 示例：
 ````html
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=你的key"></script>
@@ -551,6 +552,10 @@ VueAMap.initAMapApiLoader({
 
 由于获取经纬度是异步的，有可能用户点击保存的时候，经纬度还没获取到或者还没更新，这时候如果直接保存，经纬度数据就不正确。
 解决方案：**lm-address** 提供了**addressChange**事件，你可以在使用的组件中声明变量来确定是否获取到了经纬度，默认false，当获取到经纬度后改为true,**addressChange**事件触发时，改为false，这样就可以确保用户提交后的经纬度数据为正确数据
+
+通过web api调用高德配置amap-key属性，百度地图配置bmap-key属性
+
+当高德地图和百度地图均有配置时，只会使用高德地图
 
 #### <strong style="font-size:14px;color:#333333">基础用法</strong>
 ````html
@@ -585,18 +590,28 @@ defaultAddress|默认地址|Object| --|--
 isEdit|是否为编辑状态|Boolean| --|true
 size|尺寸|String| --|--
 inputWidth|详情地址输入框宽度|Number / String| --|'auto'
-lmRef|标志以及下一次跳转标志|Array| --|--
 filterable|省市区选择栏是否可搜索|Boolean| --|true
 elAuto|是否选择el-autocomplete组件（用于自动搜索匹配的目标地址）|Boolean| --|true
 valueKey|elAuto为true有效，el-autocomplete组件输入建议对象中用于显示的键名|String| --|name
 placement|elAuto为true有效，el-autocomplete组件菜单弹出位置|String| --|--
 triggerOnFocus|elAuto为true有效，el-autocomplete组件是否在输入框 focus 时显示建议列表|Boolean| --|--
+maxlength|地址输入框的最大长度|String,Number| --|--
+selectWidth|下拉框宽度|String,Number| --|--
+disabled|是否可见|Boolean,Array| --|--
+getLngLat|是否获取默认经纬度|Boolean| false|true
+amapKey|高德地图web服务api key|String| --|--
+bmapKey|百度地图web服务api key|String| --|--
+bmapRetCoordtype|百度地图经纬度类型|String| --|gcj02ll
 
 #### <strong style="font-size:14px;color:#333333">Events</strong>
 事件名	| 说明 |	 回调参数	
 :---|:---:|:---
 addressChange|地址发生变化|(address:Object)
 getLngLatInfo|获取经纬度|({lng:String,lat:String}:Object)
+provinceChange|省发生改变回调|(address:Object)
+cityChange|市发生改变回调|(address:Object)
+districtChange|区县发生改变回调|(address:Object)
+streetChange|详细地址发生改变回调|(address:Object)
 
 #### <strong style="font-size:14px;color:#333333">Methods</strong>
 方法名	| 说明 |	 参数	
@@ -618,6 +633,7 @@ setFullAddress|设置地址全名（用于查看状态下）|(address:String)
                input-width="300px"
                address-prop="companyAddress" 
                @addressChange="isGetLonLat=false"
+              :disabled="[true,false,true,fasle]"
                />
           </el-form>
           <div>
@@ -793,6 +809,25 @@ hiddenCamera|是否隐藏拍照|Boolean|--|true
 action|上传地址|String|--|--
 fileBaseUrl|文件域名|String|--|--
 customPreviewImgMethod|自定义图片预览方法|Function|--|--
+fileProp|校验的prop，使用v-model时有效|String|--|fileList
+fields|字段配置，使用v-model时有效|Object|--|--
+resConfig|返回值配置，使用v-model时有效|Object|--|--
+
+#### <strong style="font-size:14px;color:#333333">fields配置说明</strong>
+
+字段	| 说明 |	 类型	| 可选值	| 默认值
+:---|:---:|:---|:---:|:---
+fileId|文件路径|String|--|fileId
+fileName|文件名称|String|--|fileName
+fileType|文件类型|String|--|fileType
+
+#### <strong style="font-size:14px;color:#333333">resConfig配置说明</strong>
+
+字段	| 说明 |	 类型	| 可选值	| 默认值
+:---|:---:|:---|:---:|:---
+fileId|文件路径|String|--|url
+fileType|文件类型|String|--|fileType
+fileSize|文件大小|String|--|fileSize
 
 #### <strong style="font-size:14px;color:#333333">文件和图片上传组件Slots</strong>
 
@@ -814,6 +849,10 @@ beforeUpload|图片文件上传之前|--
 fileSuccess|图片文件上传成功|({canICommit:Boolean,fileList:Array})
 delFile|图片文件删除|--
 fileMethodChange|拍照和上传切换|--
+fileErr|上传出错|{err,file,fileList}
+
+#### <strong style="font-size:14px;color:#333333">文件和图片上传校验</strong>
+校验函数为 validIsEnd，返回Promise，可以使用ref调用
 
 #### lm-up-file 文件上传
 ##### <strong style="font-size:14px;color:#333333">Attributes</strong>
@@ -828,6 +867,8 @@ cameraText|相机按钮文字|String|--|点击拍照
 toastColumn|相机按钮文字|String|--|点击拍照
 cameraText|提示文字是否竖排|Boolean|--|--
 fileListStyle|文件列表样式|Object|--|--
+multiple|是否多张|Boolean|false|true
+overViewAccept|可预览文件|Array|-- |['.png','.jpg','.jpeg','.webp','.pdf','.docx']
 
 ##### <strong style="font-size:14px;color:#333333">Slots</strong>
 
@@ -937,6 +978,53 @@ delIcon|图片删除按钮
 
 ````
 
+使用v-model
+````html
+<template>
+    <el-form v-model="form" :model="form" ref="form" :rules="rules" label-width="120px">
+        <lm-up-file v-model="form.fileList"
+                    action="/admin/sys-file/upload"
+                    :fields="{fileId:'fileUrl',fileType:'type',fileSize:'size'}"
+                    ref="fileList"
+        />
+        <lm-up-img
+                v-model="form.imgList"
+                file-prop="imgList"
+                action="/admin/sys-file/upload"
+                :fields="{fileId:'fileUrl',fileType:'type',fileSize:'size'}"
+                ref="imgList"
+        />
+        <el-row>
+            <el-button @click="save">保存</el-button>
+        </el-row>
+    </el-form>
+</template>
+
+<script>
+    export default {
+        data() {
+            return {
+                form:{},//
+                rules:{
+                    imgList:[{required:true,message:'请上传图片',trigger:['change','blue']}],
+                    fileList:[{required:true,message:'请上传文件',trigger:['change','blue']}],
+                },
+            }
+        },
+        methods: {
+            async save(){
+                await this.$refs.form.validate()
+                await this.$refs.fileList.validIsEnd()
+                await this.$refs.imgList.validIsEnd()
+                console.log(this.form)
+            },
+        },
+
+    }
+</script>
+````
+
+
 ### 图片裁剪组件
 
 图片裁剪弹窗组件，基于vue-cropper插件，同时组件内部使用lm-dialog弹窗组件，使用时确保引入element-ui的el-button组件，lm-ui-element的lm-dialog组件
@@ -984,6 +1072,48 @@ openDialog|打开裁剪弹窗|--| 点击裁剪成功，返回裁剪的文件对�
 :---|:---:|:---
 cropperSuccess|裁剪成功事件|(file:File)
 close|关闭弹窗|--
+
+### loading组件
+可在main.js中全局引入
+
+````javascript
+import {LmLoading} from 'lm-ui-element'
+
+Vue.use(LmLoading)
+
+Vue.prototype.$lmLoading=LmLoading
+````
+
+页面调用
+
+````javascript
+//显示加载
+ this.$lmLoading.show() 
+//改变加载图标颜色，大小
+this.$lmLoading.show({color:'#ffffff',size:32})
+//关闭加载
+this.$lmLoading.hidden()
+````
+
+
+#### <strong style="font-size:14px;color:#333333">Slots</strong>
+
+name| 说明
+:---|:---:
+footer|底部内容
+sizeWarning|尺寸超出时提示内容
+
+#### <strong style="font-size:14px;color:#333333">Methods</strong>
+方法名	| 说明 |	 参数 | 返回值
+:---|:---:|:---|: ---
+openDialog|打开裁剪弹窗|--| 点击裁剪成功，返回裁剪的文件对象file，点击关闭无返回值
+
+#### <strong style="font-size:14px;color:#333333">Events</strong>
+事件名	| 说明 |	 回调参数
+:---|:---:|:---
+cropperSuccess|裁剪成功事件|(file:File)
+close|关闭弹窗|--
+
 
 
 ## 公用方法,lm_methods，lm-validate，lm-validate-methods
