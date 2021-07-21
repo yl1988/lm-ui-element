@@ -244,7 +244,7 @@ export default {
         let searchAddressArea=JSON.parse(JSON.stringify(this.addressArea))
         searchAddressArea.splice(3)
         ;(searchAddressArea[1]===searchAddressArea[2]) && (searchAddressArea.splice(2,1))
-        console.log(searchAddressArea)
+        // console.log(searchAddressArea)
         let searchValue=searchAddressArea.join('')+(queryString || '')
         let addressInfos=await this.getSearchAddresList(searchValue,queryString)
         inputQueryData=addressInfos instanceof Array ? addressInfos.reduce((result,current)=>{
@@ -392,7 +392,6 @@ export default {
         console.error('获取地图实例失败,请确保正确引入并初始化高德或者百度地图，确保window.AMap 或 window.BMap有值，或者传入正确的web api Key:高德地图key amapKey或者百度地图bmapKey key')
         return
       }
-      console.log(window)
       let {provinceId, cityId, districtId} = this.address
       let city = districtId || cityId || provinceId
       return new Promise((resolve,reject) => {
@@ -444,7 +443,7 @@ export default {
           window.AMap.plugin('AMap.Geocoder', () => {
             let geocoder = new AMap.Geocoder({})
             geocoder.getLocation(address, (status, result) => {
-              console.log(result)
+              // console.log(result)
               let {geocodes = []} = result
               // //console.log(geocodes)
               if(!(geocodes instanceof Array) || !geocodes.length){
