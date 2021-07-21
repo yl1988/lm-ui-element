@@ -980,7 +980,7 @@ delIcon|图片删除按钮
 
 ````
 
-使用v-model
+使用v-model（0.7.6版本开始支持）
 ````html
 <template>
     <el-form v-model="form" :model="form" ref="form" :rules="rules" label-width="120px">
