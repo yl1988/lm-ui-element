@@ -3,7 +3,7 @@
   <el-row>
     <el-form-item :label="label" class="addressFormItemBox" :required="required" :prop="addressProp" :style="{'margin-bottom':isEdit ? '22px' : '0'}">
       <div v-if="isEdit" class="rowStart">
-        <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :id="lmRef[0]" :filterable="filterable" :style="{width:lmSelectWidth}" :disabled="typeof disabled==='boolean' ? disabled : (!!disabled[3] || !!disabled[2] || !!disabled[1] || !!disabled[0])">
+        <el-select class="addressFormItem" :size="size" :value="address.provinceId" @input="changeProvince" placeholder="请选择" :filterable="filterable" :style="{width:lmSelectWidth}" :disabled="typeof disabled==='boolean' ? disabled : (!!disabled[3] || !!disabled[2] || !!disabled[1] || !!disabled[0])">
           <el-option
               v-for="item in provinceList"
               :key="item.id"
@@ -67,7 +67,7 @@ import provinceList from './province.json'
 import citys from './city.json'
 import districts from './district.json'
 import xhlHttp from '../../utils/xml-http'
-
+import { jsonp } from '../../utils/jsonp'
 export default {
   name: 'LmAddress',
   props: {
@@ -97,10 +97,6 @@ export default {
       type: String,
       default: 'address'
     },//用于校验的prop字段
-    lmRef: {
-      type: Array,
-      default: () => []
-    },//标志以及下一次跳转标志
     filterable: {
       type: Boolean,
       default: true
@@ -246,11 +242,14 @@ export default {
       let inputQueryData=[]
       if(queryString || this.addressArea.length){
         let searchAddressArea=JSON.parse(JSON.stringify(this.addressArea))
+        searchAddressArea.splice(3)
         ;(searchAddressArea[1]===searchAddressArea[2]) && (searchAddressArea.splice(2,1))
+        console.log(searchAddressArea)
         let searchValue=searchAddressArea.join('')+(queryString || '')
-        let addressInfos=await this.getSearchAddresList(searchValue)
+        let addressInfos=await this.getSearchAddresList(searchValue,queryString)
         inputQueryData=addressInfos instanceof Array ? addressInfos.reduce((result,current)=>{
-          let {name,address,location={}}=current
+          let {name,address,location={},title,point={}}=current
+          name=name || title
           typeof address !=='string' && (address='')
           if(typeof location==='string'){
             let locationArr=location.split(',')
@@ -258,6 +257,9 @@ export default {
               lng:locationArr[0],
               lat:locationArr[1]
             }
+          }
+          if(!(Object.keys(location).length)){
+            location=point
           }
           result.push({
             name:name+' '+address,
@@ -276,7 +278,7 @@ export default {
       let {provinceId, cityId, districtId} = this.address
       let city = districtId || cityId || provinceId
       let {amapKey,bmapKey,bmapRetCoordtype}=this
-      if(!window.AMap && !window.BMap && !amapKey && !bmapKey){
+      if(!window.AMap && !window.BMapGL && !window.BMap && !amapKey && !bmapKey){
         console.error('获取地图实例失败,请确保正确引入并初始化高德或者百度地图，或者传入正确的高德地图或者百度地图web api Key')
         return
       }
@@ -303,16 +305,13 @@ export default {
           })
         }else if(bmapKey){
           //百度地图服务api
-          xhlHttp({
-            url:"http://api.map.baidu.com/place/v2/suggestion",
-            params:{
-              ak:bmapKey,
-              query:keywords,
-              city,
-              city_limit:true,
-              output:'json',
-              ret_coordtype:bmapRetCoordtype
-            }
+          jsonp('http://api.map.baidu.com/place/v2/suggestion', {
+            ak:bmapKey,
+            query:keywords,
+            region:this.addressArea[1],
+            city_limit:true,
+            output:'json',
+            ret_coordtype:bmapRetCoordtype
           }).then(res=>{
             let {status,message,result}=res
             if(status===0){
@@ -320,10 +319,9 @@ export default {
             }else{
               reject(message)
             }
+          }).catch(err=>{
+            reject(err)
           })
-            .catch(err=>{
-              reject(err)
-            })
         }else if(window.AMap){
           //高德地图实例
           let {version}=AMap
@@ -340,6 +338,9 @@ export default {
           })
         }else{
           //百度地图实例
+          let option={onSearchComplete:result=> resolve(result.Br)}
+          let local = window.BMapGL ? new BMapGL.LocalSearch(this.addressArea[1], option) : new BMap.LocalSearch(this.addressArea[1], option)
+          local.search(keywords)
         }
       })
     },
@@ -387,10 +388,11 @@ export default {
     getLngLatFun(address) {
       if (!address) return
       let {amapKey,bmapKey,bmapRetCoordtype}=this
-      if(!window.AMap && !window.BMap && !amapKey && !bmapKey){
+      if(!window.AMap && !window.BMapGL && !window.BMap && !amapKey && !bmapKey){
         console.error('获取地图实例失败,请确保正确引入并初始化高德或者百度地图，确保window.AMap 或 window.BMap有值，或者传入正确的web api Key:高德地图key amapKey或者百度地图bmapKey key')
         return
       }
+      console.log(window)
       let {provinceId, cityId, districtId} = this.address
       let city = districtId || cityId || provinceId
       return new Promise((resolve,reject) => {
@@ -421,29 +423,22 @@ export default {
             })
         }else if(bmapKey){
           //百度地图服务api
-
-          xhlHttp({
-            url:"http://api.map.baidu.com/geocoding/v3/",
-            params:{
-              ak:bmapKey,
-              address,
-              region:city,
-              output:'json',
-              ret_coordtype:bmapRetCoordtype
-            }
+          jsonp('http://api.map.baidu.com/geocoding/v3/', {
+            ak:bmapKey,
+            address,
+            city,
+            output:'json',
+            ret_coordtype:bmapRetCoordtype
           }).then(res=>{
             let {status,result}=res
-            if(status===0){
-              let {lng,lat}=result.location || {}
+            if(status===0) {
+              let {lng, lat} = result.location || {}
               this.$emit('getLngLatInfo', {lng, lat})
               resolve({lng, lat})
-            }else{
-              reject(`失败 status=${status}`)
             }
+          }).catch(err=>{
+            reject(err)
           })
-            .catch(err=>{
-              reject(err)
-            })
         }else if(window.AMap){
           //高德地图实例
           window.AMap.plugin('AMap.Geocoder', () => {
@@ -462,6 +457,14 @@ export default {
           })
         }else{
           //百度地图实例
+          let bmapGeoInstance=window.BMapGL ? new BMapGL.Geocoder() : new BMap.Geocoder()
+          bmapGeoInstance.getPoint(address, point=>{
+            if(point){
+              let {lng, lat} = point
+              this.$emit('getLngLatInfo', {lng, lat})
+              resolve({lng, lat})
+            }
+          }, this.addressArea[1])
         }
 
       })
