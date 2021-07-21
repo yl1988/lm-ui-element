@@ -525,7 +525,7 @@ export default {
 ### 地址选择组件
 自带中国省市区县地址数据，组件较大，请按需引入。提供地址选择，地址搜索，根据地址获取经纬度功能
 
-使用地址组件，请确保在项目中引入高德地图或者百度地图，确保**AMap**或者**BMapGL**或者**BMap**实例正确初始化,也可以不初始化地图实例，使用web服务api
+使用地址组件，请确保在项目中引入高德地图或者百度地图（0.7.6版本开始支持），确保**AMap**或者**BMapGL**或者**BMap**实例正确初始化,也可以不初始化地图实例，使用web服务api
 
 以高德地图为例，实例初始化可在入口html文件，即index.html中引入
 示例：
@@ -764,6 +764,8 @@ cancel|点击取消|--
 ### 文件图片上传组件
 
 文件上传组件和图片上传组件虽然不是表单，但是是为表单设计的，必须放在element-ui的el-form标签中，基于element-ui的el-upload组件实现,带进度条，删除，预览功能。
+
+0.7.6版本开始支持 v-model
 
 请确保引入了*element-ui* 的 *ElFrom、ElFormItem、ElUpload、ElButton、ElProgress、ElIcon* 组件
 
