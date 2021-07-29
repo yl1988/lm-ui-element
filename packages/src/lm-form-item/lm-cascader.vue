@@ -51,6 +51,10 @@
                     }
                 }
             },//日期配置，级联配置
+          list:{
+            type:Array,
+            default:()=>[]
+          },//数据
         },
         data() {
             return {
