@@ -765,7 +765,7 @@ cancel|点击取消|--
 
 文件上传组件和图片上传组件虽然不是表单，但是是为表单设计的，必须放在element-ui的el-form标签中，基于element-ui的el-upload组件实现,带进度条，删除，预览功能。
 
-0.7.6版本开始支持 v-model
+0.7.7版本开始支持 v-model
 
 请确保引入了*element-ui* 的 *ElFrom、ElFormItem、ElUpload、ElButton、ElProgress、ElIcon* 组件
 
@@ -980,7 +980,7 @@ delIcon|图片删除按钮
 
 ````
 
-使用v-model（0.7.6版本开始支持）
+使用v-model（0.7.7版本开始支持）
 ````html
 <template>
     <el-form v-model="form" :model="form" ref="form" :rules="rules" label-width="120px">

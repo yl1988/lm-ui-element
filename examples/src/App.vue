@@ -21,36 +21,33 @@
       <span>弹窗内容</span>
     </lm-dialog>
     <el-form v-model="form" :model="form" ref="form" :rules="rules" label-width="120px">
-      <lm-up-file v-model="form.fileList"
-                  file-prop="fileList"
-                  action="/admin/sys-file/upload"
-                  :other-data="{ bucketName: 'smart-park'}"
-                  :fields="{fileId:'fileUrl',fileType:'type',fileSize:'size'}"
-                  ref="fileList"
-      />
+<!--      <lm-up-file v-model="form.fileList"-->
+<!--                  file-prop="fileList"-->
+<!--                  action="/admin/sys-file/upload"-->
+<!--                  :other-data="{ bucketName: 'smart-park'}"-->
+<!--                  :fields="{fileId:'fileUrl',fileType:'type',fileSize:'size'}"-->
+<!--                  ref="fileList"-->
+<!--      />-->
       <lm-up-img
         v-model="form.imgList"
         file-prop="imgList"
         action="/admin/sys-file/upload"
-        :other-data="{ bucketName: 'smart-park'}"
+        :other-data="{ bucketName: 'property'}"
         :fields="{fileId:'fileUrl',fileType:'type',fileSize:'size'}"
         ref="imgList"
+        :default-value="defaultImgList"
       />
-      <lm-up-file :fileList="fileList"
-                  file-prop="fileList"
-                  action="/admin/sys-file/upload"
-                  :other-data="{ bucketName: 'smart-park'}"
-                  :fields="{fileId:'fileUrl',fileType:'type',fileSize:'size'}"
-                  ref="fileList"
-      />
-      <lm-up-img
-        :fileList="imgList"
-        file-prop="imgList"
-        action="/admin/sys-file/upload"
-        :other-data="{ bucketName: 'smart-park'}"
-        :fields="{fileId:'fileUrl',fileType:'type',fileSize:'size'}"
-        ref="imgList"
-      />
+<!--      <lm-up-file :fileList="fileList"-->
+<!--                  action="/admin/sys-file/upload"-->
+<!--                  :other-data="{ bucketName: 'property'}"-->
+<!--                  :fields="{fileId:'fileUrl',fileType:'type',fileSize:'size'}"-->
+<!--      />-->
+<!--      <lm-up-img-->
+<!--        :fileList="imgList"-->
+<!--        action="/admin/sys-file/upload"-->
+<!--        :other-data="{ bucketName: 'smart-park'}"-->
+<!--        :fields="{fileId:'fileUrl',fileType:'type',fileSize:'size'}"-->
+<!--      />-->
       <el-row>
         <el-button @click="save">保存</el-button>
       </el-row>
@@ -62,7 +59,7 @@
 
 import LmCanlendarComponent from '../components/lm-canlendar-component'
 import ExampleForm from "../components/example-form";
-
+import axios from 'axios'
 
 export default {
   components: {
@@ -79,17 +76,20 @@ export default {
         fileList:[{required:true,message:'请上传文件',trigger:['change','blue']}],
       },
       fileList:[],
-      imgList:[]
+      imgList:[],
+      defaultImgList:[],//默认图
+      defaulFileList:[],//默认图
     }
   },
   computed: {
   },
-  mounted() {
+  async mounted() {
 
     //
     // console.log(this.$lmLoading.show())
     // this.$lmLoading.show()
     // this.$lmLoading.show({color:'#ffffff',size:32})
+    this.defaultImgList=[{fileUrl:'/admin/sys-file/property/202108/d1fab01c1f3cadb344f5175fc922caf7.png'}]
   },
   methods: {
     async sure(callback){
@@ -103,7 +103,7 @@ export default {
     },
     async save(){
       await this.$refs.form.validate()
-      await this.$refs.fileList.validIsEnd()
+      // await this.$refs.fileList.validIsEnd()
       await this.$refs.imgList.validIsEnd()
       console.log(this.form)
       console.log(this.fileList)
