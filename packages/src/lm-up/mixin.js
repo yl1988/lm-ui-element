@@ -192,7 +192,7 @@ export default {
                     }
                 }
             }
-            console.log(fileList)
+            // console.log(fileList)
             let upFileList=fileList.reduce((result,current)=>{
                 let fileFieldsConfig=fields
                 !fileFieldsConfig.fileId && (fileFieldsConfig.fileId='fileId')
@@ -222,10 +222,10 @@ export default {
         },
         // 文件出错
         async fileErr(err,file){
-            console.log(err)
+            // console.log(err)
             let {fileList}=this
             let fileIndex=fileList.findIndex(item=>item.uid===file.uid)
-            console.log(fileIndex)
+            // console.log(fileIndex)
             let fileObj={
                 ... fileList[fileIndex],
                 err:true,
